@@ -1,0 +1,266 @@
+@media (max-width: 1399.98px) {
+}
+
+@media (max-width: 1330.98px) {
+  .item-box {
+    padding: 20px 8px;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .date-box input[type="date"] {
+    width: 98px;
+  }
+  .item-box {
+    height: 178px;
+  }
+  .form-div {
+    width: 65%;
+  }
+  .otpinputfield input {
+    width: 50px;
+    height: 50px;
+  }
+  .form-div h4 {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .search-set {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 13px;
+  }
+  .dept-heading {
+    font-size: 30px;
+
+    margin-bottom: 20px;
+  }
+  .item-box {
+    height: 160px;
+  }
+  .consume {
+    font-size: 20px;
+  }
+
+  .login-div button {
+    width: 220px;
+  }
+  .password-eyes {
+    font-size: 17px;
+  }
+  .form-div {
+    padding: 30px 35px;
+    width: 80%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .pr-div h4 {
+    margin-top: 25px;
+  }
+  .date-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .dept-heading {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .item-box {
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .logo-img-div img {
+    width: 160px;
+    margin-top: 18px;
+  }
+  .girl-img img {
+    width: 250px;
+  }
+  .form-div h4 {
+    font-size: 25px;
+  }
+  .logo-img-div {
+    margin: 10px;
+    text-align: center;
+  }
+  .form-div {
+    width: 85%;
+  }
+  .form-div {
+    padding: 10px;
+    margin-top: 14px;
+  }
+
+  .file > label {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .date-box input[type="date"] {
+    width: 85px;
+  }
+  .date-flex {
+    margin-bottom: 10px;
+  }
+  .consumable-sec {
+    width: 90%;
+    margin: 15px auto 15px auto;
+    padding: 18px 18px 0 18px;
+  }
+  .otpinputfield input {
+    width: 48px;
+    height: 48px;
+  }
+
+  .login-div button {
+    width: 184px;
+    font-size: 18px;
+  }
+  .form-div {
+    width: 100%;
+  }
+
+  .addpr-btn {
+    padding: 8px;
+    margin-left: 5px;
+  }
+  .manage-flex {
+    flex-wrap: wrap;
+  }
+  .search-set {
+    margin: 0;
+    flex-wrap: wrap;
+  }
+  .d-flex-bulkbtn {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 410px) {
+  .profile-container {
+    padding: 20px 4px;
+  }
+  .orange-button {
+    padding: 4px 4px;
+    font-size: 12px;
+  }
+  .name {
+    margin-top: 5px;
+
+    font-size: 14px;
+
+    margin-left: 4px;
+  }
+  .form-div h4 {
+    font-size: 20px;
+  }
+  .otp-text {
+    font-size: 16px;
+    line-height: 25px;
+  }
+  .otpinputfield input {
+    width: 38px;
+    height: 38px;
+  }
+
+  .manage-flex h5 {
+    margin-bottom: 15px;
+  }
+}
+@media (max-width: 365.98px) {
+  .password-eyes2 {
+    margin-top: -21px;
+    font-size: 16px;
+  }
+  .password-eyes3 {
+    margin-top: -21px;
+    font-size: 16px;
+  }
+  .cancel-btn {
+    font-size: 14px;
+  }
+  .file > label {
+    font-size: 14px;
+  }
+  .inv-box h4 {
+    font-size: 20px;
+  }
+  .manage-flex h5 {
+    margin-bottom: 0;
+  }
+  .c-pdg {
+    padding: 10px;
+  }
+  .addpr-btn {
+    margin-left: 0;
+    font-size: 14px;
+  }
+  .date-box label {
+    margin-right: 0;
+  }
+  .date-box input[type="date"] {
+    width: 94px;
+  }
+  .item-box div i {
+    font-size: 32px;
+  }
+  .consume {
+    font-size: 18px;
+  }
+  .dept-heading {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .consumable-sec {
+    width: 100%;
+    margin: 15px auto 15px auto;
+    padding: 18px 18px 0 18px;
+  }
+  .verify-btn {
+    font-size: 18px;
+  }
+  .form-div label {
+    font-size: 14px;
+  }
+  .otpinputfield input {
+    font-size: 16px;
+  }
+  .girl-img {
+    text-align: center;
+  }
+  .login-div button {
+    width: 151px;
+    font-size: 16px;
+  }
+  .password-eyes {
+    font-size: 14px;
+    margin-top: -21px;
+  }
+  .form-div h4 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 340px) {
+  .orange-button {
+    margin-bottom: 3px;
+  }
+
+  .date-box input[type="date"] {
+    width: 74px;
+  }
+  .otpinputfield input {
+    width: 32px;
+    height: 32px;
+  }
+  .form-div label {
+    font-size: 14px;
+  }
+}
