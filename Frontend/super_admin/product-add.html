@@ -36,9 +36,9 @@
 <body>
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
-  if(checkAdmintoken == null){
-    location = "http://127.0.0.1:5501/Frontend/"
-  }
+    if (checkAdmintoken == null) {
+      location = "http://127.0.0.1:5501/Frontend/"
+    }
   </script>
   <!--wrapper-->
   <div class="wrapper">
@@ -620,21 +620,23 @@
           .then(data => {
 
 
-            
+
             if (data.message) {
               Swal.fire({
                 title: 'Success',
                 text: data.message,
                 icon: 'success',
-              }).then(function () {
-                window.location.href = 'manage-products.html';
-              });
+              })
+              setTimeout(() => {
+                window.location.href = "manage-products.html"
+              }, 1000);
             } else {
               Swal.fire({
                 title: 'Error',
                 text: data.error,
                 icon: 'error',
               });
+
             }
           })
           .catch(error => {
