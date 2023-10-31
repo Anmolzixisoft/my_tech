@@ -780,3 +780,10 @@ cursor: pointer;
 margin-right: 4px;
 display: inline-block;
 }
+.labelradio {
+  margin-bottom: 8px;
+  color: #212b36;
+  font-weight: 500;
+  font-size: 14px;
+  display: block;
+}

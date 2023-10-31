@@ -70,15 +70,17 @@ function deleteProduct(req, res) {
 
 function editproduct(req, res) {
     try {
-        const { id, Product_Name, MRP, Selling_Price } = req.body;
+        const { id, Product_Name, MRP, Selling_Price, status } = req.body;
+        console.log(req.body);
         const { Image } = req.files;
+      
         var image = '';
         if (typeof Image !== 'undefined') {
             image = ', `Image` = "' + Image[0].filename + '" ';
         }
 
-        const sql = 'UPDATE my_tech.product_tbl SET  Product_Name= ?, MRP= ?, Selling_Price=?' + image + 'WHERE id= ?'
-        connection.query(sql, [Product_Name, MRP, Selling_Price, id], (err, result) => {
+        const sql = 'UPDATE my_tech.product_tbl SET  Product_Name= ?, MRP= ?,	Status=? , Selling_Price=?' + image + 'WHERE id= ?'
+        connection.query(sql, [Product_Name, MRP, status, Selling_Price, id], (err, result) => {
             if (err) {
                 console.error('Database update error: ' + err.message);
                 res.status(500).json({ error: 'Error updating data in the database' });
