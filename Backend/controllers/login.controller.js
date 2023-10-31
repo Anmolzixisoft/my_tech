@@ -63,8 +63,6 @@ function verifyByOtp(req, res) {
     }
 }
 
-
-
 function setPass(req, res) {
     const { newPassword, id } = req.body
     if (!newPassword) {
@@ -116,7 +114,7 @@ function login(req, res) {
                     return res.send({ error: 'Internal server error', status: false });
                 }
                 if (results.length === 0) {
-                    return res.send({ error: 'this email id not register' });
+                    return res.send({ error: 'this email id not register',status:false });
                 }
 
                 const user = results[0];
@@ -129,14 +127,14 @@ function login(req, res) {
                     }
 
                     if (!bcryptResult) {
-                        return res.send({ error: 'Authentication failed' });
+                        return res.send({ error: 'Authentication failed' ,status:false });
                     }
 
                     const token = jwt.sign({ userId: user.id, email: user.email }, 'secret_key', {
                         expiresIn: '1h',
                     });
                     const userId = user.id
-                    res.send({ msg: "login successfully", token, userId });
+                    res.send({ msg: "login successfully", token, userId ,status:true });
                 });
                 // } else {
                 //     return res.status(200).json({ error: 'pleace contact admin', status: true });
@@ -187,13 +185,13 @@ const sentOtp = async (req, res) => {
                             (err, result1) => {
                                 if (err) {
                                     console.error('Update error:', err);
-                                    return res.status(500).json({ error: 'Update error' });
+                                    return res.status(500).json({ error: 'Update error',status:false });
                                 }
                                 else {
 
                                     transporter.sendMail(mailOptions, function (error, info) {
                                         if (error) {
-                                            return res.send({ error: error })
+                                            return res.send({ error: error,status:false })
                                         } else {
                                             console.log('Email sent: ');
                                         }
@@ -239,7 +237,7 @@ const sentOtp = async (req, res) => {
                                 (err, result1) => {
                                     if (err) {
                                         console.error('Update error:', err);
-                                        return res.status(500).json({ error: 'Update error' });
+                                        return res.status(500).json({ error: 'Update error' ,status:false});
                                     }
                                     else {
                                         const response = axios.get(`http://nimbusit.biz/api/SmsApi/SendSingleApi?UserID=${userId}&Password=${password}&SenderID=${senderID}&Phno=${phoneNum}&Msg=${msg}&EntityID=${entityID}&TemplateID=${templateId}`);
@@ -255,6 +253,7 @@ const sentOtp = async (req, res) => {
                 // Handle the response accordingly
             } catch (error) {
                 console.error('Error sending SMS:');
+                return res.send({ error: error, success: false })
             }
         }
     } catch (error) {
@@ -265,6 +264,63 @@ const sentOtp = async (req, res) => {
 }
 
 
+const adminLogin = (req, res) => {
+    try {
+        const user = req.body;
+        if (user.email === '') {
+            const error = "Please enter the email";
+            return res.status(200).json({ error: true, message: `${error}`, data: null })
+        }
+        if (user.password === '') {
+            const error = "Please enter the password";
+            return res.status(200).json({ error: true, message: `${error}`, data: null })
+        }
+        connection.query('SELECT * FROM my_tech.admin_tbl WHERE email = "' + user.email + '"', (error, findEmail) => {
+            if (error) {
+                return res.status(200).json({ error: true, message: `${error}`, data: null })
+            }
+            if (findEmail[0] == undefined) {
+                const error = "Incorrect Email";
+                return res.status(200).json({ error: true, message: `${error}`, data: null })
+            } else {
+                if (findEmail[0].password === user.password) {
+                    const token = jwt.sign({ userId: findEmail[0].id }, 'thisismyadminsceretkey');
+                    findEmail[0].token = token;
+                    return res.status(200).json({ error: false, message: "Successfully Login", data: findEmail })
+                } else {
+                    const error = "Incorrect password";
+                    return res.status(200).json({ error: true, message: `${error}`, data: null })
+                }
+            }
+        })
+    } catch (err) {
+        return res.status(500).json({ error: true, message: `${err}`, data: null })
+    }
+}
+
+function activeDiactiveUser(req, res) {
+    const { userId, status } = req.body
+    connection.query('select * from my_tech.users_tbl where id="' + userId + '" ', (err, result) => {
+        if (err) {
+            return res.send({ error: err, status: false }
+            )
+        }
+        if (result.length == 0) {
+            return res.send({ error: " user not found ", status: false })
+        }
+        else {
+            connection.query('UPDATE my_tech.users_tbl SET status="' + status + '"  where id="' + userId + '"', (err, result) => {
+                if (err) {
+                    return res.send({ error: err, status: false })
+                }
+                else {
+                    return res.send({ message: "succesfu", status: true })
+                }
+            })
+
+        }
+    })
+}
 
 
-module.exports = { login, verifyByOtp, sentOtp, setPass }
+module.exports = { login, verifyByOtp, sentOtp, setPass, adminLogin, activeDiactiveUser }

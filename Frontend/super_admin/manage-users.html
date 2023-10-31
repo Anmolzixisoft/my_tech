@@ -6,6 +6,7 @@
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
   <!--favicon-->
   <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
   <!--plugins-->
@@ -36,6 +37,12 @@
 
 <body>
   <!--wrapper-->
+  <script>
+    let checkAdmintoken = localStorage.getItem('admintoken')
+  if(checkAdmintoken == null){
+    location = "http://127.0.0.1:5501/Frontend/"
+  }
+  </script>
   <div class="wrapper">
     <!--sidebar wrapper -->
     <div class="sidebar-wrapper" data-simplebar="true">
@@ -595,6 +602,7 @@
   <script src="../assets/plugins/chartjs/js/chart.js"></script>
   <script src="../assets/js/index.js"></script>
   <script src="../assets/js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script>
     new PerfectScrollbar(".app-container");
   </script>
@@ -631,7 +639,20 @@
     }
 
     function createPropertyListing(property) {
+      let approveButtonHTML = '';
+      let disapproveButtonHTML = '';
 
+      if (property.status == 1) {
+        // Property is approved
+        approveButtonHTML = '<button class="delvr-button1" disabled>Active</button>';
+      } else if (property.status == 0) {
+        // Property is disapproved
+        disapproveButtonHTML = '<button class="nondelvr-button1" disabled>Diactive</button>';
+      } else {
+        // Neither approved nor disapproved
+        approveButtonHTML = '<button class="delvr-button" onclick="changestatus(' + property.id + ', 1)">Approve</button>';
+        disapproveButtonHTML = '<button class="nondelvr-button" onclick="changestatus(' + property.id + ', 0)">Disapprove</button>';
+      }
       const originalDateTime = new Date(property.create_at);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
@@ -654,17 +675,60 @@
   <td>${formattedDate}</td>
   <td>${formattedDate1}</td>
   <td>
-    <div>
-      <button class="delvr-button">Active</button>
-      <button class="nondelvr-button">Deactive</button>
-    </div>
-  </td>
+          <div>
+        ${approveButtonHTML}
+        ${disapproveButtonHTML}
+      </div>
+        </td>
 `;
 
       return tableRow; // Return the table row element
     }
 
     window.onload = fetchData;
+
+    function changestatus(id, status) {
+  let userid = id;
+  let statusdata = status;
+  const userData = {
+    userId: userid,
+    status: statusdata
+  };
+
+  $.ajax({
+    url: apiUrl + '/activeDiactiveUser',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(userData),
+    success: function (data) {
+      if (data.message) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: data.message,
+        }).then(() => {
+          window.location.href = "manage-users.html";
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.error,
+        });
+      }
+    },
+    error: function (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error,
+      });
+    }
+  });
+}
+
+
+
   </script>
 </body>
 

@@ -421,6 +421,12 @@
 
 
   </script>
+   <script>
+    let checkAdmintoken = localStorage.getItem('admintoken')
+  if(checkAdmintoken == null){
+    location = "http://127.0.0.1:5501/Frontend/"
+  }
+  </script>
   <script>
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);

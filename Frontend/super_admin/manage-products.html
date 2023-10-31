@@ -6,6 +6,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!--favicon-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
   <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
   <!--plugins-->
   <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
@@ -34,6 +36,12 @@
 </head>
 
 <body>
+  <script>
+    let checkAdmintoken = localStorage.getItem('admintoken')
+    if (checkAdmintoken == null) {
+      location = "http://127.0.0.1:5501/Frontend/"
+    }
+  </script>
   <!--wrapper-->
   <div class="wrapper">
     <!--sidebar wrapper -->
@@ -551,35 +559,11 @@
                           <th>Selling Price</th>
                           <th>Created Date</th>
                           <th>Last Update</th>
+                          <th>Action</th>
                           <th>Status</th>
                         </tr>
                       </thead>
-                      <!-- <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>4 Wheeler QR Code</td>
-                            <td>
-                              <img
-                                src="../assets/images/qrimage.png"
-                                alt=""
-                                class="imgqr"
-                              />
-                            </td>
-                            <td>Rs 5000</td>
-                            <td>Rs4000</td>
-                            <td>11.02.2023</td>
-                            <td>25.02.2023</td>
-                            <td>
-                              <div>
-                                <button class="delvr-button">Active</button>
-                                <button class="nondelvr-button">
-                                  Deactive
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
 
-                        </tbody> -->
                       <tbody id="property-list">
                       </tbody>
                     </table>
@@ -672,6 +656,8 @@
   <script src="../assets/plugins/chartjs/js/chart.js"></script>
   <script src="../assets/js/index.js"></script>
   <!--app JS-->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
   <script src="../assets/js/app.js"></script>
   <script src="../utils.js"></script>
   <script>
@@ -702,7 +688,56 @@
   </script>
   <script>
 
+
+
+    function deleteproduct(id) {
+      let productid = id
+      const userData = {
+        productid: productid
+      };
+
+      fetch(apiUrl + '/deleteProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status == true) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+            }).then(() => {
+              window.location.href = "manage-products.html"
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.error,
+            });
+          }
+        })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+          });
+        });
+    }
+
+    function editproduct(id) {
+      location.href = `update-product.html?id=${id}`;
+    }
+
+
+
     const propertyList = document.getElementById('property-list');
+
     function fetchData() {
 
       const api = apiUrl + '/getProduct';
@@ -725,12 +760,17 @@
             propertyList.appendChild(newRow);
 
           });
-          document.getElementById('spinner').style.display = 'none';
+
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error);
         });
     }
+
+
+
+
+
 
     function createPropertyListing(property) {
 
@@ -754,9 +794,16 @@
   <td>${formattedDate}</td>
   <td>${formattedDate1}</td>
   <td>
+    <div class="statusAction">
+      <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>
+            <i class="fa-solid fa-trash"  onclick="deleteproduct(${property.id})"></i>
+          </div>
+  </td>
+  <td>
     <div>
-      <button class="delvr-button">Active</button>
-      <button class="nondelvr-button">Deactive</button>
+      ${property.Status == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '   <button class="nondelvr-button" style="cursor:auto">Deactive</button>'}
+      
+   
     </div>
   </td>
 `;

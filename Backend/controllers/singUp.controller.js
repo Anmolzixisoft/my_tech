@@ -51,7 +51,7 @@ function getuserById(req, res) {
                     element.profile_image = `http://192.168.29.179:5501/Backend/public/${element.profile_image}`
                     element.aadhar_image = `http://192.168.29.179:5501/Backend/public/${element.aadhar_image}`
                     element.license_image = `http://192.168.29.179:5501/Backend/public/${element.license_image}`
-                    element.aadhar_image_back= `http://192.168.29.179:5501/Backend/public/${element.aadhar_image_back}`
+                    element.aadhar_image_back = `http://192.168.29.179:5501/Backend/public/${element.aadhar_image_back}`
 
                 });
                 return res.send({ data: result, status: true })
