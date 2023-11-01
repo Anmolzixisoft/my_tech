@@ -3,13 +3,14 @@ const connection = require('../database/mysqldb')
 
 function vehicleAdd(req, res) {
     try {
-        const { user_id, vehicle_type, brand_name, modal_name, reg_no, current_city, location } = req.body
+        const { product_id, user_id, vehicle_type, brand_name, modal_name, reg_no, current_city, location } = req.body
         if (!req.body) {
             return res.status(500).json({ status: false, error: 'fill field ' });
 
         }
-        const sql = 'INSERT INTO my_tech.vehicle_info_tbl (user_id, vehicle_type, brand_name, modal_name,reg_no,current_city,location) VALUES (?, ?, ?,?,?,?,?)';
+        const sql = 'INSERT INTO my_tech.vehicle_info_tbl (product_id,user_id, vehicle_type, brand_name, modal_name,reg_no,current_city,location) VALUES (?, ?, ?,?,?,?,?,?)';
         const values = [
+            product_id,
             user_id,
             vehicle_type,
             brand_name,
