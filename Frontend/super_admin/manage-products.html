@@ -808,10 +808,20 @@
   </td>
 `;
 
-      return tableRow; // Return the table row element
+      return tableRow;
     }
 
     window.onload = fetchData;
+    $(document).ready(function () {
+      $('.search-input-box input[type="search"]').keyup(function () {
+        var searchText = $(this).val().toLowerCase();
+
+        $('#property-list tr').each(function () {
+          var cellText = $(this).text().toLowerCase();
+          $(this).toggle(cellText.indexOf(searchText) > -1);
+        });
+      });
+    });
   </script>
 </body>
 

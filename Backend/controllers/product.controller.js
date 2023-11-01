@@ -71,9 +71,9 @@ function deleteProduct(req, res) {
 function editproduct(req, res) {
     try {
         const { id, Product_Name, MRP, Selling_Price, status } = req.body;
-        console.log(req.body);
+
         const { Image } = req.files;
-      
+
         var image = '';
         if (typeof Image !== 'undefined') {
             image = ', `Image` = "' + Image[0].filename + '" ';

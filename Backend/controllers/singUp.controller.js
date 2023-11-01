@@ -77,28 +77,47 @@ function signUp(req, res) {
         if (!isValidMobileNumber(mobile_number)) {
             return res.status(400).json({ error: 'Invalid mobile number format', status: false });
         }
-        bcrypt.hash(password, 10, (hashErr, hashedPassword) => {
-            if (hashErr) {
-                console.error('Password hashing failed: ' + hashErr);
-                return res.status(500).json({ error: 'Internal server error', status: false });
-            }
-            connection.query(
-                'INSERT INTO my_tech.users_tbl (name, email, mobile_number, password,password_bcrypt) VALUES (?,?, ?,?, ?)',
-                [name, email, mobile_number, hashedPassword, password],
-                (err, result) => {
-                    if (err) {
-                        console.error('Error inserting data: ' + err);
-                        return res.status(500).json({ error: 'Error inserting data', status: false });
-                    } else {
-                        console.log("succsessss");
 
-                        return res.status(201).json({ data: result, status: true, message: ` successful SingUp` });
-                    }
+
+
+        connection.query(
+            'SELECT * FROM my_tech.users_tbl WHERE email = ? ',
+            [email],
+            (err, results) => {
+                if (err) {
+                    console.error('Error checking email existence: ' + err);
+                    return res.status(500).json({ error: 'Internal server error' });
                 }
-            );
-        }
 
+                if (results.length > 0) {
+                    return res.status(409).json({ status: false, message: `User already registered with this email` });
+                } else {
+                    bcrypt.hash(password, 10, (hashErr, hashedPassword) => {
+                        if (hashErr) {
+                            console.error('Password hashing failed: ' + hashErr);
+                            return res.status(500).json({ error: 'Internal server error', status: false });
+                        }
+                        connection.query(
+                            'INSERT INTO my_tech.users_tbl (name, email, mobile_number, password,password_bcrypt) VALUES (?,?, ?,?, ?)',
+                            [name, email, mobile_number, hashedPassword, password],
+                            (err, result) => {
+                                if (err) {
+                                    console.error('Error inserting data: ' + err);
+                                    return res.status(500).json({ error: 'Error inserting data', status: false });
+                                } else {
+                                    console.log("succsessss");
+
+                                    return res.status(201).json({ data: result, status: true, message: ` successful SingUp` });
+                                }
+                            }
+                        );
+                    }
+
+                    );
+                }
+            }
         );
+
 
 
     } catch (error) {

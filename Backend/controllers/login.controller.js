@@ -33,10 +33,10 @@ function verifyByOtp(req, res) {
     try {
         const { id, otp } = req.body;
         if (id === '') {
-            return res.status(200).json({ error: true, message: "Please provide the id", data: null })
+            return res.status(200).json({ status:false,error: true, message: "Please provide the id", data: null })
         }
         if (otp === '') {
-            return res.status(200).json({ error: true, message: "Please provide the otp", data: null })
+            return res.status(200).json({status:false, error: true, message: "Please provide the otp", data: null })
         } else {
             connection.query(
                 'SELECT *  FROM my_tech.users_tbl WHERE id = ? AND otp = ? ',
@@ -153,7 +153,7 @@ const sentOtp = async (req, res) => {
     try {
         const { email, mobile_num } = req.body
         if (email === '' || mobile_num === '') {
-            return res.status(200).json({ error: true, message: "Please enter the email or mobile number", data: null })
+            return res.status(200).json({ status:false,error: true, message: "Please enter the email or mobile number", data: null })
         }
         if (email) {
             const otp = generateOTP();
@@ -196,7 +196,7 @@ const sentOtp = async (req, res) => {
                                             console.log('Email sent: ');
                                         }
                                     })
-                                    return res.status(200).json({ success: true, message: `otp sent  Email ${otp}`, data: user });
+                                    return res.status(200).json({ status: true, message: `otp sent  Email ${otp}`, data: user });
                                 }
                             }
                         );
@@ -226,7 +226,7 @@ const sentOtp = async (req, res) => {
                             return res.send({ error: 'Internal server error', status: false });
                         }
                         if (results.length == 0) {
-                            return res.send({ success: false, error: 'this mobile number  is not register' });
+                            return res.send({ status: false, error: 'this mobile number  is not register' });
                         }
                         else {
                             const user = results[0];
@@ -242,7 +242,7 @@ const sentOtp = async (req, res) => {
                                     else {
                                         const response = axios.get(`http://nimbusit.biz/api/SmsApi/SendSingleApi?UserID=${userId}&Password=${password}&SenderID=${senderID}&Phno=${phoneNum}&Msg=${msg}&EntityID=${entityID}&TemplateID=${templateId}`);
                                         console.log('SMS sent successfully:', response.data);
-                                        return res.status(200).json({ success: true, message: `otp sent Number ${otp}`, data: user });
+                                        return res.status(200).json({ status: true, message: `otp sent Number ${otp}`, data: user });
                                     }
                                 }
                             );
@@ -269,32 +269,32 @@ const adminLogin = (req, res) => {
         const user = req.body;
         if (user.email === '') {
             const error = "Please enter the email";
-            return res.status(200).json({ error: true, message: `${error}`, data: null })
+            return res.status(200).json({status:false, error: true, message: `${error}`, data: null })
         }
         if (user.password === '') {
             const error = "Please enter the password";
-            return res.status(200).json({ error: true, message: `${error}`, data: null })
+            return res.status(200).json({ status : flase,error: true, message: `${error}`, data: null })
         }
         connection.query('SELECT * FROM my_tech.admin_tbl WHERE email = "' + user.email + '"', (error, findEmail) => {
             if (error) {
-                return res.status(200).json({ error: true, message: `${error}`, data: null })
+                return res.status(200).json({status:false, error: true, message: `${error}`, data: null })
             }
             if (findEmail[0] == undefined) {
                 const error = "Incorrect Email";
-                return res.status(200).json({ error: true, message: `${error}`, data: null })
+                return res.status(200).json({ status:false,error: true, message: `${error}`, data: null })
             } else {
                 if (findEmail[0].password === user.password) {
                     const token = jwt.sign({ userId: findEmail[0].id }, 'thisismyadminsceretkey');
                     findEmail[0].token = token;
-                    return res.status(200).json({ error: false, message: "Successfully Login", data: findEmail })
+                    return res.status(200).json({status:true, error: false, message: "Successfully Login", data: findEmail })
                 } else {
                     const error = "Incorrect password";
-                    return res.status(200).json({ error: true, message: `${error}`, data: null })
+                    return res.status(200).json({status:false, error: true, message: `${error}`, data: null })
                 }
             }
         })
     } catch (err) {
-        return res.status(500).json({ error: true, message: `${err}`, data: null })
+        return res.status(500).json({status:false, error: true, message: `${err}`, data: null })
     }
 }
 
