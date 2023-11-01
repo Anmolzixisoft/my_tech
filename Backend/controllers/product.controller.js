@@ -1,35 +1,49 @@
 const connection = require('../database/mysqldb')
+const QRCode = require('qrcode')
 
 function productAdd(req, res) {
     try {
-        const { Product_Name, MRP, Selling_Price } = req.body
-        const { Image } = req.files
-        if (!Image) {
-            return res.send({ error: "insert image" })
-        }
-        const file = Image[0].filename
-
-        const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price, Image) VALUES (?, ?, ?,?)';
-        const values = [
-            Product_Name,
-            MRP,
-            Selling_Price,
-            file,
-
-        ];
-        connection.query(sql, values, (err, result) => {
+        const { Product_Name, MRP, Selling_Price } = req.body;
+        let data = {
+            Product_Name: Product_Name,
+            MRP: MRP,
+            Selling_Price: Selling_Price,
+            id: "aisuoiqu3234738jdhf100223"
+        };
+        let stringData = JSON.stringify(data);
+        
+        QRCode.toDataURL(stringData, function (err, code) {
             if (err) {
-                console.error('Database insertion error: ' + err.message);
-                res.status(500).json({ error: 'Error inserting data into the database' });
-            } else {
-                console.log('Data inserted into the database.');
-                res.status(200).json({ message: 'Projuct Added' });
+                console.log("Error occurred while generating QR code:", err);
+                return res.status(500).json({ error: "Error generating QR code" });
             }
+    
+            // 'code' variable holds the base64 representation of the QR code image
+            // const { Image } = req.files;
+            // if (!Image || !Image[0]) {
+            //     return res.status(400).json({ error: "Please insert an image" });
+            // }
+            
+            // const file = Image[0].filename;
+    
+            const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price, Image) VALUES (?, ?, ?, ?)';
+            const values = [Product_Name, MRP, Selling_Price, code];
+    
+            connection.query(sql, values, (err, result) => {
+                if (err) {
+                    console.error('Database insertion error: ' + err.message);
+                    res.status(500).json({ error: 'Error inserting data into the database' });
+                } else {
+                    console.log('Data inserted into the database.');
+                    res.status(200).json({ message: 'Product Added' });
+                }
+            });
         });
     } catch (error) {
-        console.error(error);
-        return res.send({ error: error })
+        console.error("An error occurred:", error);
+        res.status(500).json({ error: 'Server error' });
     }
+    
 
 }
 
@@ -39,9 +53,9 @@ function getProduct(req, res) {
             if (err) {
                 return res.send({ error: err })
             } else {
-                result.forEach(element => {
-                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
-                });
+                // result.forEach(element => {
+                //     element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                // });
                 return res.send({ message: result })
             }
         })

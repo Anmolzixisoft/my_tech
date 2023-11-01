@@ -544,12 +544,12 @@
                         <input type="text" class="form-control" id="sellingPrice" aria-describedby="" />
                       </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
+                    <!-- <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="image" class="form-label">Upload QR Image</label>
                         <input type="file" class="form-control" id="image" aria-describedby="" />
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </form>
                 <div class="col-md-12 my-3">
@@ -604,13 +604,13 @@
         const productName = document.getElementById('productName').value;
         const mrp = document.getElementById('mrp').value;
         const sellingPrice = document.getElementById('sellingPrice').value;
-        const image = document.getElementById('image').files[0];
+        // const image = document.getElementById('image').files[0];
 
         const formData = new FormData(form);
         formData.append('Product_Name', productName);
         formData.append('Selling_Price', sellingPrice);
         formData.append('MRP', mrp);
-        formData.append('Image', image);
+        // formData.append('Image', image);
 
         fetch(apiUrl + '/productAdd', {
           method: 'POST',
@@ -618,9 +618,6 @@
         })
           .then(response => response.json())
           .then(data => {
-
-
-
             if (data.message) {
               Swal.fire({
                 title: 'Success',

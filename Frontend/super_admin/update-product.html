@@ -574,7 +574,7 @@
                                                     name="Selling_Price" aria-describedby="" />
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-sm-6">
+                                        <!-- <div class="col-md-6 col-sm-6">
                                             <div class="label-font mb-3">
                                                 <label for="image" class="form-label">Upload QR Image</label>
                                                 <input type="file" class="form-control" id="Image" name="Image"
@@ -582,7 +582,7 @@
                                                 <img id="propertyImage" alt="Property Image" width="90" height="90">
 
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-6 col-sm-6">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="status" id="inlineRadio1"
@@ -665,7 +665,7 @@
                 $('#mrp').val(data.message.MRP);
                 $('#sellingPrice').val(data.message.Selling_Price);
                 $('#status').val(data.message.Status);
-                $('#propertyImage').attr('src', data.message.Image);
+                // $('#propertyImage').attr('src', data.message.Image);
                 $('#idproduct').val(data.message.id);
                 if (data.message.Status == 1) {
                     $('#inlineRadio1').prop('checked', true); // Set 'Active' radio button

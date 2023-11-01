@@ -33,10 +33,10 @@ function verifyByOtp(req, res) {
     try {
         const { id, otp } = req.body;
         if (id === '') {
-            return res.status(200).json({ status:false,error: true, message: "Please provide the id", data: null })
+            return res.status(200).json({ status: false, error: true, message: "Please provide the id", data: null })
         }
         if (otp === '') {
-            return res.status(200).json({status:false, error: true, message: "Please provide the otp", data: null })
+            return res.status(200).json({ status: false, error: true, message: "Please provide the otp", data: null })
         } else {
             connection.query(
                 'SELECT *  FROM my_tech.users_tbl WHERE id = ? AND otp = ? ',
@@ -114,7 +114,7 @@ function login(req, res) {
                     return res.send({ error: 'Internal server error', status: false });
                 }
                 if (results.length === 0) {
-                    return res.send({ error: 'this email id not register',status:false });
+                    return res.send({ error: 'this email id not register', status: false });
                 }
 
                 const user = results[0];
@@ -127,14 +127,14 @@ function login(req, res) {
                     }
 
                     if (!bcryptResult) {
-                        return res.send({ error: 'Authentication failed' ,status:false });
+                        return res.send({ error: 'Authentication failed', status: false });
                     }
 
                     const token = jwt.sign({ userId: user.id, email: user.email }, 'secret_key', {
                         expiresIn: '1h',
                     });
                     const userId = user.id
-                    res.send({ msg: "login successfully", token, userId ,status:true });
+                    res.send({ msg: "login successfully", token, userId, status: true });
                 });
                 // } else {
                 //     return res.status(200).json({ error: 'pleace contact admin', status: true });
@@ -152,8 +152,8 @@ function login(req, res) {
 const sentOtp = async (req, res) => {
     try {
         const { email, mobile_num } = req.body
-        if (email === '' || mobile_num === '') {
-            return res.status(200).json({ status:false,error: true, message: "Please enter the email or mobile number", data: null })
+        if (email == '' && mobile_num == '') {
+            return res.status(200).json({ status: false, error: true, message: "Please enter the email or mobile number", data: null })
         }
         if (email) {
             const otp = generateOTP();
@@ -180,27 +180,40 @@ const sentOtp = async (req, res) => {
                         const user = results[0];
 
                         connection.query(
-                            `UPDATE my_tech.users_tbl SET  otp=? WHERE email=?`,
+                            `UPDATE my_tech.users_tbl SET otp=? WHERE email=?`,
                             [otp, user.email],
                             (err, result1) => {
                                 if (err) {
                                     console.error('Update error:', err);
-                                    return res.status(500).json({ error: 'Update error',status:false });
-                                }
-                                else {
-
-                                    transporter.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            return res.send({ error: error,status:false })
-                                        } else {
-                                            console.log('Email sent: ');
+                                    return res.status(500).json({ error: 'Update error', status: false });
+                                } else {
+                                    // Assuming 'email' is unique, performing a SELECT after the UPDATE
+                                    connection.query(
+                                        'SELECT * FROM my_tech.users_tbl WHERE email = ?',
+                                        [user.email],
+                                        (selectErr, selectResult) => {
+                                            if (selectErr) {
+                                                console.error('Select error:', selectErr);
+                                                return res.status(500).json({ error: 'Select error', status: false });
+                                            }
+                                            const user = selectResult[0];
+                                            
+                                            // Continue with sending the email
+                                            transporter.sendMail(mailOptions, function (error, info) {
+                                                if (error) {
+                                                    return res.send({ error: error, status: false })
+                                                } else {
+                                                    console.log('Email sent: ');
+                                                }
+                                            });
+                        
+                                            return res.status(200).json({ status: true, message: `OTP sent via Email: ${otp}`, data: user });
                                         }
-                                    })
-                                    return res.status(200).json({ status: true, message: `otp sent  Email ${otp}`, data: user });
+                                    );
                                 }
                             }
                         );
-
+                        
                     }
                 }
             );
@@ -232,20 +245,40 @@ const sentOtp = async (req, res) => {
                             const user = results[0];
 
                             connection.query(
-                                `UPDATE my_tech.users_tbl SET  otp=? WHERE mobile_number=?`,
+                                `UPDATE my_tech.users_tbl SET otp=? WHERE mobile_number=?`,
                                 [otp, user.mobile_number],
                                 (err, result1) => {
                                     if (err) {
                                         console.error('Update error:', err);
-                                        return res.status(500).json({ error: 'Update error' ,status:false});
-                                    }
-                                    else {
-                                        const response = axios.get(`http://nimbusit.biz/api/SmsApi/SendSingleApi?UserID=${userId}&Password=${password}&SenderID=${senderID}&Phno=${phoneNum}&Msg=${msg}&EntityID=${entityID}&TemplateID=${templateId}`);
-                                        console.log('SMS sent successfully:', response.data);
-                                        return res.status(200).json({ status: true, message: `otp sent Number ${otp}`, data: user });
+                                        return res.status(500).json({ error: 'Update error', status: false });
+                                    } else {
+                                        // Assuming 'mobile_number' is unique, performing a SELECT after the UPDATE
+                                        connection.query(
+                                            'SELECT * FROM my_tech.users_tbl WHERE mobile_number = ?',
+                                            [user.mobile_number],
+                                            (selectErr, selectResult) => {
+                                                if (selectErr) {
+                                                    console.error('Select error:', selectErr);
+                                                    return res.status(500).json({ error: 'Select error', status: false });
+                                                }
+                                                const user = selectResult[0];
+                            
+                                                // After successful SELECT, send SMS
+                                                axios.get(`http://nimbusit.biz/api/SmsApi/SendSingleApi?UserID=${userId}&Password=${password}&SenderID=${senderID}&Phno=${phoneNum}&Msg=${msg}&EntityID=${entityID}&TemplateID=${templateId}`)
+                                                    .then(response => {
+                                                        console.log('SMS sent successfully:', response.data);
+                                                        return res.status(200).json({ status: true, message: `OTP sent to Number ${otp}`, data: user });
+                                                    })
+                                                    .catch(smsError => {
+                                                        console.error('SMS sending error:', smsError);
+                                                        return res.status(500).json({ error: 'SMS sending error', status: false });
+                                                    });
+                                            }
+                                        );
                                     }
                                 }
                             );
+                            
 
                         }
                     }
@@ -269,32 +302,32 @@ const adminLogin = (req, res) => {
         const user = req.body;
         if (user.email === '') {
             const error = "Please enter the email";
-            return res.status(200).json({status:false, error: true, message: `${error}`, data: null })
+            return res.status(200).json({ status: false, error: true, message: `${error}`, data: null })
         }
         if (user.password === '') {
             const error = "Please enter the password";
-            return res.status(200).json({ status : flase,error: true, message: `${error}`, data: null })
+            return res.status(200).json({ status: flase, error: true, message: `${error}`, data: null })
         }
         connection.query('SELECT * FROM my_tech.admin_tbl WHERE email = "' + user.email + '"', (error, findEmail) => {
             if (error) {
-                return res.status(200).json({status:false, error: true, message: `${error}`, data: null })
+                return res.status(200).json({ status: false, error: true, message: `${error}`, data: null })
             }
             if (findEmail[0] == undefined) {
                 const error = "Incorrect Email";
-                return res.status(200).json({ status:false,error: true, message: `${error}`, data: null })
+                return res.status(200).json({ status: false, error: true, message: `${error}`, data: null })
             } else {
                 if (findEmail[0].password === user.password) {
                     const token = jwt.sign({ userId: findEmail[0].id }, 'thisismyadminsceretkey');
                     findEmail[0].token = token;
-                    return res.status(200).json({status:true, error: false, message: "Successfully Login", data: findEmail })
+                    return res.status(200).json({ status: true, error: false, message: "Successfully Login", data: findEmail })
                 } else {
                     const error = "Incorrect password";
-                    return res.status(200).json({status:false, error: true, message: `${error}`, data: null })
+                    return res.status(200).json({ status: false, error: true, message: `${error}`, data: null })
                 }
             }
         })
     } catch (err) {
-        return res.status(500).json({status:false, error: true, message: `${err}`, data: null })
+        return res.status(500).json({ status: false, error: true, message: `${err}`, data: null })
     }
 }
 
