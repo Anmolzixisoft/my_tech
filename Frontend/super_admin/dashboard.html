@@ -36,9 +36,9 @@
 <body>
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
-  if(checkAdmintoken == null){
-    location = "http://127.0.0.1:5501/Frontend/"
-  }
+    if (checkAdmintoken == null) {
+      location = "http://192.168.29.179:5501/Frontend/"
+    }
   </script>
   <!--wrapper-->
   <div class="wrapper">
@@ -74,6 +74,7 @@
           </a>
         </li>
 
+
         <li class="menu-label">Products</li>
         <li>
           <a href="manage-products.html">
@@ -81,6 +82,15 @@
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
             <div class="menu-title">Manage Products</div>
+          </a>
+        </li>
+        <li class="menu-label">purchased</li>
+        <li>
+          <a href="purchase-product.html">
+            <div class="parent-icon">
+              <img src="../assets/images/stocktrnsfericon.png" alt="" />
+            </div>
+            <div class="menu-title">purchased Products</div>
           </a>
         </li>
       </ul>

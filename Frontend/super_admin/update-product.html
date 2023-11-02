@@ -45,7 +45,7 @@
     <script>
         let checkAdmintoken = localStorage.getItem('admintoken')
         if (checkAdmintoken == null) {
-            location = "http://127.0.0.1:5501/Frontend/"
+            location = "http://192.168.29.179:5501/Frontend/"
         }
     </script>
     <!--wrapper-->
@@ -89,6 +89,15 @@
                             <img src="../assets/images/stocktrnsfericon.png" alt="" />
                         </div>
                         <div class="menu-title">Manage Products</div>
+                    </a>
+                </li>
+                <li class="menu-label">purchased</li>
+                <li>
+                    <a href="purchase-product.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/stocktrnsfericon.png" alt="" />
+                        </div>
+                        <div class="menu-title">purchased Products</div>
                     </a>
                 </li>
             </ul>
@@ -561,7 +570,8 @@
                                         <div class="col-md-6 col-sm-6">
                                             <div class="label-font mb-3">
                                                 <label for="mrp" class="form-label">MRP</label>
-                                                <input type="text" class="form-control" id="mrp" name="MRP" />
+                                                <input type="text" class="form-control" id="mrp"
+                                                    onkeypress="return isNumberKey(event)" required name="MRP" />
                                             </div>
                                         </div>
 
@@ -571,7 +581,8 @@
                                             <div class="label-font mb-3">
                                                 <label for="sellingPrice" class="form-label">Selling Price</label>
                                                 <input type="text" class="form-control" id="sellingPrice"
-                                                    name="Selling_Price" aria-describedby="" />
+                                                    name="Selling_Price" onkeypress="return isNumberKey(event)" required
+                                                    aria-describedby="" />
                                             </div>
                                         </div>
                                         <!-- <div class="col-md-6 col-sm-6">
@@ -583,16 +594,16 @@
 
                                             </div>
                                         </div> -->
-                                        <div class="col-md-6 col-sm-6">
+                                        <div class="col-md-6 col-sm-6 mt-md-4 pt-md-3">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status" id="inlineRadio1"
-                                                    value="1">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="inlineRadio1" value="1">
                                                 <label class="form-check-label labelradio"
                                                     for="inlineRadio1">Active</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status" id="inlineRadio2"
-                                                    value="0">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="inlineRadio2" value="0">
                                                 <label class="form-check-label labelradio"
                                                     for="inlineRadio2">Deactive</label>
                                             </div>
@@ -644,7 +655,13 @@
         new PerfectScrollbar(".app-container");
     </script>
     <script>
-
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
         const urlParams = new URLSearchParams(window.location.search);
         var productID = urlParams.get('id');
 
@@ -701,7 +718,7 @@
         $(document).on('submit', '#productForm', function (e) {
 
             const fromdata = new FormData(this)
-           
+
 
             e.preventDefault();
             $.ajax({

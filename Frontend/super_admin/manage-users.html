@@ -40,7 +40,7 @@
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
   if(checkAdmintoken == null){
-    location = "http://127.0.0.1:5501/Frontend/"
+    location = "http://192.168.29.179:5501/Frontend/"
   }
   </script>
   <div class="wrapper">
@@ -83,6 +83,15 @@
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
             <div class="menu-title">Manage Products</div>
+          </a>
+        </li>
+        <li class="menu-label">purchased</li>
+        <li>
+          <a href="purchase-product.html">
+            <div class="parent-icon">
+              <img src="../assets/images/stocktrnsfericon.png" alt="" />
+            </div>
+            <div class="menu-title">purchased Products</div>
           </a>
         </li>
       </ul>
@@ -609,6 +618,8 @@
   <script>
 
     const propertyList = document.getElementById('property-list');
+    let count = 1;
+
     function fetchData() {
 
       const api = apiUrl + '/getuser';
@@ -665,7 +676,7 @@
       const formattedDate1 = `${day1}-${month1}-${year1}`;
       const tableRow = document.createElement('tr'); // Create a table row
       tableRow.innerHTML = `
-      <td>${property.id}</td>
+      <td>${count}</td>
   <td>
     <a href="user-details.html?id=${property.id}">${property.name}</a>
   </td>
@@ -681,7 +692,7 @@
       </div>
         </td>
 `;
-
+count++;
       return tableRow; // Return the table row element
     }
 

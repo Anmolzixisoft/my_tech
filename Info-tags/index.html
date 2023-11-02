@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--favicon-->
+  <!-- <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png"/> -->
+  <!-- Bootstrap CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+  <link href="assets/css/bootstrap-extended.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+  <link href="assets/css/style.css" rel="stylesheet" />
+  <link href="assets/css/responsive.css" rel="stylesheet" />
+  <title>Infotags</title>
+</head>
+
+<body>
+  <div class="topbar-bg">
+    <img src="assets/images/mainlogo.png" alt="" />
+  </div>
+  <div class="main-box">
+    <div class="row">
+      <div class="col-12">
+        <div>
+          <h4 class="contact-heading">Contact Vehicle Owner.</h4>
+          <hr />
+
+          <h1 class="plate-no">JK04G <span>####</span></h1>
+
+          <p class="cont-owner">
+            Please select a reason why do you want to contact the owner.
+          </p>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="reason-main-box">
+          <div class="reasonflex active">
+            <div>
+              <i class="fa-solid fa-bolt thecind"></i>
+              <span class="thelist">The lights of this car is on.</span>
+            </div>
+            <div>
+              <input type="radio" class="thespecail_radio" name="radioreas" />
+            </div>
+          </div>
+          <div class="reasonflex">
+            <div>
+              <i class="fa-solid fa-bolt thecind"></i>
+              <span class="thelist">The car is in no parking.</span>
+            </div>
+            <div>
+              <input type="radio" class="thespecail_radio" name="radioreas" />
+            </div>
+          </div>
+          <div class="reasonflex">
+            <div>
+              <i class="fa-solid fa-bolt thecind"></i>
+              <span class="thelist">The car is getting towed.</span>
+            </div>
+            <div>
+              <input type="radio" class="thespecail_radio" name="radioreas" />
+            </div>
+          </div>
+          <div class="reasonflex">
+            <div>
+              <i class="fa-solid fa-bolt thecind"></i>
+              <span class="thelist">There is a baby or pet in car.</span>
+            </div>
+            <div>
+              <input type="radio" class="thespecail_radio" name="radioreas" />
+            </div>
+          </div>
+          <div class="reasonflex">
+            <div>
+              <i class="fa-solid fa-bolt thecind"></i>
+              <span class="thelist">The window or car is open.</span>
+            </div>
+            <div>
+              <input type="radio" class="thespecail_radio" name="radioreas" />
+            </div>
+          </div>
+          <div class="reasonflex">
+            <div>
+              <i class="fa-solid fa-bolt thecind"></i>
+
+              <span class="thelist"> Something wrong with this car.</span>
+            </div>
+            <div>
+              <input type="radio" class="thespecail_radio" name="radioreas" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="messagebtnflex" >
+          <a href="" data-bs-toggle="modal " id="openmodal">Message</a>
+        </div>
+
+      </div>
+
+      <div class="col-12 px-3 mt-1 text-sm-start text-center">
+        <a href="#" class="whatsapptext">
+          <i class="fa-brands fa-whatsapp fa-beat-fade"></i> Urgency? Connect
+          with Infotags.
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!--Message Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog mymodaldialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form action="">
+            <div class="row">
+              <div class="col-12">
+                <div class="noplate">
+                  <img src="assets/images/plat-number.jpg" alt="" />
+                </div>
+                <p class="vehicle">
+                  Please Verify the plate number of the vehicle.
+                </p>
+                <hr />
+              </div>
+              <div class="col-12">
+                <p style="font-size: 16px; color: #000">
+                  Please enter the <br /><b>last 4 digits of vehicle plate number</b>
+                </p>
+              </div>
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-5">
+                    <h1 class="plate-no2">JK04G <span>####</span></h1>
+                  </div>
+                  <div class="col-7">
+                    <input type="text" name="" maxlength="4" class="form-control" placeholder="Last 4 Digits" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 py-1">
+                <p class="wantno">
+                  Do you want the vehicle owner to call you? you can enter
+                  your number here.
+                </p>
+                <input type="text" name="" class="form-control" placeholder="(Optional) Your Phone" value="" />
+                <hr class="martop" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="footermessage text-center text-md-end">
+          <button type="button" class="btnmsg">Message Now</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-size: 16px">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- Bootstrap JS -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/plugins/chartjs/js/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="assets/js/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+  $(document).ready(function () {
+    $(".reasonflex").click(function () {
+      var radio = $(this).find(".thespecail_radio");
+      radio.prop("checked", true);
+    });
+  });
+
+  $(document).ready(function () {
+    $(".reasonflex ").click(function () {
+      var reasonflex = $(this).closest(".reasonflex");
+      $(".reasonflex .thespecail_radio[name='" + this.name + "']").prop(
+        "checked",
+        false
+      );
+      $(this).prop("checked", true);
+      $(".reasonflex").css("background-color", "");
+      reasonflex.css("background-color", "#ff611c");
+    });
+  });
+
+  $(document).ready(function () {
+  $('#openmodal').click(function (e) {
+    e.preventDefault(); // Prevent the default behavior of the anchor tag
+
+    let anyChecked = false;
+    $('.thespecail_radio').each(function () {
+      if ($(this).prop('checked')) {
+        anyChecked = true;
+      }
+    });
+
+    if (anyChecked) {
+      $('#exampleModal').modal('show');
+    } else {
+      alert('Please select a reason before sending a message.');
+    }
+  });
+});
+
+
+
+  $(document).ready(function () {
+    // Function to get the value of a specific URL parameter
+    function getUrlParameter(parameter) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(parameter);
+    }
+
+    // Usage - Get ID from URL
+    const id = getUrlParameter('id');
+    console.log('ID from URL:', id);
+
+    // Making a POST request
+    $('.btnmsg').click(function () {
+      const last4Digits = $('input[placeholder="Last 4 Digits"]').val();
+      const phoneNumber = $('input[placeholder="(Optional) Your Phone"]').val();
+
+      const postData = {
+        product_id: id
+      };
+      console.log(postData);
+
+      $.ajax({
+        url: 'http://192.168.29.179:5001/api/getMobileno',
+        type: 'POST',
+        dataType: "JSON",
+        data: JSON.stringify(postData),
+        contentType: "application/json",
+        success: function (response) {
+          const mobileNumber = response.data[0].mobile_number;
+          $.ajax({
+            url: 'http://192.168.29.179:5001/api/sentOtp',
+            type: 'POST',
+            dataType: "JSON",
+            data: JSON.stringify({ mobile_num: mobileNumber }),
+            contentType: "application/json",
+            success: function (otpResponse) {
+              console.log('OTP Sent:', otpResponse);
+              if (otpResponse.status == true) {
+                Swal.fire({
+                  title: 'Success',
+                  text: 'message send ',
+                  icon: 'success',
+                })
+                setTimeout(() => {
+                  window.location.href = `index.html?id=${id}`
+                }, 1000);
+              } else {
+                Swal.fire({
+                  title: 'Error',
+                  text: otpResponse.error,
+                  icon: 'error',
+                });
+
+              }
+
+            },
+            error: function (otpError) {
+              console.error('Error sending OTP:', otpError);
+
+            }
+          });
+
+        },
+        error: function (xhr, status, error) {
+          console.error('Error:', error);
+          // Handle errors from the server
+        }
+      });
+    });
+  });
+
+
+
+
+
+
+</script>
+
+</html>

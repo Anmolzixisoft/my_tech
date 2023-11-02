@@ -4,46 +4,51 @@ const QRCode = require('qrcode')
 function productAdd(req, res) {
     try {
         const { Product_Name, MRP, Selling_Price } = req.body;
-        let data = {
-            Product_Name: Product_Name,
-            MRP: MRP,
-            Selling_Price: Selling_Price,
-            id: "aisuoiqu3234738jdhf100223"
-        };
-        let stringData = JSON.stringify(data);
-        
-        QRCode.toDataURL(stringData, function (err, code) {
+
+        const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price) VALUES (?, ?, ?)';
+        const values = [Product_Name, MRP, Selling_Price];
+
+        connection.query(sql, values, (err, result) => {
             if (err) {
-                console.log("Error occurred while generating QR code:", err);
-                return res.status(500).json({ error: "Error generating QR code" });
+                console.error('Database insertion error: ' + err.message);
+                res.status(500).json({ error: 'Error inserting data into the database' });
+            } else {
+                var id = result.insertId
+                var redirectURL = `http://192.168.29.179:5501/Info-tags/index.html?id=${id}`
+
+                QRCode.toDataURL(redirectURL, function (err, code) {
+                    if (err) {
+                        console.log("Error occurred while generating QR code:", err);
+                        return res.status(500).json({ error: "Error generating QR code" });
+                    }
+
+                    connection.query(`UPDATE my_tech.product_tbl SET Image= '${code}'  WHERE product_tbl.id =${result.insertId}`, values, (err, result) => {
+                        if (err) {
+                            console.error('Database insertion error: ' + err.message);
+                            res.status(500).json({ error: 'Error inserting data into the database' });
+                        } else {
+
+                            console.log('Data inserted into the database.');
+                            res.status(200).json({ message: 'Product Added' });
+                        }
+                    })
+
+                });
+
+
+
+
             }
-    
-            // 'code' variable holds the base64 representation of the QR code image
-            // const { Image } = req.files;
-            // if (!Image || !Image[0]) {
-            //     return res.status(400).json({ error: "Please insert an image" });
-            // }
-            
-            // const file = Image[0].filename;
-    
-            const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price, Image) VALUES (?, ?, ?, ?)';
-            const values = [Product_Name, MRP, Selling_Price, code];
-    
-            connection.query(sql, values, (err, result) => {
-                if (err) {
-                    console.error('Database insertion error: ' + err.message);
-                    res.status(500).json({ error: 'Error inserting data into the database' });
-                } else {
-                    console.log('Data inserted into the database.');
-                    res.status(200).json({ message: 'Product Added' });
-                }
-            });
         });
+
+
+
+
     } catch (error) {
         console.error("An error occurred:", error);
         res.status(500).json({ error: 'Server error' });
     }
-    
+
 
 }
 
@@ -54,7 +59,7 @@ function getProduct(req, res) {
                 return res.send({ error: err })
             } else {
                 // result.forEach(element => {
-                //     element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                //     element.Image = `http://localhost:5501/Backend/public/${element.Image}`;
                 // });
                 return res.send({ message: result })
             }
@@ -124,7 +129,7 @@ function getProductbyid(req, res) {
             }
             else {
                 result.forEach(element => {
-                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                    element.Image = `http://localhost:5501/Backend/public/${element.Image}`;
                 });
                 return res.status(200).json({ message: result[0] });
 

@@ -38,7 +38,7 @@
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
     if(checkAdmintoken != null){
-      location = "http://127.0.0.1:5501/Frontend/super_admin/dashboard.html"
+      location = "http://192.168.29.179:5501/Frontend/super_admin/dashboard.html"
     }
   </script>
   <div class="container-fluid">
@@ -167,7 +167,7 @@ $(document).on('submit', '#admin_login', function(e) {
                         'success',
                     );
                     setTimeout(() => {
-                        location = 'http://127.0.0.1:5501/Frontend/super_admin/dashboard.html';
+                        location = 'http://192.168.29.179:5501/Frontend/super_admin/dashboard.html';
                     }, 1000);
                     let admintoken = localStorage.setItem("admintoken", response.data[0]
                         .token);

@@ -39,7 +39,7 @@
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
     if (checkAdmintoken == null) {
-      location = "http://127.0.0.1:5501/Frontend/"
+      location = "http://192.168.29.179:5501/Frontend/"
     }
   </script>
   <!--wrapper-->
@@ -83,6 +83,15 @@
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
             <div class="menu-title">Manage Products</div>
+          </a>
+        </li>
+        <li class="menu-label">purchased</li>
+        <li>
+          <a href="purchase-product.html">
+            <div class="parent-icon">
+              <img src="../assets/images/stocktrnsfericon.png" alt="" />
+            </div>
+            <div class="menu-title">purchased Products</div>
           </a>
         </li>
       </ul>
@@ -737,6 +746,7 @@
 
 
     const propertyList = document.getElementById('property-list');
+    let count =1;
 
     function fetchData() {
 
@@ -786,11 +796,12 @@
       const formattedDate1 = `${day1}-${month1}-${year1}`;
       const tableRow = document.createElement('tr'); // Create a table row
       tableRow.innerHTML = `
-      <td>${property.id}</td>
+      <td>${count}</td>
   <td>${property.Product_Name}</td>
   <td><img src="${property.Image}" alt="" class="imgqr" /></td>
+  
   <td>${property.MRP}</td>
-  <td>${property.Selling_Price}</td>
+  <td> ₹ ${property.Selling_Price}</td>
   <td>${formattedDate}</td>
   <td>${formattedDate1}</td>
   <td>
@@ -807,7 +818,7 @@
     </div>
   </td>
 `;
-
+count ++ ;
       return tableRow;
     }
 

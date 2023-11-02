@@ -184,7 +184,6 @@ const sentOtp = async (req, res) => {
                             [otp, user.email],
                             (err, result1) => {
                                 if (err) {
-                                    console.error('Update error:', err);
                                     return res.status(500).json({ error: 'Update error', status: false });
                                 } else {
                                     // Assuming 'email' is unique, performing a SELECT after the UPDATE
@@ -193,7 +192,6 @@ const sentOtp = async (req, res) => {
                                         [user.email],
                                         (selectErr, selectResult) => {
                                             if (selectErr) {
-                                                console.error('Select error:', selectErr);
                                                 return res.status(500).json({ error: 'Select error', status: false });
                                             }
                                             const user = selectResult[0];
@@ -258,7 +256,6 @@ const sentOtp = async (req, res) => {
                                             [user.mobile_number],
                                             (selectErr, selectResult) => {
                                                 if (selectErr) {
-                                                    console.error('Select error:', selectErr);
                                                     return res.status(500).json({ error: 'Select error', status: false });
                                                 }
                                                 const user = selectResult[0];

@@ -12,6 +12,8 @@
   <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
   <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
   <link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
   <!-- loader-->
   <link href="../assets/css/pace.min.css" rel="stylesheet" />
   <script src="../assets/js/pace.min.js"></script>
@@ -37,7 +39,7 @@
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
     if (checkAdmintoken == null) {
-      location = "http://127.0.0.1:5501/Frontend/"
+      location = "http://192.168.29.179:5501/Frontend/"
     }
   </script>
   <!--wrapper-->
@@ -81,6 +83,15 @@
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
             <div class="menu-title">Manage Products</div>
+          </a>
+        </li>
+        <li class="menu-label">purchased</li>
+        <li>
+          <a href="purchase-product.html">
+            <div class="parent-icon">
+              <img src="../assets/images/stocktrnsfericon.png" alt="" />
+            </div>
+            <div class="menu-title">purchased Products</div>
           </a>
         </li>
       </ul>
@@ -530,26 +541,29 @@
                       <div class="label-font mb-3">
                         <label for="productName" class="form-label">Product Name</label>
                         <input type="text" class="form-control" id="productName" aria-describedby="" />
+                        <small id="productNameError" class="text-danger"></small>
+
                       </div>
                     </div>
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="mrp" class="form-label">MRP</label>
-                        <input type="text" class="form-control" id="mrp" aria-describedby="" />
+                        <input type="text" class="form-control" id="mrp" onkeypress="return isNumberKey(event)" required
+                          aria-describedby="" />
+                        <small id="mrpError" class="text-danger"></small>
+
                       </div>
                     </div>
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="sellingPrice" class="form-label">Selling Price</label>
-                        <input type="text" class="form-control" id="sellingPrice" aria-describedby="" />
+                        <input type="text" class="form-control" id="sellingPrice" onkeypress="return isNumberKey(event)"
+                          required aria-describedby="" />
+                        <small id="sellingPriceError" class="text-danger"></small>
+
                       </div>
                     </div>
-                    <!-- <div class="col-md-6 col-sm-6">
-                      <div class="label-font mb-3">
-                        <label for="image" class="form-label">Upload QR Image</label>
-                        <input type="file" class="form-control" id="image" aria-describedby="" />
-                      </div>
-                    </div> -->
+
                   </div>
                 </form>
                 <div class="col-md-12 my-3">
@@ -588,6 +602,8 @@
   <script src="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
   <script src="../assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
   <script src="../assets/plugins/chartjs/js/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
   <script src="../assets/js/index.js"></script>
   <script src="../utils.js"></script>
   <script src="../assets/js/app.js"></script>
@@ -595,54 +611,65 @@
     new PerfectScrollbar(".app-container");
   </script>
   <script>
-
+    function isNumberKey(evt) {
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    }
     document.addEventListener('DOMContentLoaded', function () {
       const submitButton = document.getElementById('submitButton');
       submitButton.addEventListener('click', function (event) {
         event.preventDefault();
-        const form = document.getElementById('productForm');
         const productName = document.getElementById('productName').value;
         const mrp = document.getElementById('mrp').value;
         const sellingPrice = document.getElementById('sellingPrice').value;
         // const image = document.getElementById('image').files[0];
+        if (productName.trim() === '' || mrp.trim() === '' || sellingPrice.trim() === '') {
+          alert('Please fill in all the required fields!');
+        } else {
+          const form = document.getElementById('productForm');
 
-        const formData = new FormData(form);
-        formData.append('Product_Name', productName);
-        formData.append('Selling_Price', sellingPrice);
-        formData.append('MRP', mrp);
-        // formData.append('Image', image);
+          const formData = new FormData(form);
+          formData.append('Product_Name', productName);
+          formData.append('Selling_Price', sellingPrice);
+          formData.append('MRP', mrp);
+          // formData.append('Image', image);
 
-        fetch(apiUrl + '/productAdd', {
-          method: 'POST',
-          body: formData,
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.message) {
-              Swal.fire({
-                title: 'Success',
-                text: data.message,
-                icon: 'success',
-              })
-              setTimeout(() => {
-                window.location.href = "manage-products.html"
-              }, 1000);
-            } else {
+          fetch(apiUrl + '/productAdd', {
+            method: 'POST',
+            body: formData,
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.message) {
+                Swal.fire({
+                  title: 'Success',
+                  text: data.message,
+                  icon: 'success',
+                })
+                setTimeout(() => {
+                  window.location.href = "manage-products.html"
+                }, 1000);
+              } else {
+                Swal.fire({
+                  title: 'Error',
+                  text: data.error,
+                  icon: 'error',
+                });
+
+              }
+            })
+            .catch(error => {
               Swal.fire({
                 title: 'Error',
-                text: data.error,
+                text: error,
                 icon: 'error',
               });
-
-            }
-          })
-          .catch(error => {
-            Swal.fire({
-              title: 'Error',
-              text: error,
-              icon: 'error',
             });
-          });
+
+        }
       });
     });
 
