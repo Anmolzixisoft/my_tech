@@ -941,3 +941,39 @@ label.error {
   background-color: #0085ff;
   color: white;
 }
+
+.deltable th {
+  text-align: start;
+
+  color: #868585;
+  font-weight: 500;
+}
+.deltable td {
+  text-align: right;
+}
+.custdetailheading {
+  font-size: 16px;
+}
+.rounded-full {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+.orderflex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flexbtnsave {
+  display: flex;
+
+  align-items: center;
+  column-gap: 20px;
+}
+.ordertitle {
+  font-size: 20px;
+}
+.chstat {
+  font-size: 18px;
+  color: #000;
+}
