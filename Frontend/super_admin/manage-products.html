@@ -572,7 +572,7 @@
                           <th>Last Update</th>
                           <th>Status</th>
                           <th>Shipment</th>
-                          <th>Mark as deliverd</th>
+                       
                           <th>Action</th>
 
                         </tr>
@@ -700,88 +700,7 @@
   <script>
 
 
-
-    function deleteproduct(id) {
-      let productid = id
-      const userData = {
-        productid: productid
-      };
-
-      fetch(apiUrl + '/deleteProduct', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status == true) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: data.message,
-            }).then(() => {
-              window.location.href = "manage-products.html"
-            })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: data.error,
-            });
-          }
-        })
-        .catch(error => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error,
-          });
-        });
-    }
-
-    function editproduct(id) {
-      location.href = `update-product.html?id=${id}`;
-    }
-
-
-
-    const propertyList = document.getElementById('property-list');
-    let count = 1;
-
-    function fetchData() {
-
-      const api = apiUrl + '/getProduct';
-      fetch(api, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Failed to fetch data');
-          }
-        })
-        .then(data => {
-          data.message.forEach(property => {
-            const newRow = createPropertyListing(property);
-            propertyList.appendChild(newRow);
-
-          });
-
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
-
-
-
-    jQuery(document).ready(function () {
+jQuery(document).ready(function () {
       jQuery("#shipment_form").validate({
         rules: {
           QR_Code_Numbe: {
@@ -862,30 +781,29 @@
       });
     });
 
-
-    function changestatus(id, status) {
-      console.log(id, status);
-      let userid = id;
-      let statusdata = status;
+    function deleteproduct(id) {
+      let productid = id
       const userData = {
-        id: userid,
-        delivered_status: statusdata
+        productid: productid
       };
 
-      $.ajax({
-        url: apiUrl + '/status_change',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(userData),
-        success: function (data) {
-          if (data.message) {
+      fetch(apiUrl + '/deleteProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status == true) {
             Swal.fire({
               icon: 'success',
               title: 'Success',
               text: data.message,
             }).then(() => {
-              location.reload();
-            });
+              window.location.href = "manage-products.html"
+            })
           } else {
             Swal.fire({
               icon: 'error',
@@ -893,32 +811,56 @@
               text: data.error,
             });
           }
-        },
-        error: function (error) {
+        })
+        .catch(error => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: error,
           });
-        }
-      });
+        });
+    }
+
+    function editproduct(id) {
+      location.href = `update-product.html?id=${id}`;
     }
 
 
 
+    const propertyList = document.getElementById('property-list');
+    let count = 1;
+
+    function fetchData() {
+
+      const api = apiUrl + '/getProduct';
+      fetch(api, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to fetch data');
+          }
+        })
+        .then(data => {
+          data.message.forEach(property => {
+            const newRow = createPropertyListing(property);
+            propertyList.appendChild(newRow);
+
+          });
+
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    }
 
     function createPropertyListing(property) {
-      let approveButtonHTML = '';
-      let disapproveButtonHTML = '';
-
-      if (property.delivered_status == 1) {
-        // Property is approved
-        approveButtonHTML = '<button class="delvr-button1 deleverdgreen" disabled>Delivered</button>';
-      } else {
-        // Neither approved nor disapproved
-        approveButtonHTML = '<button class="delvr-button" onclick="changestatus(' + property.id + ', 1)">Mark as delivered</button>';
-
-      }
+     
       const originalDateTime = new Date(property.Created_Date);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
@@ -929,6 +871,7 @@
       const year1 = originalDateTime1.getUTCFullYear();
       const formattedDate = `${day}-${month}-${year}`;
       const formattedDate1 = `${day1}-${month1}-${year1}`;
+      console.log(property.QR_Code_Numbe);
       const tableRow = document.createElement('tr'); // Create a table row
       tableRow.innerHTML = `
       <td>${count}</td>
@@ -946,16 +889,13 @@
       ${property.Status == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '   <button class="nondelvr-button" style="cursor:auto">Deactive</button>'}
     </div>
   </td>
+  
   <td>
-    <button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(${property.id})">Ready to Shipment</button>
 
-    </td>
-  <td>
-    
-   ${approveButtonHTML}
-    
-    </td>
+${property.QR_Code_Numbe == '' ? '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.id + ')">Ready to Shipment</button>' : 'QR code number : ' + property.QR_Code_Numbe}
 
+
+</td>
   <td>
     <div class="statusAction">
       <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>

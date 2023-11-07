@@ -528,10 +528,10 @@
         <div class="row">
           <div class="col-md-12">
             <div class="inv-box">
-              <h4> Purchased Products</h4>
+              <h4>Manage Orders</h4>
               <div class="manage-flex">
-                <h5> your Purchased Products</h5>
-              
+                <h5> Manage Your Orders</h5>
+
               </div>
             </div>
           </div>
@@ -558,14 +558,13 @@
                       <thead>
                         <tr role="row">
                           <th>S.No</th>
-                          <th>User Name</th>
-                          <th>Contact No.</th>
-                          <th>Product Name</th>
-                          <th>Image</th>
-                          <th>Product Price</th>
+                          <th>Order ID</th>
+                          <th>Customer</th>
+                          <th>Total</th>
+                          <th>Status</th>
+                          <th>Date</th>
 
-                          <th>Created Date</th>
-                          <th>Last Update</th>
+                          <th>Action</th>
                           <!-- <th>Status</th> -->
                         </tr>
                       </thead>
@@ -594,61 +593,6 @@
   </div>
   <!--end wrapper-->
 
-  <!-- modal edit batches -->
-
-  <div class="modal fade" id="l3_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Institute Name </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Email </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Contact No. </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Create Password </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Confirm Password </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Student Limit </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mb-4">
-          <button type="button" class="addpr-btn">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Bootstrap JS -->
   <script src="../assets/js/bootstrap.bundle.min.js"></script>
@@ -698,6 +642,7 @@
 
 
 
+
     const propertyList = document.getElementById('property-list');
     let count = 1;
     function fetchData() {
@@ -730,14 +675,67 @@
         });
     }
 
+    function viewdetails(id) {
+      location.href = `order-details.html?id=${id}`;
+    }
 
 
 
+    function changestatus(id, status) {
+      console.log(id, status);
+      let userid = id;
+      let statusdata = status;
+      const userData = {
+        id: userid,
+        delivered_status: statusdata
+      };
 
+      $.ajax({
+        url: apiUrl + '/status_change',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(userData),
+        success: function (data) {
+          if (data.message) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+            }).then(() => {
+              location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.error,
+            });
+          }
+        },
+        error: function (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+          });
+        }
+      });
+    }
 
     function createPropertyListing(property) {
+      let approveButtonHTML = '';
+      let disapproveButtonHTML = '';
+      console.log(property.delivered_status == 1);
+      if (property.delivered_status == 1) {
+        // Property is approved
+        approveButtonHTML = '<button class="deleverdgreen" disabled>Delivered</button>';
+      } else {
+        // Neither approved nor disapproved
+        approveButtonHTML = '<button class="pending-btn" onclick="changestatus(' + property.product_id + ', 1)">Pending</button>';
 
+      }
       console.log(property, 'property');
+
       const originalDateTime = new Date(property.create_at);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
@@ -751,18 +749,17 @@
       const tableRow = document.createElement('tr'); // Create a table row
       tableRow.innerHTML = `
       <td>${count}</td>
+  <td>${property.QR_Code_Numbe}</td>
   <td>${property.name}</td>
-  <td>${property.mobile_number}</td>
   
-  <td>${property.Product_Name}</td>
-  <td><img src="${property.Image}" alt="" class="imgqr" /></td>
   <td>₹ ${property.Selling_Price}</td>
+  <td>${approveButtonHTML}</td>\
   <td>${formattedDate}</td>
-  <td>${formattedDate1}</td>
 
-  </td>
+  <td><span class="eye-btn"><i class="fa-solid fa-eye"  onclick="viewdetails(${property.id})"></i></span></td>
+ 
 `;
-count++;
+      count++;
       return tableRow;
     }
 

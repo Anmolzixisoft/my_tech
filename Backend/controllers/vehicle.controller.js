@@ -4,31 +4,78 @@ const { findStates } = require('../model/vehicle');
 
 function vehicleAdd(req, res) {
     try {
+
         const { product_id, user_id, vehicle_type, brand_name, modal_name, reg_no, current_city, location } = req.body
         if (!req.body) {
             return res.status(500).json({ status: false, error: 'fill field ' });
 
         }
-        const sql = 'INSERT INTO my_tech.vehicle_info_tbl (product_id,user_id, vehicle_type, brand_name, modal_name,reg_no,current_city,location) VALUES (?, ?, ?,?,?,?,?,?)';
-        const values = [
-            product_id,
-            user_id,
-            vehicle_type,
-            brand_name,
-            modal_name,
-            reg_no,
-            current_city,
-            location
-        ];
-        connection.query(sql, values, (err, result) => {
-            if (err) {
-                console.error('Database insertion error: ' + err.message);
-                return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
-            } else {
-                console.log('Data inserted into the database.');
-                return res.status(200).json({ status: true, message: 'Projuct Added' });
-            }
-        });
+        connection.query('SELECT * FROM my_tech.purchase_QR_tbl where user_id = "' + user_id + '" AND product_id="' + product_id + '" ',
+            (err, result) => {
+                if (err) {
+                    return res.status(500).json({ status: false, error: err });
+                }
+                if (result[0] == undefined) {
+                    return res.status(200).json({ status: false, message: "The product not be purchase" });
+                } else {
+                    connection.query('SELECT * FROM my_tech.vehicle_info_tbl WHERE user_id = "' + user_id + '" AND product_id = "' + product_id + '"', (error, findVichelInfo) => {
+                        if (error) {
+                            return res.status(200).json({ status: false, error: err });
+
+                        } if (findVichelInfo[0] == undefined) {
+                            const sql = 'INSERT INTO my_tech.vehicle_info_tbl (product_id,user_id, vehicle_type, brand_name, modal_name,reg_no,current_city,location) VALUES (?, ?, ?,?,?,?,?,?)';
+                            const values = [
+                                product_id,
+                                user_id,
+                                vehicle_type,
+                                brand_name,
+                                modal_name,
+                                reg_no,
+                                current_city,
+                                location
+                            ];
+                            connection.query(sql, values, (err, result) => {
+                                if (err) {
+                                    return res.status(500).json({ status: false, error: err });
+                                }
+
+                                if (result.affectedRows == 1) {
+                                    connection.query('UPDATE my_tech.purchase_QR_tbl SET status= "1" WHERE user_id = "' + user_id + '" AND product_id = "' + product_id + '"', (error, updateStatus) => {
+                                        console.log(updateStatus, 'updateStatusupdateStatusupdateStatus');
+                                        if (error) {
+                                            return res.status(200).json({ status: false, error: error });
+                                        }
+                                        if (updateStatus.affectedRows == 1) {
+
+                                            connection.query('UPDATE my_tech.product_tbl SET delivered_status_scan	= "1" WHERE id = "' + product_id + '"', (error, statusdata) => {
+                                                console.log(statusdata.affectedRows, 'statusdata');
+
+                                                if (error) {
+                                                    return res.status(200).json({ status: false, error: error });
+                                                }
+                                                if (statusdata.affectedRows == 1) {
+                                                    return res.status(200).json({ status: true, message: 'Successfully' });
+                                                } else {
+                                                    return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
+                                                }
+                                            })
+
+                                            // return res.status(200).json({ status: true, message: 'Successfully' });
+                                        } else {
+                                            return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
+                                        }
+                                    })
+                                } else {
+                                    const error = "QR code not scan";
+                                    return res.status(500).json({ status: false, error: `${error}` });
+                                }
+                            });
+                        } else {
+                            return res.status(500).json({ status: false, message: "Vichel Info Already Add" });
+                        }
+                    })
+                }
+            })
 
     } catch (error) {
         return res.send({ data: error, status: false })
@@ -42,6 +89,9 @@ function getallvehicle(req, res) {
             if (err) {
                 return res.status(500).json({ status: false, error: 'Error get  data  the database' });
             } else {
+                result.forEach(element => {
+                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                });
                 return res.status(200).json({ status: true, data: result, message: 'success' });
             }
         })
@@ -105,7 +155,7 @@ function gteByid(req, res) {
     try {
         const { user_id } = req.body
         console.log(user_id);
-        connection.query(`SELECT my_tech.vehicle_info_tbl.*, my_tech.product_tbl.Image
+        connection.query(`SELECT my_tech.vehicle_info_tbl.*, my_tech.product_tbl.QR_code,my_tech.product_tbl.delivered_status_scan	
         FROM my_tech.vehicle_info_tbl 
         LEFT JOIN my_tech.product_tbl 
         ON my_tech.vehicle_info_tbl.product_id = my_tech.product_tbl.id  where my_tech.vehicle_info_tbl.user_id = ${user_id}`, (err, result) => {
@@ -117,6 +167,9 @@ function gteByid(req, res) {
                 return res.status(500).json({ status: false, data: null, error: 'vehicle not found' });
 
             } else {
+                // result.forEach(element => {
+                //     element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                // });
                 return res.status(200).json({ status: true, data: result, message: 'success' });
             }
         })
@@ -143,6 +196,9 @@ function ProjuctgteByid(req, res) {
 
             } else {
                 let product = result[0]
+                result.forEach(element => {
+                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                });
                 return res.status(200).json({ status: true, data: product, message: 'success' });
             }
         })

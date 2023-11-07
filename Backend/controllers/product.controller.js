@@ -59,7 +59,7 @@ function getProduct(req, res) {
                 return res.send({ error: err })
             } else {
                 result.forEach(element => {
-                    element.Image = `http://localhost:5501/Backend/public/${element.Image}`;
+                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
                 });
                 return res.send({ message: result })
             }

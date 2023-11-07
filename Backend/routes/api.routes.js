@@ -6,7 +6,9 @@ const loginRouter = require('./login.route')
 const productRouter = require('./product.route')
 const vehicleRouter = require('./vehicle.route')
 const purchaseRouter = require('./qr_purchase.route')
+const contactRouter = require('./contact.route')
 
+apiRouter.use('/api', contactRouter)
 apiRouter.use('/api', signUpRouter);
 apiRouter.use('/api', loginRouter);
 apiRouter.use('/api', productRouter);

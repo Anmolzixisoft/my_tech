@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--favicon-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+    <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
+    <!--plugins-->
+    <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <!-- loader-->
+    <link href="../assets/css/pace.min.css" rel="stylesheet" />
+    <script src="../assets/js/pace.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/bootstrap-extended.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="../assets/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="../assets/css/icons.css" rel="stylesheet" />
+    <!-- Theme Style CSS -->
+    <link rel="stylesheet" href="../assets/css/dark-theme.css" />
+    <link rel="stylesheet" href="../assets/css/semi-dark.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/header-colors.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <title>My-Tech -Admin Panel</title>
+</head>
+
+<body>
+    <script>
+        let checkAdmintoken = localStorage.getItem('admintoken')
+        if (checkAdmintoken == null) {
+            location = "http://192.168.29.179:5501/Frontend/"
+        }
+    </script>
+    <!--wrapper-->
+    <div class="wrapper">
+        <!--sidebar wrapper -->
+        <div class="sidebar-wrapper" data-simplebar="true">
+            <div class="sidebar-header">
+                <div>
+                    <h4 class="logo-text text-center">My-Tech</h4>
+                </div>
+                <div class="toggle-icon ms-auto">
+                    <i class="bx bx-arrow-back"></i>
+                </div>
+            </div>
+            <!--navigation-->
+            <ul class="metismenu" id="menu">
+                <li class="menu-label">Main</li>
+                <li>
+                    <a href="./dashboard.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/dashboardicon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Dashboard</div>
+                    </a>
+                </li>
+
+                <li class="menu-label">Users</li>
+                <li>
+                    <a href="manage-users.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/tssicon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Manage Users</div>
+                    </a>
+                </li>
+
+                <li class="menu-label">Products</li>
+                <li>
+                    <a href="manage-products.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/stocktrnsfericon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Manage Products</div>
+                    </a>
+                </li>
+                <li class="menu-label">purchased</li>
+                <li>
+                    <a href="purchase-product.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/stocktrnsfericon.png" alt="" />
+                        </div>
+                        <div class="menu-title">purchased Products</div>
+                    </a>
+                </li>
+            </ul>
+            <!--end navigation-->
+        </div>
+        <!--end sidebar wrapper -->
+        <!--start header -->
+        <header>
+            <div class="topbar d-flex align-items-center">
+                <nav class="navbar navbar-expand gap-3">
+                    <div class="mobile-toggle-menu"><i class="bx bx-menu"></i></div>
+
+                    <div class="position-relative search-bar d-lg-block d-none">
+                        <input class="form-control px-5" type="search" placeholder="Search" />
+                        <span
+                            class="position-absolute top-50 search-show ms-3 translate-middle-y start-0 top-50 fs-5"><i
+                                class="bx bx-search"></i></span>
+                    </div>
+
+                    <div class="top-menu ms-auto">
+                        <ul class="navbar-nav align-items-center gap-1">
+                            <li class="nav-item mobile-search-icon d-flex d-lg-none" data-bs-toggle="modal"
+                                data-bs-target="#SearchModal">
+                                <a class="nav-link" href="avascript:;"><i class="bx bx-search"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="top-menu ms-auto">
+                        <ul class="navbar-nav align-items-center gap-1">
+                            <li class="nav-item mobile-search-icon d-flex d-lg-none" data-bs-toggle="modal"
+                                data-bs-target="#SearchModal">
+                                <a class="nav-link" href="avascript:;"><i class="bx bx-search"></i>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown dropdown-large">
+                                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                                    data-bs-toggle="dropdown"><span class="alert-count">7</span>
+                                    <i class="bx bx-bell"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:;">
+                                        <div class="msg-header">
+                                            <!-- <p class="msg-header-title">Notifications</p>
+                        <p class="msg-header-badge">8 New</p> -->
+                                        </div>
+                                    </a>
+                                    <div class="header-notifications-list">
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-1.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Daisy Anderson<span class="msg-time float-end">5 sec ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">The standard chunk of lorem</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-danger text-danger">
+                                                    dc
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        New Orders
+                                                        <span class="msg-time float-end">2 min ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">You have recived new orders</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-2.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Althea Cabardo
+                                                        <span class="msg-time float-end">14 sec ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Many desktop publishing packages
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-success text-success">
+                                                    <img src="../assets/images/app/outlook.png" width="25"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Account Created<span class="msg-time float-end">28 min
+                                                            ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Successfully created new email
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-info text-info">Ss</div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        New Product Approved
+                                                        <span class="msg-time float-end">2 hrs ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Your new product has approved
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-4.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Katherine Pechon
+                                                        <span class="msg-time float-end">15 min ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Making this the first true generator
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-success text-success">
+                                                    <i class="bx bx-check-square"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Your item is shipped
+                                                        <span class="msg-time float-end">5 hrs ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Successfully shipped your item
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-primary">
+                                                    <img src="../assets/images/app/github.png" width="25"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        New 24 authors<span class="msg-time float-end">1 day ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        24 new authors joined last week
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-8.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Peter Costanzo
+                                                        <span class="msg-time float-end">6 hrs ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        It was popularised in the 1960s
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a href="javascript:;">
+                                        <div class="text-center msg-footer">
+                                            <button class="btn btn-primary w-100">
+                                                View All Notifications
+                                            </button>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown dropdown-large">
+                                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="alert-count">8</span>
+                                    <i class="bx bx-shopping-bag"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:;">
+                                        <div class="msg-header">
+                                            <p class="msg-header-title">My Cart</p>
+                                            <p class="msg-header-badge">10 Items</p>
+                                        </div>
+                                    </a>
+                                    <div class="header-message-list">
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/11.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/02.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/03.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/04.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/05.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/06.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/07.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/08.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/09.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a href="javascript:;">
+                                        <div class="text-center msg-footer">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <h5 class="mb-0">Total</h5>
+                                                <h5 class="mb-0 ms-auto">$489.00</h5>
+                                            </div>
+                                            <button class="btn btn-primary w-100">Checkout</button>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="user-box dropdown px-3">
+                        <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../assets/images/avatars/avatar-4.png" class="user-img" alt="user avatar" />
+                            <div class="user-info">
+                                <p class="user-name mb-0">Admin</p>
+                                <!-- <p class="designattion mb-0">Web Designer</p> -->
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                        class="bx bx-log-out-circle"></i><span>Logout</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <!--end header -->
+        <!--start page wrapper -->
+        <div class="page-wrapper">
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="inv-box">
+                            <h4>Order Details</h4>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <div class="table-top">
+                                    <div class="search-set">
+                                        <div class="search-input-box">
+                                            <a class="btn-searchset"><i class="fa-solid fa-filter"></i>
+                                            </a>
+                                            <div id="" class="">
+                                                <label>
+                                                    <input type="search" class="form-control form-control-sm"
+                                                        placeholder="Search..."
+                                                        aria-controls="DataTables_Table_0" /></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="delverystatustable">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th>S.No</th>
+                                                    <th>Product Name</th>
+                                                    <th>Image</th>
+                                                    <th>QR code</th>
+
+                                                    <th>MRP</th>
+                                                    <th>Selling Price</th>
+                                                    <th>Created Date</th>
+                                                    <th>Last Update</th>
+                                                    <th>Status</th>
+                                                    <th>Shipment</th>
+
+                                                    <th>Action</th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="property-list">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end page wrapper -->
+        <!--start overlay-->
+        <div class="overlay toggle-icon"></div>
+        <!--end overlay-->
+        <!--Start Back To Top Button-->
+        <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+        <!--End Back To Top Button-->
+        <footer class="page-footer">
+            <p class="mb-0">Copyright © 2023. All right reserved.</p>
+        </footer>
+    </div>
+    <!--end wrapper-->
+
+    <!--  shipment modal -->
+
+    <div class="modal fade" id="l3_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="shipment_form">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="label-font mb-3">
+                                    <label for="" class="form-label">QR Code Number </label>
+                                    <input type="text" class="form-control" name="QR_Code_Numbe" id="QR_Code_Numbe"
+                                        aria-describedby="" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="label-font mb-3">
+                                    <label for="" class="form-label"> Courier Detail </label>
+                                    <input type="text" class="form-control" name="Courier_Detail" id="Courier_Detail"
+                                        aria-describedby="" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="label-font mb-3">
+                                    <label for="" class="form-label"> Courier ID</label>
+                                    <input type="text" class="form-control " name="Courier_ID" id="Courier_ID"
+                                        aria-describedby="" />
+                                </div>
+                            </div>
+                            <div class="text-center mb-4">
+                                <button type="submit" class="addpr-btn">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+    <!--plugins-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="../assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="../assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="../assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="../assets/plugins/chartjs/js/chart.js"></script>
+    <script src="../assets/js/index.js"></script>
+    <!--app JS-->
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="../assets/js/app.js"></script>
+    <script src="../utils.js"></script>
+    <script>
+        new PerfectScrollbar(".app-container");
+    </script>
+    <script>
+        $(".fingsize")
+            .addClass("img-enlargable")
+            .click(function () {
+                var src = $(this).attr("src");
+                $("<div>")
+                    .css({
+                        background: "RGBA(0,0,0,.5) url(" + src + ") no-repeat center",
+                        backgroundSize: "contain",
+                        width: "100%",
+                        height: "100%",
+                        position: "fixed",
+                        zIndex: "10000",
+                        top: "0",
+                        left: "0",
+                        cursor: "zoom-out",
+                    })
+                    .click(function () {
+                        $(this).remove();
+                    })
+                    .appendTo("body");
+            });
+    </script>
+    <script>
+
+
+        jQuery(document).ready(function () {
+            jQuery("#shipment_form").validate({
+                rules: {
+                    QR_Code_Numbe: {
+                        required: true
+                    },
+                    Courier_Detail: {
+                        required: true
+                    },
+                    Courier_ID: {
+                        required: true
+                    }
+                },
+                messages: {
+                    QR_Code_Numbe: {
+                        required: "Please enter QR Code Number"
+                    },
+                    Courier_Detail: {
+                        required: "Please enter Courier Detail"
+                    },
+                    Courier_ID: {
+                        required: "Please enter Courier ID"
+                    }
+                },
+
+                errorClass: "error",
+                errorElement: "div",
+            });
+
+            $(document).on('submit', '#shipment_form', function (e) {
+                e.preventDefault();
+
+                // Proceed with your action (e.g., AJAX submission) when the form is valid
+                var QRCodeNumber = $("#QR_Code_Numbe").val();
+                var courierDetail = $("#Courier_Detail").val();
+                var courierID = $("#Courier_ID").val();
+                var productId = $('#l3_modal').attr('data-id');
+
+                var requestData = {
+                    QR_Code_Numbe: QRCodeNumber,
+                    Courier_Detail: courierDetail,
+                    Courier_ID: courierID,
+                    id: productId
+
+                };
+                // AJAX POST request
+                $.ajax({
+                    url: apiUrl + '/addDetailsproduct',
+                    type: "POST",
+                    dataType: "JSON",
+                    data: JSON.stringify(requestData),
+                    contentType: "application/json",
+                    success: function (response) {
+                        if (response.error == true) {
+                            Swal.fire(
+                                'error!',
+                                `${response.message}`,
+                                'error'
+                            );
+                        } else {
+                            Swal.fire(
+                                'success!',
+                                `${response.message}`,
+                                'success',
+                            );
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors from the server
+                        console.error("Request failed", error);
+                        // You can add code here to handle errors, show messages, etc.
+                    }
+                });
+
+
+            });
+        });
+
+        function deleteproduct(id) {
+            let productid = id
+            const userData = {
+                productid: productid
+            };
+
+            fetch(apiUrl + '/deleteProduct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                        }).then(() => {
+                            window.location.href = "manage-products.html"
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.error,
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error,
+                    });
+                });
+        }
+
+        function editproduct(id) {
+            location.href = `update-product.html?id=${id}`;
+        }
+
+
+
+        const propertyList = document.getElementById('property-list');
+        let count = 1;
+
+        function fetchData() {
+
+            const api = apiUrl + '/getProduct';
+            fetch(api, {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to fetch data');
+                    }
+                })
+                .then(data => {
+                    data.message.forEach(property => {
+                        const newRow = createPropertyListing(property);
+                        propertyList.appendChild(newRow);
+
+                    });
+
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        function createPropertyListing(property) {
+
+            const originalDateTime = new Date(property.Created_Date);
+            const day = originalDateTime.getUTCDate();
+            const month = originalDateTime.getUTCMonth() + 1;
+            const year = originalDateTime.getUTCFullYear();
+            const originalDateTime1 = new Date(property.Update_Date);
+            const day1 = originalDateTime1.getUTCDate();
+            const month1 = originalDateTime1.getUTCMonth() + 1;
+            const year1 = originalDateTime1.getUTCFullYear();
+            const formattedDate = `${day}-${month}-${year}`;
+            const formattedDate1 = `${day1}-${month1}-${year1}`;
+            console.log(property.QR_Code_Numbe);
+            const tableRow = document.createElement('tr'); // Create a table row
+            tableRow.innerHTML = `
+      <td>${count}</td>
+  <td>${property.Product_Name}</td>
+  <td><img src="${property.Image}" alt="" class="imgqr" /></td>
+  <td><img src="${property.QR_code}" alt="" class="imgqr" /></td>
+
+  <td>${property.MRP}</td>
+  <td> ₹ ${property.Selling_Price}</td>
+  <td>${formattedDate}</td>
+  <td>${formattedDate1}</td>
+ 
+  <td>
+    <div>
+      ${property.Status == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '   <button class="nondelvr-button" style="cursor:auto">Deactive</button>'}
+    </div>
+  </td>
+  
+  <td>
+
+${property.QR_Code_Numbe == '' ? '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.id + ')">Ready to Shipment</button>' : 'QR code number : ' + property.QR_Code_Numbe}
+
+
+</td>
+  <td>
+    <div class="statusAction">
+      <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>
+            <i class="fa-solid fa-trash"  onclick="deleteproduct(${property.id})"></i>
+          </div>
+  </td>
+`;
+            count++;
+            return tableRow;
+        }
+        function openShipmentModal(id) {
+            $('#l3_modal').attr('data-id', id);
+            $('#l3_modal').modal('show');
+        }
+
+        window.onload = fetchData;
+        $(document).ready(function () {
+            $('.search-input-box input[type="search"]').keyup(function () {
+                var searchText = $(this).val().toLowerCase();
+
+                $('#property-list tr').each(function () {
+                    var cellText = $(this).text().toLowerCase();
+                    $(this).toggle(cellText.indexOf(searchText) > -1);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

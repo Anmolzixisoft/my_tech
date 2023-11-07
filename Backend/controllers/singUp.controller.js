@@ -213,54 +213,88 @@ function sendVerificationMail(req, res) {
 
 function AdduserDetails(req, res) {
     try {
-
         const { id, name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state, city, pincode } = req.body;
+        connection.query('SELECT * FROM my_tech.tbl_cities WHERE id="' + city + '"', (err, result) => {
+            if (err) {
+                return res.send({ status: false, error: err })
+            }
+            else {
+                var city_name = result[0].name
+                connection.query(`SELECT * FROM my_tech.tbl_states WHERE id=${state}`, (err, stateresult) => {
 
-        const { aadhar_image, license_image, profile_image, aadhar_image_back } = req.files
-        if (!aadhar_image || !license_image || !profile_image) {
-            return res.send({ error: "insert file " })
-        }
-        const profile = profile_image[0].filename
-        const aadhar = aadhar_image[0].filename
-        const license = license_image[0].filename
-        const back_aadhar = aadhar_image_back[0].filename
+                    if (err) {
+                        return res.send({ status: false, error: err })
+                    }
+                    else {
+                        var state_name = stateresult[0].name
+                    }
 
-        if (!isValidEmail(email)) {
-            return res.status(400).json({ error: 'Invalid email format', status: false });
-        }
+                    const { aadhar_image, license_image, profile_image, aadhar_image_back } = req.files
+                    // if (!aadhar_image || !license_image || !profile_image) {
+                    //     return res.send({ error: "insert file " })
+                    // }
 
-        if (!isValidMobileNumber(mobile_number)) {
-            return res.status(400).json({ error: 'Invalid mobile number format', status: false });
-        }
+                    var aadhar_image_update = '';
+                    var license_image_update = '';
+                    var profile_image_update = '';
+                    var aadhar_image_back_update = '';
 
-        connection.query(
-            'SELECT * FROM my_tech.users_tbl WHERE id = ? ',
-            [id],
-            (err, results) => {
-                if (err) {
-                    console.error('Error checking email existence: ' + err);
-                    return res.status(500).json({ error: 'Internal server error' });
-                }
+                    if (typeof license_image !== 'undefined') {
+                        license_image_update = ', license_image = "' + license_image[0].filename + '" ';
+                    }
 
-                if (results.length > 0) {
+                    if (typeof aadhar_image !== 'undefined') {
+                        aadhar_image_update = ', aadhar_image = "' + aadhar_image[0].filename + '" ';
+                    }
+
+                    if (typeof profile_image !== 'undefined') {
+                        profile_image_update = ', profile_image = "' + profile_image[0].filename + '" ';
+                    }
+
+                    if (typeof aadhar_image_back !== 'undefined') {
+                        aadhar_image_back_update = ', aadhar_image_back = "' + aadhar_image_back[0].filename + '" ';
+                    }
+
+                    if (!isValidEmail(email)) {
+                        return res.status(400).json({ error: 'Invalid email format', status: false });
+                    }
+
+                    if (!isValidMobileNumber(mobile_number)) {
+                        return res.status(400).json({ error: 'Invalid mobile number format', status: false });
+                    }
+
                     connection.query(
-                        'UPDATE my_tech.users_tbl  SET name="' + name + '",email="' + email + '",mobile_number="' + mobile_number + '",emergency_mobile_number="' + emergency_mobile_number + '",state="' + state + '",city="' + city + '",pincode="' + pincode + '",aadhar_no="' + aadhar_no + '", license_no="' + license_no + '",address="' + address + '",aadhar_image="' + aadhar + '",aadhar_image_back="' + back_aadhar + '", license_image="' + license + '"  ,profile_completed="1",profile_image="' + profile + '"  WHERE id="' + id + '"',
-
-                        (err, result1) => {
+                        'SELECT * FROM my_tech.users_tbl WHERE id = ? ',
+                        [id],
+                        (err, results) => {
                             if (err) {
-                                console.error('Update error:', err);
-                                return res.status(500).json({ error: 'Update error' });
+                                console.error('Error checking email existence: ' + err);
+                                return res.status(500).json({ error: 'Internal server error' });
                             }
 
-                            return res.status(200).json({ status: true, message: ` successful ` });
+                            if (results.length > 0) {
+
+                                const sql = 'UPDATE my_tech.users_tbl SET name=?,email=?,mobile_number=?' + profile_image_update + ',' + 'emergency_mobile_number=?,aadhar_no=?' + aadhar_image_update + '' + aadhar_image_back_update + ',' + 'license_no=?' + license_image_update + ',' + 'address=?,state=?,city=?,pincode=?,profile_completed= "1" WHERE id = ?'
+
+                                connection.query(sql, [name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state_name, city_name, pincode, id],
+                                    (err, result) => {
+                                        if (err) {
+                                            console.error('Update error:', err);
+                                            return res.status(500).json({ error: 'Update error' });
+                                        }
+
+                                        return res.status(200).json({ status: true, message: ` successful ` });
+                                    }
+                                );
+                            } else {
+                                return res.send({ message: "user not found" })
+                            }
                         }
                     );
-                } else {
-                    return res.send({ message: "user not found" })
-                }
-            }
-        );
+                })
 
+            }
+        })
     } catch (error) {
         console.log('update  error ->', error);
         return res.send({ data: error, status: false })
@@ -268,8 +302,6 @@ function AdduserDetails(req, res) {
 
 
 }
-
-
 
 
 module.exports = { signUp, getuser, sendVerificationMail, AdduserDetails, getuserById }
