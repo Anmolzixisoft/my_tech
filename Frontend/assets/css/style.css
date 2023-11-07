@@ -436,7 +436,9 @@
 .delvr-button1 {
   background-color: #0085ff;
 }
-
+.deleverdgreen{
+  background-color: #0d7013 !important;
+}
 .delvr-button1:hover {
   pointer-events: none;
 }
@@ -786,4 +788,11 @@ display: inline-block;
   font-weight: 500;
   font-size: 14px;
   display: block;
+}
+.error {
+  color: red; 
+}
+
+label.error {
+  color: red;
 }

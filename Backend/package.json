@@ -17,6 +17,7 @@
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "country-state-city": "^3.2.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
@@ -36,6 +37,7 @@
     "passport-instagram": "^1.0.0",
     "passport-linkedin-oauth2": "^2.0.0",
     "path": "^0.12.7",
+    "qr-image": "^3.2.0",
     "qrcode": "^1.5.3",
     "sequelize": "^6.33.0",
     "twilio": "^4.19.0"

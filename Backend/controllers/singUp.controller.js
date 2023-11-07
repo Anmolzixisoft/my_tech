@@ -54,7 +54,10 @@ function getuserById(req, res) {
                     element.aadhar_image_back = `http://192.168.29.179:5501/Backend/public/${element.aadhar_image_back}`
 
                 });
-                return res.send({ data: result, status: true })
+
+
+                const user = result[0]
+                return res.send({ data: user, status: true })
 
             }
         })
@@ -107,7 +110,7 @@ function signUp(req, res) {
                                 } else {
                                     console.log("succsessss");
 
-                                    return res.status(201).json({ data: result, status: true, message: ` successful SingUp` });
+                                    return res.status(200).json({ data: result, status: true, message: ` successful SingUp`, userId: result.insertId });
                                 }
                             }
                         );
@@ -117,7 +120,6 @@ function signUp(req, res) {
                 }
             }
         );
-
 
 
     } catch (error) {
@@ -178,7 +180,7 @@ function sendVerificationMail(req, res) {
                                 console.log('Email sent: ');
                             }
                         })
-                        return res.status(201).json({ data: result1, status: true, msg: `sent mail successful ${otp}` });
+                        return res.status(200).json({ data: result1, status: true, msg: `sent mail successful ${otp}` });
                     }
                 );
             } else {
@@ -198,7 +200,7 @@ function sendVerificationMail(req, res) {
                                     console.log('Email sent: ');
                                 }
                             })
-                            return res.status(201).json({ data: result, status: true, msg: `sent mail successful ${otp}` });
+                            return res.status(200).json({ data: result, status: true, msg: `sent mail successful ${otp}` });
                         }
                     }
                 );
@@ -212,10 +214,10 @@ function sendVerificationMail(req, res) {
 function AdduserDetails(req, res) {
     try {
 
-        const { name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address } = req.body;
+        const { id, name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state, city, pincode } = req.body;
 
-        const { aadhar_image, aadhar_image_back, license_image, profile_image } = req.files
-        if (!aadhar_image || !aadhar_image_back || !license_image || !profile_image) {
+        const { aadhar_image, license_image, profile_image, aadhar_image_back } = req.files
+        if (!aadhar_image || !license_image || !profile_image) {
             return res.send({ error: "insert file " })
         }
         const profile = profile_image[0].filename
@@ -232,8 +234,8 @@ function AdduserDetails(req, res) {
         }
 
         connection.query(
-            'SELECT * FROM my_tech.users_tbl WHERE email = ? ',
-            [email],
+            'SELECT * FROM my_tech.users_tbl WHERE id = ? ',
+            [id],
             (err, results) => {
                 if (err) {
                     console.error('Error checking email existence: ' + err);
@@ -242,7 +244,7 @@ function AdduserDetails(req, res) {
 
                 if (results.length > 0) {
                     connection.query(
-                        'UPDATE my_tech.users_tbl  SET name="' + name + '",email="' + email + '",mobile_number="' + mobile_number + '",emergency_mobile_number="' + emergency_mobile_number + '",aadhar_no="' + aadhar_no + '", license_no="' + license_no + '",address="' + address + '",aadhar_image="' + aadhar + '", license_image="' + license + '" ,aadhar_image_back="' + back_aadhar + '" ,profile_completed="1",profile_image="' + profile + '"  WHERE email="' + email + '"',
+                        'UPDATE my_tech.users_tbl  SET name="' + name + '",email="' + email + '",mobile_number="' + mobile_number + '",emergency_mobile_number="' + emergency_mobile_number + '",state="' + state + '",city="' + city + '",pincode="' + pincode + '",aadhar_no="' + aadhar_no + '", license_no="' + license_no + '",address="' + address + '",aadhar_image="' + aadhar + '",aadhar_image_back="' + back_aadhar + '", license_image="' + license + '"  ,profile_completed="1",profile_image="' + profile + '"  WHERE id="' + id + '"',
 
                         (err, result1) => {
                             if (err) {
@@ -250,7 +252,7 @@ function AdduserDetails(req, res) {
                                 return res.status(500).json({ error: 'Update error' });
                             }
 
-                            return res.status(201).json({ data: result1, status: true, message: ` successful ` });
+                            return res.status(200).json({ status: true, message: ` successful ` });
                         }
                     );
                 } else {
@@ -266,6 +268,9 @@ function AdduserDetails(req, res) {
 
 
 }
+
+
+
 
 module.exports = { signUp, getuser, sendVerificationMail, AdduserDetails, getuserById }
 

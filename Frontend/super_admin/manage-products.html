@@ -564,12 +564,17 @@
                           <th>S.No</th>
                           <th>Product Name</th>
                           <th>Image</th>
+                          <th>QR code</th>
+
                           <th>MRP</th>
                           <th>Selling Price</th>
                           <th>Created Date</th>
                           <th>Last Update</th>
-                          <th>Action</th>
                           <th>Status</th>
+                          <th>Shipment</th>
+                          <th>Mark as deliverd</th>
+                          <th>Action</th>
+
                         </tr>
                       </thead>
 
@@ -597,64 +602,59 @@
   </div>
   <!--end wrapper-->
 
-  <!-- modal edit batches -->
+  <!--  shipment modal -->
 
   <div class="modal fade" id="l3_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Institute Name </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
+          <form id="shipment_form">
+            <div class="row">
+              <div class="col-md-4 col-sm-6">
+                <div class="label-font mb-3">
+                  <label for="" class="form-label">QR Code Number </label>
+                  <input type="text" class="form-control" name="QR_Code_Numbe" id="QR_Code_Numbe" aria-describedby="" />
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-6">
+                <div class="label-font mb-3">
+                  <label for="" class="form-label"> Courier Detail </label>
+                  <input type="text" class="form-control" name="Courier_Detail" id="Courier_Detail"
+                    aria-describedby="" />
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-6">
+                <div class="label-font mb-3">
+                  <label for="" class="form-label"> Courier ID</label>
+                  <input type="text" class="form-control " name="Courier_ID" id="Courier_ID" aria-describedby="" />
+                </div>
+              </div>
+              <div class="text-center mb-4">
+                <button type="submit" class="addpr-btn">Submit</button>
               </div>
             </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Email </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Contact No. </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Create Password </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Confirm Password </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="label-font mb-3">
-                <label for="" class="form-label">Student Limit </label>
-                <input type="text" class="form-control" id="" aria-describedby="" />
-              </div>
-            </div>
-          </div>
+          </form>
+
         </div>
-        <div class="text-center mb-4">
-          <button type="button" class="addpr-btn">Submit</button>
-        </div>
+
       </div>
     </div>
   </div>
 
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
   <!-- Bootstrap JS -->
   <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
   <!--plugins-->
   <script src="../assets/js/jquery.min.js"></script>
   <script src="../assets/plugins/simplebar/js/simplebar.min.js"></script>
@@ -665,6 +665,8 @@
   <script src="../assets/plugins/chartjs/js/chart.js"></script>
   <script src="../assets/js/index.js"></script>
   <!--app JS-->
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   <script src="../assets/js/app.js"></script>
@@ -746,7 +748,7 @@
 
 
     const propertyList = document.getElementById('property-list');
-    let count =1;
+    let count = 1;
 
     function fetchData() {
 
@@ -779,11 +781,144 @@
 
 
 
+    jQuery(document).ready(function () {
+      jQuery("#shipment_form").validate({
+        rules: {
+          QR_Code_Numbe: {
+            required: true
+          },
+          Courier_Detail: {
+            required: true
+          },
+          Courier_ID: {
+            required: true
+          }
+        },
+        messages: {
+          QR_Code_Numbe: {
+            required: "Please enter QR Code Number"
+          },
+          Courier_Detail: {
+            required: "Please enter Courier Detail"
+          },
+          Courier_ID: {
+            required: "Please enter Courier ID"
+          }
+        },
+
+        errorClass: "error",
+        errorElement: "div",
+      });
+
+      $(document).on('submit', '#shipment_form', function (e) {
+        e.preventDefault();
+
+        // Proceed with your action (e.g., AJAX submission) when the form is valid
+        var QRCodeNumber = $("#QR_Code_Numbe").val();
+        var courierDetail = $("#Courier_Detail").val();
+        var courierID = $("#Courier_ID").val();
+        var productId = $('#l3_modal').attr('data-id');
+
+        var requestData = {
+          QR_Code_Numbe: QRCodeNumber,
+          Courier_Detail: courierDetail,
+          Courier_ID: courierID,
+          id: productId
+
+        };
+        // AJAX POST request
+        $.ajax({
+          url: apiUrl + '/addDetailsproduct',
+          type: "POST",
+          dataType: "JSON",
+          data: JSON.stringify(requestData),
+          contentType: "application/json",
+          success: function (response) {
+            if (response.error == true) {
+              Swal.fire(
+                'error!',
+                `${response.message}`,
+                'error'
+              );
+            } else {
+              Swal.fire(
+                'success!',
+                `${response.message}`,
+                'success',
+              );
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
+            }
+          },
+          error: function (xhr, status, error) {
+            // Handle errors from the server
+            console.error("Request failed", error);
+            // You can add code here to handle errors, show messages, etc.
+          }
+        });
+
+
+      });
+    });
+
+
+    function changestatus(id, status) {
+      console.log(id, status);
+      let userid = id;
+      let statusdata = status;
+      const userData = {
+        id: userid,
+        delivered_status: statusdata
+      };
+
+      $.ajax({
+        url: apiUrl + '/status_change',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(userData),
+        success: function (data) {
+          if (data.message) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+            }).then(() => {
+              location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.error,
+            });
+          }
+        },
+        error: function (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+          });
+        }
+      });
+    }
+
 
 
 
     function createPropertyListing(property) {
+      let approveButtonHTML = '';
+      let disapproveButtonHTML = '';
 
+      if (property.delivered_status == 1) {
+        // Property is approved
+        approveButtonHTML = '<button class="delvr-button1 deleverdgreen" disabled>Delivered</button>';
+      } else {
+        // Neither approved nor disapproved
+        approveButtonHTML = '<button class="delvr-button" onclick="changestatus(' + property.id + ', 1)">Mark as delivered</button>';
+
+      }
       const originalDateTime = new Date(property.Created_Date);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
@@ -799,27 +934,41 @@
       <td>${count}</td>
   <td>${property.Product_Name}</td>
   <td><img src="${property.Image}" alt="" class="imgqr" /></td>
-  
+  <td><img src="${property.QR_code}" alt="" class="imgqr" /></td>
+
   <td>${property.MRP}</td>
   <td> ₹ ${property.Selling_Price}</td>
   <td>${formattedDate}</td>
   <td>${formattedDate1}</td>
+ 
+  <td>
+    <div>
+      ${property.Status == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '   <button class="nondelvr-button" style="cursor:auto">Deactive</button>'}
+    </div>
+  </td>
+  <td>
+    <button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(${property.id})">Ready to Shipment</button>
+
+    </td>
+  <td>
+    
+   ${approveButtonHTML}
+    
+    </td>
+
   <td>
     <div class="statusAction">
       <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>
             <i class="fa-solid fa-trash"  onclick="deleteproduct(${property.id})"></i>
           </div>
   </td>
-  <td>
-    <div>
-      ${property.Status == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '   <button class="nondelvr-button" style="cursor:auto">Deactive</button>'}
-      
-   
-    </div>
-  </td>
 `;
-count ++ ;
+      count++;
       return tableRow;
+    }
+    function openShipmentModal(id) {
+      $('#l3_modal').attr('data-id', id);
+      $('#l3_modal').modal('show');
     }
 
     window.onload = fetchData;

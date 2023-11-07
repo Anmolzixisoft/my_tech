@@ -1,5 +1,6 @@
 const connection = require('../database/mysqldb')
 
+const { findStates } = require('../model/vehicle');
 
 function vehicleAdd(req, res) {
     try {
@@ -104,7 +105,35 @@ function gteByid(req, res) {
     try {
         const { user_id } = req.body
         console.log(user_id);
-        connection.query('select * from my_tech.vehicle_info_tbl where user_id = "' + user_id + '"', (err, result) => {
+        connection.query(`SELECT my_tech.vehicle_info_tbl.*, my_tech.product_tbl.Image
+        FROM my_tech.vehicle_info_tbl 
+        LEFT JOIN my_tech.product_tbl 
+        ON my_tech.vehicle_info_tbl.product_id = my_tech.product_tbl.id  where my_tech.vehicle_info_tbl.user_id = ${user_id}`, (err, result) => {
+            console.log();
+            if (err) {
+                return res.status(500).json({ status: false, error: 'Error get  data  the database' });
+            }
+            if (result.length == 0) {
+                return res.status(500).json({ status: false, data: null, error: 'vehicle not found' });
+
+            } else {
+                return res.status(200).json({ status: true, data: result, message: 'success' });
+            }
+        })
+
+    } catch (error) {
+        return res.send({ data: null, message: error, status: false })
+
+    }
+}
+function ProjuctgteByid(req, res) {
+    try {
+        const { vehicle_id } = req.body
+        console.log(vehicle_id);
+        connection.query(`SELECT my_tech.vehicle_info_tbl.*, my_tech.product_tbl.Image
+        FROM my_tech.vehicle_info_tbl 
+        LEFT JOIN my_tech.product_tbl 
+        ON my_tech.vehicle_info_tbl.product_id = my_tech.product_tbl.id  where my_tech.vehicle_info_tbl.id = ${vehicle_id}`, (err, result) => {
             console.log();
             if (err) {
                 return res.status(500).json({ status: false, error: 'Error get  data  the database' });
@@ -113,7 +142,8 @@ function gteByid(req, res) {
                 return res.status(500).json({ status: false, error: 'vehicle not found' });
 
             } else {
-                return res.status(200).json({ status: true, data: result, message: 'success' });
+                let product = result[0]
+                return res.status(200).json({ status: true, data: product, message: 'success' });
             }
         })
 
@@ -121,6 +151,39 @@ function gteByid(req, res) {
         return res.send({ data: error, status: false })
 
     }
+};
+
+const getStates = (req, res) => {
+    try {
+        findStates((error, ressult) => {
+            if (error) {
+                return res.status(200).json({ status: false, message: `${error}`, data: error });
+            } else {
+                return res.status(200).json({ status: true, message: "successfully find states", data: ressult });
+            }
+        })
+    } catch (error) {
+        return res.status(200).json({ status: false, message: "Failed to get states", data: error });
+    }
 }
 
-module.exports = { vehicleAdd, getallvehicle, updateVehicle, deleteVehicle, gteByid }
+function getCity(req, res) {
+    try {
+        const { state_id } = req.body
+        connection.query('SELECT * FROM my_tech.tbl_cities WHERE state_id="' + state_id + '"', (err, result) => {
+            if (err) {
+                return res.status(200).json({ status: false, message: "Failed to get states", data: err });
+
+            } else {
+                return res.status(200).json({ status: true, message: "successfully find city", data: result });
+
+            }
+        })
+
+    } catch (error) {
+        return res.status(200).json({ status: false, message: "Failed to get states", data: error });
+
+    }
+}
+
+module.exports = { vehicleAdd, getallvehicle, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity }

@@ -9,11 +9,11 @@ function purchaseQr(req, res) {
         connection.query(checkSql, [product_id], (err, result) => {
             if (err) {
                 console.error('Database selection error: ' + err.message);
-                return res.status(500).json({ error: 'Error checking data in the database' });
+                return res.status(500).json({ status:false,error: 'Error checking data in the database' });
             } else {
                 if (result.length > 0) {
                     // Product with the provided ID already exists
-                    return res.status(200).json({ message: 'Product not available' });
+                    return res.status(200).json({ status: false, message: 'already purchased' });
                 } else {
                     // Insert the product_id and user_id into the database
                     const sql = 'INSERT INTO my_tech.purchase_QR_tbl (product_id, user_id) VALUES (?, ?)';
@@ -22,10 +22,10 @@ function purchaseQr(req, res) {
                     connection.query(sql, values, (err, result) => {
                         if (err) {
                             console.error('Database insertion error: ' + err.message);
-                            return res.status(500).json({ error: 'Error inserting data into the database' });
+                            return res.status(500).json({status:false, error: 'Error inserting data into the database' });
                         } else {
                             console.log('Data inserted into the database.');
-                            return res.status(200).json({ message: 'Success' });
+                            return res.status(200).json({ status: true, message: 'Success' });
                         }
                     });
                 }
@@ -33,7 +33,7 @@ function purchaseQr(req, res) {
         });
     } catch (error) {
         console.error("An error occurred:", error);
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({status:false, error: 'Server error' });
     }
 }
 

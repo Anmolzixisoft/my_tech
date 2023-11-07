@@ -457,10 +457,11 @@
         .then(response => response.json())
         .then(data => {
 
-          data.data.forEach(property => {
-            const propertyListing = createPropertyListing(property);
+          console.log(data);
+          
+            const propertyListing = createPropertyListing(  data.data);
             propertyListingsContainer.appendChild(propertyListing);
-          });
+        
         })
         .catch(error => {
           alert(`${error}`);
@@ -527,12 +528,7 @@
                 <img src=${property.aadhar_image} alt="" class="adhrimg" />
               </td>
             </tr>
-            <tr>
-              <th scope="row">Aadhaar Back Image</th>
-              <td>
-                <img src=${property.aadhar_image_back} alt="" class="adhrimg" />
-              </td>
-            </tr>
+            
             <tr>
               <th scope="row">Licence No.</th>
               <td>${property.license_no}</td>

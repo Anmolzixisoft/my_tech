@@ -344,7 +344,7 @@ function activeDiactiveUser(req, res) {
                     return res.send({ error: err, status: false })
                 }
                 else {
-                    return res.send({ message: "succesfu", status: true })
+                    return res.send({ message: "succesfully", status: true })
                 }
             })
 

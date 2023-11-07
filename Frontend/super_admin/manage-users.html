@@ -655,10 +655,10 @@
 
       if (property.status == 1) {
         // Property is approved
-        approveButtonHTML = '<button class="delvr-button1" disabled>Active</button>';
+        approveButtonHTML = '<button class="delvr-button1" disabled>Approved</button>';
       } else if (property.status == 0) {
         // Property is disapproved
-        disapproveButtonHTML = '<button class="nondelvr-button1" disabled>Diactive</button>';
+        disapproveButtonHTML = '<button class="nondelvr-button1" disabled>Disapproved</button>';
       } else {
         // Neither approved nor disapproved
         approveButtonHTML = '<button class="delvr-button" onclick="changestatus(' + property.id + ', 1)">Approve</button>';

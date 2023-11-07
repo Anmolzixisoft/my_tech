@@ -4,9 +4,13 @@ const QRCode = require('qrcode')
 function productAdd(req, res) {
     try {
         const { Product_Name, MRP, Selling_Price } = req.body;
-
-        const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price) VALUES (?, ?, ?)';
-        const values = [Product_Name, MRP, Selling_Price];
+        const { Image } = req.files
+        if (!Image) {
+            return res.send({ error: "insert image" })
+        }
+        const file = Image[0].filename
+        const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price,Image) VALUES (?,?, ?, ?)';
+        const values = [Product_Name, MRP, Selling_Price, file];
 
         connection.query(sql, values, (err, result) => {
             if (err) {
@@ -22,7 +26,7 @@ function productAdd(req, res) {
                         return res.status(500).json({ error: "Error generating QR code" });
                     }
 
-                    connection.query(`UPDATE my_tech.product_tbl SET Image= '${code}'  WHERE product_tbl.id =${result.insertId}`, values, (err, result) => {
+                    connection.query(`UPDATE my_tech.product_tbl SET QR_code= '${code}'  WHERE product_tbl.id =${result.insertId}`, values, (err, result) => {
                         if (err) {
                             console.error('Database insertion error: ' + err.message);
                             res.status(500).json({ error: 'Error inserting data into the database' });
@@ -41,14 +45,10 @@ function productAdd(req, res) {
             }
         });
 
-
-
-
     } catch (error) {
         console.error("An error occurred:", error);
         res.status(500).json({ error: 'Server error' });
     }
-
 
 }
 
@@ -58,9 +58,9 @@ function getProduct(req, res) {
             if (err) {
                 return res.send({ error: err })
             } else {
-                // result.forEach(element => {
-                //     element.Image = `http://localhost:5501/Backend/public/${element.Image}`;
-                // });
+                result.forEach(element => {
+                    element.Image = `http://localhost:5501/Backend/public/${element.Image}`;
+                });
                 return res.send({ message: result })
             }
         })
@@ -129,7 +129,7 @@ function getProductbyid(req, res) {
             }
             else {
                 result.forEach(element => {
-                    element.Image = `http://localhost:5501/Backend/public/${element.Image}`;
+                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
                 });
                 return res.status(200).json({ message: result[0] });
 
@@ -140,5 +140,52 @@ function getProductbyid(req, res) {
 
     }
 }
-module.exports = { productAdd, getProduct, deleteProduct, editproduct, getProductbyid }
+function addDetailsproduct(req, res) {
+    try {
+        const { id, QR_Code_Numbe, Courier_Detail, Courier_ID } = req.body;
+        const sql = 'UPDATE my_tech.product_tbl SET  QR_Code_Numbe= ?, Courier_Detail= ?,	Courier_ID=? WHERE id= ?'
+
+        connection.query(sql, [QR_Code_Numbe, Courier_Detail, Courier_ID, id], (err, result) => {
+            if (err) {
+                console.error('Database update error: ' + err.message);
+                res.status(200).json({ error: 'Error updating data in the database' });
+            }
+            if (result.affectedRows == 1) {
+                res.status(200).json({ error: false, message: "Shipment successfully add", data: result });
+            } else {
+                res.status(200).json({ error: true, message: "Shipment not be add", data: null });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: error });
+    }
+
+}
+
+function delivered_status_change(req, res) {
+    try {
+        console.log(req.body);
+        const { id, delivered_status } = req.body;
+        const sql = 'UPDATE my_tech.product_tbl SET  delivered_status="'+delivered_status+'" WHERE id= "'+id+'"'
+
+        connection.query(sql,  (err, result) => {
+            if (err) {
+                console.error('Database update error: ' + err.message);
+                res.status(200).json({ error: 'Error updating data in the database' });
+            }
+            if (result.affectedRows == 1) {
+                console.log(result);
+                res.status(200).json({ error: false, message: "delivered_status successfully change", data: result });
+            } else {
+                res.status(200).json({ error: true, message: "delivered_status not be change", data: null });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: error });
+    }
+
+}
+module.exports = { productAdd, getProduct, deleteProduct, editproduct, getProductbyid, addDetailsproduct, delivered_status_change }
 
