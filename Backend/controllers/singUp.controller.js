@@ -42,10 +42,22 @@ function getuserById(req, res) {
         if (!id) {
             return res.send({ message: "id not found " })
         }
-        connection.query('SELECT * FROM my_tech.users_tbl  where id ="' + id + '" ', (err, result) => {
-            if (err) {
-                return res.send({ data: "user not found ", status: false })
+        const query = `
+        SELECT u.*, s.name AS state_name, c.name AS city_name
+        FROM my_tech.users_tbl AS u
+        LEFT JOIN my_tech.tbl_states AS s ON u.state = s.id
+        LEFT JOIN my_tech.tbl_cities AS c ON u.city = c.id
+        WHERE u.id = ${id}
+    `;
 
+        connection.query(query, (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.send({ data: err, status: false })
+
+            }
+            if (result[0] == undefined) {
+                return res.status(200).json({ status: false, message: "user not found " });
             } else {
                 result.forEach(element => {
                     element.profile_image = `http://192.168.29.179:5501/Backend/public/${element.profile_image}`
@@ -214,87 +226,75 @@ function sendVerificationMail(req, res) {
 function AdduserDetails(req, res) {
     try {
         const { id, name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state, city, pincode } = req.body;
-        connection.query('SELECT * FROM my_tech.tbl_cities WHERE id="' + city + '"', (err, result) => {
-            if (err) {
-                return res.send({ status: false, error: err })
-            }
-            else {
-                var city_name = result[0].name
-                connection.query(`SELECT * FROM my_tech.tbl_states WHERE id=${state}`, (err, stateresult) => {
 
-                    if (err) {
-                        return res.send({ status: false, error: err })
-                    }
-                    else {
-                        var state_name = stateresult[0].name
-                    }
 
-                    const { aadhar_image, license_image, profile_image, aadhar_image_back } = req.files
-                    // if (!aadhar_image || !license_image || !profile_image) {
-                    //     return res.send({ error: "insert file " })
-                    // }
 
-                    var aadhar_image_update = '';
-                    var license_image_update = '';
-                    var profile_image_update = '';
-                    var aadhar_image_back_update = '';
+        const { aadhar_image, license_image, profile_image, aadhar_image_back } = req.files
+        // if (!aadhar_image || !license_image || !profile_image) {
+        //     return res.send({ error: "insert file " })
+        // }
 
-                    if (typeof license_image !== 'undefined') {
-                        license_image_update = ', license_image = "' + license_image[0].filename + '" ';
-                    }
+        var aadhar_image_update = '';
+        var license_image_update = '';
+        var profile_image_update = '';
+        var aadhar_image_back_update = '';
 
-                    if (typeof aadhar_image !== 'undefined') {
-                        aadhar_image_update = ', aadhar_image = "' + aadhar_image[0].filename + '" ';
-                    }
+        if (typeof license_image !== 'undefined') {
+            license_image_update = ', license_image = "' + license_image[0].filename + '" ';
+        }
 
-                    if (typeof profile_image !== 'undefined') {
-                        profile_image_update = ', profile_image = "' + profile_image[0].filename + '" ';
-                    }
+        if (typeof aadhar_image !== 'undefined') {
+            aadhar_image_update = ', aadhar_image = "' + aadhar_image[0].filename + '" ';
+        }
 
-                    if (typeof aadhar_image_back !== 'undefined') {
-                        aadhar_image_back_update = ', aadhar_image_back = "' + aadhar_image_back[0].filename + '" ';
-                    }
+        if (typeof profile_image !== 'undefined') {
+            profile_image_update = ', profile_image = "' + profile_image[0].filename + '" ';
+        }
 
-                    if (!isValidEmail(email)) {
-                        return res.status(400).json({ error: 'Invalid email format', status: false });
-                    }
+        if (typeof aadhar_image_back !== 'undefined') {
+            aadhar_image_back_update = ', aadhar_image_back = "' + aadhar_image_back[0].filename + '" ';
+        }
 
-                    if (!isValidMobileNumber(mobile_number)) {
-                        return res.status(400).json({ error: 'Invalid mobile number format', status: false });
-                    }
+        if (!isValidEmail(email)) {
+            return res.status(400).json({ error: 'Invalid email format', status: false });
+        }
 
-                    connection.query(
-                        'SELECT * FROM my_tech.users_tbl WHERE id = ? ',
-                        [id],
-                        (err, results) => {
+        if (!isValidMobileNumber(mobile_number)) {
+            return res.status(400).json({ error: 'Invalid mobile number format', status: false });
+        }
+
+        connection.query(
+            'SELECT * FROM my_tech.users_tbl WHERE id = ? ',
+            [id],
+            (err, results) => {
+                if (err) {
+                    console.error('Error checking email existence: ' + err);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
+
+                if (results.length > 0) {
+
+                    const sql = 'UPDATE my_tech.users_tbl SET name=?,email=?,mobile_number=?' + profile_image_update + ',' + 'emergency_mobile_number=?,aadhar_no=?' + aadhar_image_update + '' + aadhar_image_back_update + ',' + 'license_no=?' + license_image_update + ',' + 'address=?,state=?,city=?,pincode=?,profile_completed= "1" WHERE id = ?'
+
+                    connection.query(sql, [name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state, city, pincode, id],
+                        (err, result) => {
                             if (err) {
-                                console.error('Error checking email existence: ' + err);
-                                return res.status(500).json({ error: 'Internal server error' });
+                                console.error('Update error:', err);
+                                return res.status(500).json({ error: 'Update error' });
                             }
 
-                            if (results.length > 0) {
-
-                                const sql = 'UPDATE my_tech.users_tbl SET name=?,email=?,mobile_number=?' + profile_image_update + ',' + 'emergency_mobile_number=?,aadhar_no=?' + aadhar_image_update + '' + aadhar_image_back_update + ',' + 'license_no=?' + license_image_update + ',' + 'address=?,state=?,city=?,pincode=?,profile_completed= "1" WHERE id = ?'
-
-                                connection.query(sql, [name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state_name, city_name, pincode, id],
-                                    (err, result) => {
-                                        if (err) {
-                                            console.error('Update error:', err);
-                                            return res.status(500).json({ error: 'Update error' });
-                                        }
-
-                                        return res.status(200).json({ status: true, message: ` successful ` });
-                                    }
-                                );
-                            } else {
-                                return res.send({ message: "user not found" })
-                            }
+                            return res.status(200).json({ status: true, message: ` successful ` });
                         }
                     );
-                })
-
+                } else {
+                    return res.send({ message: "user not found" })
+                }
             }
-        })
+        );
+
+
+
+
     } catch (error) {
         console.log('update  error ->', error);
         return res.send({ data: error, status: false })

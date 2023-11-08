@@ -977,3 +977,9 @@ label.error {
   font-size: 18px;
   color: #000;
 }
+.prodcttable th {
+  text-align: start;
+}
+.prodcttable td {
+  text-align: start;
+}

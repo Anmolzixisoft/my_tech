@@ -85,13 +85,13 @@
             <div class="menu-title">Manage Products</div>
           </a>
         </li>
-        <li class="menu-label">purchased</li>
+        <li class="menu-label">Orders</li>
         <li>
           <a href="purchase-product.html">
             <div class="parent-icon">
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
-            <div class="menu-title">purchased Products</div>
+            <div class="menu-title">Manage Orders</div>
           </a>
         </li>
       </ul>
@@ -638,6 +638,9 @@
   </script>
   <script>
 
+function viewdetails(id) {
+        location.href = `order-details.html?id=${id}`;
+    }
 
 
 
@@ -675,11 +678,7 @@
         });
     }
 
-    function viewdetails(id) {
-      location.href = `order-details.html?id=${id}`;
-    }
-
-
+   
 
     function changestatus(id, status) {
       console.log(id, status);
@@ -756,7 +755,7 @@
   <td>${approveButtonHTML}</td>\
   <td>${formattedDate}</td>
 
-  <td><span class="eye-btn"><i class="fa-solid fa-eye"  onclick="viewdetails(${property.id})"></i></span></td>
+  <td><span class="eye-btn"><i class="fa-solid fa-eye"  onclick="viewdetails(${property.user_id})"></i></span></td>
  
 `;
       count++;

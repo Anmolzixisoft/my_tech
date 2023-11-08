@@ -90,4 +90,52 @@ function getpurchaseinfo(req, res) {
         return res.status(500).json({ error: 'Server error' });
     }
 }
-module.exports = { purchaseQr, getMobileNo, getpurchaseinfo }
+
+
+function getpurchaseinfoPatycular(req, res) {
+    try {
+        const { userid } = req.body
+
+        // SELECT 
+        // my_tech.purchase_QR_tbl.*,
+        // my_tech.users_tbl.*,
+        // my_tech.product_tbl.Image,my_tech.product_tbl.QR_code,my_tech.product_tbl.Product_Name,my_tech.product_tbl.	Selling_Price,my_tech.product_tbl.QR_Code_Numbe,my_tech.product_tbl.delivered_status
+        // FROM my_tech.purchase_QR_tbl
+        // INNER JOIN my_tech.users_tbl ON my_tech.users_tbl.id = my_tech.purchase_QR_tbl.user_id
+        // INNER JOIN my_tech.product_tbl ON my_tech.product_tbl.id = my_tech.purchase_QR_tbl.product_id where  my_tech.users_tbl.id=${userid}
+        connection.query(`SELECT 
+        u.*, 
+        s.name AS state_name, 
+        c.name AS city_name,
+        pq.*,
+        p.Image,
+        p.Created_Date AS product_Created_Date,
+        p.QR_code,
+        p.Product_Name,
+        p.Selling_Price
+    FROM my_tech.purchase_QR_tbl AS pq
+    INNER JOIN my_tech.users_tbl AS u ON u.id = pq.user_id
+    INNER JOIN my_tech.product_tbl AS p ON p.id = pq.product_id
+    LEFT JOIN my_tech.tbl_states AS s ON u.state = s.id
+    LEFT JOIN my_tech.tbl_cities AS c ON u.city = c.id
+    WHERE u.id = ${userid};
+    `, (err, result) => {
+            if (err) {
+                console.error('Database insertion error: ' + err.message);
+                return res.status(500).json({ error: 'Error inserting data into the database' });
+            } else {
+                result.forEach(element => {
+                    element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                    element.profile_image = `http://192.168.29.179:5501/Backend/public/${element.profile_image}`
+                });
+                const user = result[0]
+                return res.status(200).json({ data: user, message: 'success' });
+
+            }
+        })
+    } catch (error) {
+        console.error("An error occurred:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+module.exports = { purchaseQr, getMobileNo, getpurchaseinfo, getpurchaseinfoPatycular }
