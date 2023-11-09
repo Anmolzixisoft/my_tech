@@ -16,18 +16,26 @@ function purchaseQr(req, res) {
                     return res.status(200).json({ status: false, message: 'already purchased' });
                 } else {
                     // Insert the product_id and user_id into the database
-                    const sql = 'INSERT INTO my_tech.purchase_QR_tbl (product_id, user_id,address, state, city, pincode) VALUES (?, ?,?,?,?,?)';
-                    const values = [product_id, user_id, address, state, city, pincode];
-
-                    connection.query(sql, values, (err, result) => {
+                    connection.query('UPDATE my_tech.product_tbl SET puchased_status="1" WHERE id="' + product_id + '"', (err, purchaseStatus) => {
                         if (err) {
-                            console.error('Database insertion error: ' + err.message);
-                            return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
-                        } else {
-                            console.log('Data inserted into the database.');
-                            return res.status(200).json({ status: true, message: 'Success' });
+                            return res.send({ error: err, status: false })
                         }
-                    });
+                        else {
+                            const sql = 'INSERT INTO my_tech.purchase_QR_tbl (product_id, user_id,address, state, city, pincode) VALUES (?, ?,?,?,?,?)';
+                            const values = [product_id, user_id, address, state, city, pincode];
+
+                            connection.query(sql, values, (err, result) => {
+                                if (err) {
+                                    console.error('Database insertion error: ' + err.message);
+                                    return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
+                                } else {
+                                    console.log('Data inserted into the database.');
+                                    return res.status(200).json({ status: true, message: 'Success' });
+                                }
+                            });
+                        }
+                    })
+
                 }
             }
         });
@@ -70,7 +78,7 @@ function getpurchaseinfo(req, res) {
         connection.query(`SELECT 
         my_tech.purchase_QR_tbl.*,
         my_tech.users_tbl.name , my_tech.users_tbl.mobile_number,
-        my_tech.product_tbl.Image,my_tech.product_tbl.QR_code,my_tech.product_tbl.Product_Name,my_tech.product_tbl.	Selling_Price,my_tech.product_tbl.QR_Code_Numbe,my_tech.product_tbl.delivered_status
+        my_tech.product_tbl.Image,my_tech.product_tbl.QR_code,my_tech.product_tbl.Product_Name,my_tech.product_tbl.	Selling_Price
         FROM my_tech.purchase_QR_tbl
         INNER JOIN my_tech.users_tbl ON my_tech.users_tbl.id = my_tech.purchase_QR_tbl.user_id
         INNER JOIN my_tech.product_tbl ON my_tech.product_tbl.id = my_tech.purchase_QR_tbl.product_id;`, (err, result) => {

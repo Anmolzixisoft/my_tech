@@ -571,8 +571,8 @@
                           <th>Created Date</th>
                           <th>Last Update</th>
                           <th>Status</th>
-                          <th>Shipment</th>
-                       
+
+
                           <th>Action</th>
 
                         </tr>
@@ -604,48 +604,7 @@
 
   <!--  shipment modal -->
 
-  <div class="modal fade" id="l3_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="shipment_form">
-            <div class="row">
-              <div class="col-md-4 col-sm-6">
-                <div class="label-font mb-3">
-                  <label for="" class="form-label">QR Code Number </label>
-                  <input type="text" class="form-control" name="QR_Code_Numbe" id="QR_Code_Numbe" aria-describedby="" />
-                </div>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="label-font mb-3">
-                  <label for="" class="form-label"> Courier Detail </label>
-                  <input type="text" class="form-control" name="Courier_Detail" id="Courier_Detail"
-                    aria-describedby="" />
-                </div>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="label-font mb-3">
-                  <label for="" class="form-label"> Courier ID</label>
-                  <input type="text" class="form-control " name="Courier_ID" id="Courier_ID" aria-describedby="" />
-                </div>
-              </div>
-              <div class="text-center mb-4">
-                <button type="submit" class="addpr-btn">Submit</button>
-              </div>
-            </div>
-          </form>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
+ 
 
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -700,86 +659,7 @@
   <script>
 
 
-jQuery(document).ready(function () {
-      jQuery("#shipment_form").validate({
-        rules: {
-          QR_Code_Numbe: {
-            required: true
-          },
-          Courier_Detail: {
-            required: true
-          },
-          Courier_ID: {
-            required: true
-          }
-        },
-        messages: {
-          QR_Code_Numbe: {
-            required: "Please enter QR Code Number"
-          },
-          Courier_Detail: {
-            required: "Please enter Courier Detail"
-          },
-          Courier_ID: {
-            required: "Please enter Courier ID"
-          }
-        },
-
-        errorClass: "error",
-        errorElement: "div",
-      });
-
-      $(document).on('submit', '#shipment_form', function (e) {
-        e.preventDefault();
-
-        // Proceed with your action (e.g., AJAX submission) when the form is valid
-        var QRCodeNumber = $("#QR_Code_Numbe").val();
-        var courierDetail = $("#Courier_Detail").val();
-        var courierID = $("#Courier_ID").val();
-        var productId = $('#l3_modal').attr('data-id');
-
-        var requestData = {
-          QR_Code_Numbe: QRCodeNumber,
-          Courier_Detail: courierDetail,
-          Courier_ID: courierID,
-          id: productId
-
-        };
-        // AJAX POST request
-        $.ajax({
-          url: apiUrl + '/addDetailsproduct',
-          type: "POST",
-          dataType: "JSON",
-          data: JSON.stringify(requestData),
-          contentType: "application/json",
-          success: function (response) {
-            if (response.error == true) {
-              Swal.fire(
-                'error!',
-                `${response.message}`,
-                'error'
-              );
-            } else {
-              Swal.fire(
-                'success!',
-                `${response.message}`,
-                'success',
-              );
-              setTimeout(() => {
-                location.reload();
-              }, 1000);
-            }
-          },
-          error: function (xhr, status, error) {
-            // Handle errors from the server
-            console.error("Request failed", error);
-            // You can add code here to handle errors, show messages, etc.
-          }
-        });
-
-
-      });
-    });
+    
 
     function deleteproduct(id) {
       let productid = id
@@ -860,7 +740,7 @@ jQuery(document).ready(function () {
     }
 
     function createPropertyListing(property) {
-     
+
       const originalDateTime = new Date(property.Created_Date);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
@@ -890,12 +770,7 @@ jQuery(document).ready(function () {
     </div>
   </td>
   
-  <td>
 
-${property.QR_Code_Numbe == '' ? '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.id + ')">Ready to Shipment</button>' : 'QR code number : ' + property.QR_Code_Numbe}
-
-
-</td>
   <td>
     <div class="statusAction">
       <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>

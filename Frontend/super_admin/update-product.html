@@ -549,9 +549,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="inv-box">
-                            <h4>Property</h4>
+                            <h4>Product</h4>
                             <div class="manage-flex">
-                                <h5>Update property</h5>
+                                <h5>Update Product</h5>
                             </div>
                         </div>
                     </div>
@@ -594,6 +594,15 @@
 
                                             </div>
                                         </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="label-font mb-3">
+                                              <label for="description" class="form-label">Description.</label>
+                                              <textarea class="form-control" placeholder="description here" id="description" name="description"></textarea>
+                                         
+                                              <small id="descriptionError" class="text-danger"></small>
+                      
+                                            </div>
+                                          </div>
                                         <div class="col-md-6 col-sm-6 mt-md-4 pt-md-3">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="status"
@@ -681,6 +690,7 @@
                 $('#productName').val(data.message.Product_Name);
                 $('#mrp').val(data.message.MRP);
                 $('#sellingPrice').val(data.message.Selling_Price);
+                $('#description').val(data.message.description);
                 $('#status').val(data.message.Status);
                 $('#propertyImage').attr('src', data.message.Image);
                 $('#idproduct').val(data.message.id);

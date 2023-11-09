@@ -2,6 +2,19 @@ const connection = require('../database/mysqldb')
 var nodemailer = require('nodemailer');
 
 const bcrypt = require('bcrypt');
+
+
+function generateOTP() {
+    const digits = '0123456789';
+    let otp = '';
+
+    for (let i = 0; i < 4; i++) {
+        const randomIndex = Math.floor(Math.random() * digits.length);
+        otp += digits[randomIndex];
+    }
+
+    return otp;
+}
 var transporter = nodemailer.createTransport({
     host: "tls://smtp.gmail.com",
     service: 'gmail',
@@ -93,7 +106,7 @@ function signUp(req, res) {
             return res.status(400).json({ error: 'Invalid mobile number format', status: false });
         }
 
-
+        const otp = generateOTP();
 
         connection.query(
             'SELECT * FROM my_tech.users_tbl WHERE email = ? ',
@@ -113,8 +126,8 @@ function signUp(req, res) {
                             return res.status(500).json({ error: 'Internal server error', status: false });
                         }
                         connection.query(
-                            'INSERT INTO my_tech.users_tbl (name, email, mobile_number, password,password_bcrypt) VALUES (?,?, ?,?, ?)',
-                            [name, email, mobile_number, hashedPassword, password],
+                            'INSERT INTO my_tech.users_tbl (name, email, mobile_number, password,password_bcrypt,otp) VALUES (?,?, ?,?, ?,?)',
+                            [name, email, mobile_number, hashedPassword, password, otp],
                             (err, result) => {
                                 if (err) {
                                     console.error('Error inserting data: ' + err);
@@ -122,7 +135,8 @@ function signUp(req, res) {
                                 } else {
                                     console.log("succsessss");
 
-                                    return res.status(200).json({ data: result, status: true, message: ` successful SingUp`, userId: result.insertId });
+
+                                    return res.status(200).json({ data: result, status: true, message: ` successful SingUp`, otp: otp, userId: result.insertId });
                                 }
                             }
                         );
@@ -140,17 +154,6 @@ function signUp(req, res) {
     }
 }
 
-function generateOTP() {
-    const digits = '0123456789';
-    let otp = '';
-
-    for (let i = 0; i < 4; i++) {
-        const randomIndex = Math.floor(Math.random() * digits.length);
-        otp += digits[randomIndex];
-    }
-
-    return otp;
-}
 
 function sendVerificationMail(req, res) {
     const email = req.body.email
@@ -304,6 +307,28 @@ function AdduserDetails(req, res) {
 }
 
 
-module.exports = { signUp, getuser, sendVerificationMail, AdduserDetails, getuserById }
+
+function verifyotp(req, res) {
+    try {
+        const { user_id, otp } = req.body
+        connection.query('select otp from my_tech.users_tbl where id="' + user_id + '"', (err, result) => {
+            if (err) {
+                return res.send({ status: false, error: err })
+            } else {
+                console.log(result[0].otp);
+                if (result[0].otp == otp) {
+                    return res.send({ status: true, message: " otp verify successfully" })
+                }
+                else {
+                    return res.send({ status: false, message: "otp not verify" })
+                }
+            }
+        })
+    } catch (error) {
+        return res.send({ error: error, status: false })
+    }
+}
+
+module.exports = { signUp, getuser, sendVerificationMail, verifyotp, AdduserDetails, getuserById }
 
 

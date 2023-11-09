@@ -13,7 +13,7 @@ function checkIfUserExists(req, res, next) {
             }
 
             if (results.length > 0) {
-                return res.status(409).json({ status: false, message: `User already registered with this email` });
+                return res.status(409).json({ status: false, message: `email already exist ` });
             } else {
                 next();
             }

@@ -179,6 +179,7 @@ function gteByid(req, res) {
 
     }
 }
+
 function ProjuctgteByid(req, res) {
     try {
         const { vehicle_id } = req.body
@@ -242,4 +243,16 @@ function getCity(req, res) {
     }
 }
 
-module.exports = { vehicleAdd, getallvehicle, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity }
+function myorder(req, res) {
+    const { user_id } = req.body
+
+    connection.query('SELECT * FROM my_tech.purchase_QR_tbl  WHERE user_id="' + user_id + '"', (err, result) => {
+        if (err) {
+            return res.send({ status: false, message: err })
+
+        } else {
+            return res.send({ status: true, message: result })
+        }
+    })
+}
+module.exports = { vehicleAdd, getallvehicle, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity, myorder }

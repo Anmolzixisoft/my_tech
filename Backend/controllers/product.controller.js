@@ -3,14 +3,14 @@ const QRCode = require('qrcode')
 
 function productAdd(req, res) {
     try {
-        const { Product_Name, MRP, Selling_Price } = req.body;
+        const { Product_Name, MRP, Selling_Price, description } = req.body;
         const { Image } = req.files
         if (!Image) {
             return res.send({ error: "insert image" })
         }
         const file = Image[0].filename
-        const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price,Image) VALUES (?,?, ?, ?)';
-        const values = [Product_Name, MRP, Selling_Price, file];
+        const sql = 'INSERT INTO my_tech.product_tbl (Product_Name, MRP, Selling_Price,Image,description) VALUES (?,?, ?, ?,?)';
+        const values = [Product_Name, MRP, Selling_Price, file, description];
 
         connection.query(sql, values, (err, result) => {
             if (err) {
@@ -89,7 +89,8 @@ function deleteProduct(req, res) {
 
 function editproduct(req, res) {
     try {
-        const { id, Product_Name, MRP, Selling_Price, status } = req.body;
+ 
+        const { id, Product_Name, MRP, Selling_Price, status, description } = req.body;
 
         const { Image } = req.files;
 
@@ -98,8 +99,8 @@ function editproduct(req, res) {
             image = ', `Image` = "' + Image[0].filename + '" ';
         }
 
-        const sql = 'UPDATE my_tech.product_tbl SET  Product_Name= ?, MRP= ?,	Status=? , Selling_Price=?' + image + 'WHERE id= ?'
-        connection.query(sql, [Product_Name, MRP, status, Selling_Price, id], (err, result) => {
+        const sql = 'UPDATE my_tech.product_tbl SET  Product_Name= ?, MRP= ?,	Status=? , description=?,Selling_Price=?' + image + 'WHERE id= ?'
+        connection.query(sql, [Product_Name, MRP, status, description, Selling_Price, id], (err, result) => {
             if (err) {
                 console.error('Database update error: ' + err.message);
                 res.status(500).json({ error: 'Error updating data in the database' });
@@ -140,12 +141,12 @@ function getProductbyid(req, res) {
 
     }
 }
-function addDetailsproduct(req, res) {
+function addDetailslipment(req, res) {
     try {
-        const { id, QR_Code_Numbe, Courier_Detail, Courier_ID } = req.body;
-        const sql = 'UPDATE my_tech.product_tbl SET  QR_Code_Numbe= ?, Courier_Detail= ?,	Courier_ID=? WHERE id= ?'
+        const { user_id, product_id, QR_Code_Numbe, Courier_Detail, Courier_ID } = req.body;
+        const sql = 'UPDATE my_tech.purchase_QR_tbl SET  QR_Code_Numbe= ?, Courier_Detail= ?,delivered_status=1,	Courier_ID=? WHERE product_id= ? AND user_id  =? '
 
-        connection.query(sql, [QR_Code_Numbe, Courier_Detail, Courier_ID, id], (err, result) => {
+        connection.query(sql, [QR_Code_Numbe, Courier_Detail, Courier_ID, product_id, user_id], (err, result) => {
             if (err) {
                 console.error('Database update error: ' + err.message);
                 res.status(200).json({ error: 'Error updating data in the database' });
@@ -165,11 +166,11 @@ function addDetailsproduct(req, res) {
 
 function delivered_status_change(req, res) {
     try {
-        console.log(req.body);
-        const { id, delivered_status } = req.body;
-        const sql = 'UPDATE my_tech.product_tbl SET  delivered_status="'+delivered_status+'" WHERE id= "'+id+'"'
 
-        connection.query(sql,  (err, result) => {
+        const { product_id, user_id, delivered_status } = req.body;
+        const sql = 'UPDATE my_tech.purchase_QR_tbl SET  delivered_status="2" WHERE user_id= "' + user_id + '" AND 	product_id="' + product_id + '"'
+
+        connection.query(sql, (err, result) => {
             if (err) {
                 console.error('Database update error: ' + err.message);
                 res.status(200).json({ error: 'Error updating data in the database' });
@@ -187,5 +188,5 @@ function delivered_status_change(req, res) {
     }
 
 }
-module.exports = { productAdd, getProduct, deleteProduct, editproduct, getProductbyid, addDetailsproduct, delivered_status_change }
+module.exports = { productAdd, getProduct, deleteProduct, editproduct, getProductbyid, addDetailslipment, delivered_status_change }
 

@@ -561,6 +561,7 @@
                           <th>Order ID</th>
                           <th>Customer</th>
                           <th>Total</th>
+                          <th>Shipment</th>
                           <th>Status</th>
                           <th>Date</th>
 
@@ -577,6 +578,49 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="l3_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="shipment_form">
+              <div class="row">
+                <div class="col-md-4 col-sm-6">
+                  <div class="label-font mb-3">
+                    <label for="" class="form-label">QR Code Number </label>
+                    <input type="text" class="form-control" name="QR_Code_Numbe" id="QR_Code_Numbe"
+                      aria-describedby="" />
+                  </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                  <div class="label-font mb-3">
+                    <label for="" class="form-label"> Courier Detail </label>
+                    <input type="text" class="form-control" name="Courier_Detail" id="Courier_Detail"
+                      aria-describedby="" />
+                  </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                  <div class="label-font mb-3">
+                    <label for="" class="form-label"> Courier ID</label>
+                    <input type="text" class="form-control " name="Courier_ID" id="Courier_ID" aria-describedby="" />
+                  </div>
+                </div>
+                <div class="text-center mb-4">
+                  <button type="submit" class="addpr-btn">Submit</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+
         </div>
       </div>
     </div>
@@ -607,6 +651,8 @@
   <script src="../assets/js/index.js"></script>
   <!--app JS-->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
 
   <script src="../assets/js/app.js"></script>
   <script src="../utils.js"></script>
@@ -638,13 +684,98 @@
   </script>
   <script>
 
-function viewdetails(id) {
-        location.href = `order-details.html?id=${id}`;
+    function viewdetails(id) {
+      location.href = `order-details.html?id=${id}`;
     }
 
+    jQuery(document).ready(function () {
+      jQuery("#shipment_form").validate({
+        rules: {
+          QR_Code_Numbe: {
+            required: true
+          },
+          Courier_Detail: {
+            required: true
+          },
+          Courier_ID: {
+            required: true
+          }
+        },
+        messages: {
+          QR_Code_Numbe: {
+            required: "Please enter QR Code Number"
+          },
+          Courier_Detail: {
+            required: "Please enter Courier Detail"
+          },
+          Courier_ID: {
+            required: "Please enter Courier ID"
+          }
+        },
+
+        errorClass: "error",
+        errorElement: "div",
+      });
+
+    });
+    function openShipmentModal(product_id, user_id) {
+      $('#l3_modal').attr('data-id', product_id);
+      $('#l3_modal').attr('data-id_user', user_id);
+
+      $('#l3_modal').modal('show');
+    }
+
+    $(document).on('submit', '#shipment_form', function (e) {
+      e.preventDefault();
+
+      // Proceed with your action (e.g., AJAX submission) when the form is valid
+      var QRCodeNumber = $("#QR_Code_Numbe").val();
+      var courierDetail = $("#Courier_Detail").val();
+      var courierID = $("#Courier_ID").val();
+      var productId = $('#l3_modal').attr('data-id');
+      var userid = $('#l3_modal').attr('data-id_user');
+      var requestData = {
+        QR_Code_Numbe: QRCodeNumber,
+        Courier_Detail: courierDetail,
+        Courier_ID: courierID,
+
+        product_id: productId,
+        user_id: userid
+      };
+      // AJAX POST request
+      $.ajax({
+        url: apiUrl + '/addDetailsproduct',
+        type: "POST",
+        dataType: "JSON",
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (response) {
+          if (response.error == true) {
+            Swal.fire(
+              'error!',
+              `${response.message}`,
+              'error'
+            );
+          } else {
+            Swal.fire(
+              'success!',
+              `${response.message}`,
+              'success',
+            );
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+          }
+        },
+        error: function (xhr, status, error) {
+          // Handle errors from the server
+          console.error("Request failed", error);
+          // You can add code here to handle errors, show messages, etc.
+        }
+      });
 
 
-
+    });
 
     const propertyList = document.getElementById('property-list');
     let count = 1;
@@ -665,7 +796,7 @@ function viewdetails(id) {
           }
         })
         .then(data => {
-          console.log(data);
+        
           data.data.forEach(property => {
             const newRow = createPropertyListing(property);
             propertyList.appendChild(newRow);
@@ -678,15 +809,13 @@ function viewdetails(id) {
         });
     }
 
-   
+    function changestatus(product_id, id) {
 
-    function changestatus(id, status) {
-      console.log(id, status);
       let userid = id;
-      let statusdata = status;
+      let product_id_delivered = product_id;
       const userData = {
-        id: userid,
-        delivered_status: statusdata
+        product_id: product_id_delivered,
+        user_id: userid
       };
 
       $.ajax({
@@ -724,16 +853,16 @@ function viewdetails(id) {
     function createPropertyListing(property) {
       let approveButtonHTML = '';
       let disapproveButtonHTML = '';
-      console.log(property.delivered_status == 1);
-      if (property.delivered_status == 1) {
+  
+      if (property.delivered_status == 2) {
         // Property is approved
         approveButtonHTML = '<button class="deleverdgreen" disabled>Delivered</button>';
       } else {
         // Neither approved nor disapproved
-        approveButtonHTML = '<button class="pending-btn" onclick="changestatus(' + property.product_id + ', 1)">Pending</button>';
+        approveButtonHTML = '<button class="pending-btn" >Pending</button>';
 
       }
-      console.log(property, 'property');
+      
 
       const originalDateTime = new Date(property.create_at);
       const day = originalDateTime.getUTCDate();
@@ -746,13 +875,23 @@ function viewdetails(id) {
       const formattedDate = `${day}-${month}-${year}`;
       const formattedDate1 = `${day1}-${month1}-${year1}`;
       const tableRow = document.createElement('tr'); // Create a table row
+      console.log(property, '-------------');
       tableRow.innerHTML = `
       <td>${count}</td>
   <td>${property.QR_Code_Numbe}</td>
   <td>${property.name}</td>
   
   <td>₹ ${property.Selling_Price}</td>
-  <td>${approveButtonHTML}</td>\
+  <td>
+${property.delivered_status == 0 ? 
+    '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.product_id + ',' + property.user_id + ')">Ready to Shipment</button>' 
+    : (property.delivered_status == 1 ? 
+        '<button class="delvr-button-mark" onclick="changestatus(' + property.product_id + ', ' + property.user_id + ')">Mark as delivered</button>' 
+        : '<button class="deleverdgreen" disabled>Delivered</button>')
+}
+</td>
+
+  <td>${approveButtonHTML}</td>
   <td>${formattedDate}</td>
 
   <td><span class="eye-btn"><i class="fa-solid fa-eye"  onclick="viewdetails(${property.user_id})"></i></span></td>

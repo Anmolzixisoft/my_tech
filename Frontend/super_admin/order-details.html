@@ -272,16 +272,13 @@
                           <tbody>
                             <tr role="row">
                               <th>Order Date</th>
-                              <td>04/05/2023</td>
+                              <td>${data.data.create_at}</td>
                             </tr>
                             <tr>
                               <th>Payment Method</th>
                               <td>Online</td>
                             </tr>
-                            <tr>
-                              <th>Shipping Method</th>
-                              <td>Cash On Delivery</td>
-                            </tr>
+                           
                           </tbody>
                         </table>
                       </div>
@@ -311,6 +308,36 @@
                             <tr>
                               <th>State</th>
                               <td>${data.data.state_name}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mt-3">
+                <div class="card-body">
+                  <div class="bg-white">
+                    <h5 class="custdetailheading">Shipment</h5>
+  
+                    <div class="table-responsive">
+                      <div class="deltable">
+                        <table class="table">
+                          <tbody>
+                            <tr role="row">
+                              <th>QR Code Number</th>
+                              <td>${data.data.QR_Code_Numbe}</td>
+                            </tr>
+                            <tr>
+                              <th>Courier Detail</th>
+                              <td>${data.data.Courier_Detail}</td>
+                            </tr>
+                            <tr>
+                              <th>Courier ID</th>
+                              <td>${data.data.Courier_ID}</td>
                             </tr>
                           </tbody>
                         </table>
