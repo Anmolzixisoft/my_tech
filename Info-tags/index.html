@@ -101,7 +101,7 @@
         </div>
       </div>
       <div class="col-12">
-        <div class="messagebtnflex" >
+        <div class="messagebtnflex">
           <a href="" data-bs-toggle="modal " id="openmodal">Message</a>
         </div>
 
@@ -143,7 +143,8 @@
                     <h1 class="plate-no2">JK04G <span>####</span></h1>
                   </div>
                   <div class="col-7">
-                    <input type="text" name="" maxlength="4" class="form-control" placeholder="Last 4 Digits" />
+                    <input type="text" name="vehicle-number" id="vehicle-number" maxlength="4" class="form-control"
+                      placeholder="Last 4 Digits" />
                   </div>
                 </div>
               </div>
@@ -198,23 +199,23 @@
   });
 
   $(document).ready(function () {
-  $('#openmodal').click(function (e) {
-    e.preventDefault(); // Prevent the default behavior of the anchor tag
+    $('#openmodal').click(function (e) {
+      e.preventDefault(); // Prevent the default behavior of the anchor tag
 
-    let anyChecked = false;
-    $('.thespecail_radio').each(function () {
-      if ($(this).prop('checked')) {
-        anyChecked = true;
+      let anyChecked = false;
+      $('.thespecail_radio').each(function () {
+        if ($(this).prop('checked')) {
+          anyChecked = true;
+        }
+      });
+
+      if (anyChecked) {
+        $('#exampleModal').modal('show');
+      } else {
+        alert('Please select a reason before sending a message.');
       }
     });
-
-    if (anyChecked) {
-      $('#exampleModal').modal('show');
-    } else {
-      alert('Please select a reason before sending a message.');
-    }
   });
-});
 
 
 
@@ -227,15 +228,16 @@
 
     // Usage - Get ID from URL
     const id = getUrlParameter('id');
-    console.log('ID from URL:', id);
+
 
     // Making a POST request
     $('.btnmsg').click(function () {
       const last4Digits = $('input[placeholder="Last 4 Digits"]').val();
       const phoneNumber = $('input[placeholder="(Optional) Your Phone"]').val();
-
+      console.log(last4Digits, 'log');
       const postData = {
-        product_id: id
+        product_id: id,
+        vehicle_number: last4Digits
       };
       console.log(postData);
 
@@ -245,45 +247,37 @@
         dataType: "JSON",
         data: JSON.stringify(postData),
         contentType: "application/json",
-        success: function (response) {
-          const mobileNumber = response.data[0].mobile_number;
-          $.ajax({
-            url: 'http://192.168.29.179:5001/api/sentOtp',
-            type: 'POST',
-            dataType: "JSON",
-            data: JSON.stringify({ mobile_num: mobileNumber }),
-            contentType: "application/json",
-            success: function (otpResponse) {
-              console.log('OTP Sent:', otpResponse);
-              if (otpResponse.status == true) {
-                Swal.fire({
-                  title: 'Success',
-                  text: 'message send ',
-                  icon: 'success',
-                })
-                setTimeout(() => {
-                  window.location.href = `index.html?id=${id}`
-                }, 1000);
-              } else {
-                Swal.fire({
-                  title: 'Error',
-                  text: otpResponse.error,
-                  icon: 'error',
-                });
 
-              }
+        success: function (otpResponse) {
+          console.log('OTP Sent:', otpResponse);
+          if (otpResponse.status == true) {
+            Swal.fire({
+              title: 'Success',
+              text: 'message send ',
+              icon: 'success',
+            })
+            setTimeout(() => {
+              window.location.href = `index.html?id=${id}`
+            }, 1000);
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: otpResponse.error,
+              icon: 'info',
+            });
 
-            },
-            error: function (otpError) {
-              console.error('Error sending OTP:', otpError);
-
-            }
-          });
+          }
 
         },
+
         error: function (xhr, status, error) {
           console.error('Error:', error);
           // Handle errors from the server
+          Swal.fire({
+            title: 'Error',
+            text: otpError,
+            icon: 'error',
+          });
         }
       });
     });

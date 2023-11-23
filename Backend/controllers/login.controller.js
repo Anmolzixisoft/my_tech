@@ -152,6 +152,7 @@ function login(req, res) {
 const sentOtp = async (req, res) => {
     try {
         const { email, mobile_num } = req.body
+        console.log(req.body);
         if (email == '' && mobile_num == '') {
             return res.status(200).json({ status: false, error: true, message: "Please enter the email or mobile number", data: null })
         }
@@ -195,7 +196,7 @@ const sentOtp = async (req, res) => {
                                                 return res.status(500).json({ error: 'Select error', status: false });
                                             }
                                             const user = selectResult[0];
-                                            
+
                                             // Continue with sending the email
                                             transporter.sendMail(mailOptions, function (error, info) {
                                                 if (error) {
@@ -204,14 +205,14 @@ const sentOtp = async (req, res) => {
                                                     console.log('Email sent: ');
                                                 }
                                             });
-                        
+
                                             return res.status(200).json({ status: true, message: `OTP sent via Email: ${otp}`, data: user });
                                         }
                                     );
                                 }
                             }
                         );
-                        
+
                     }
                 }
             );
@@ -231,7 +232,7 @@ const sentOtp = async (req, res) => {
                     'SELECT *  FROM my_tech.users_tbl WHERE mobile_number = ?',
                     [phoneNum],
                     (err, results) => {
-
+                        console.log(phoneNum);
                         if (err) {
                             console.error('Database query failed: ' + err);
                             return res.send({ error: 'Internal server error', status: false });
@@ -259,7 +260,7 @@ const sentOtp = async (req, res) => {
                                                     return res.status(500).json({ error: 'Select error', status: false });
                                                 }
                                                 const user = selectResult[0];
-                            
+
                                                 // After successful SELECT, send SMS
                                                 axios.get(`http://nimbusit.biz/api/SmsApi/SendSingleApi?UserID=${userId}&Password=${password}&SenderID=${senderID}&Phno=${phoneNum}&Msg=${msg}&EntityID=${entityID}&TemplateID=${templateId}`)
                                                     .then(response => {
@@ -275,7 +276,7 @@ const sentOtp = async (req, res) => {
                                     }
                                 }
                             );
-                            
+
 
                         }
                     }

@@ -89,7 +89,7 @@ function deleteProduct(req, res) {
 
 function editproduct(req, res) {
     try {
- 
+
         const { id, Product_Name, MRP, Selling_Price, status, description } = req.body;
 
         const { Image } = req.files;
@@ -144,19 +144,46 @@ function getProductbyid(req, res) {
 function addDetailslipment(req, res) {
     try {
         const { user_id, product_id, QR_Code_Numbe, Courier_Detail, Courier_ID } = req.body;
-        const sql = 'UPDATE my_tech.purchase_QR_tbl SET  QR_Code_Numbe= ?, Courier_Detail= ?,delivered_status=1,	Courier_ID=? WHERE product_id= ? AND user_id  =? '
+        console.log(req.body);
 
-        connection.query(sql, [QR_Code_Numbe, Courier_Detail, Courier_ID, product_id, user_id], (err, result) => {
+        var redirectURL = `http://192.168.29.179:5501/Info-tags/index.html?id=${QR_Code_Numbe}`
+
+        connection.query('SELECT QR_Code_Numbe FROM my_tech.purchase_QR_tbl WHERE QR_Code_Numbe="' + QR_Code_Numbe + '"', (err, qrnum) => {
             if (err) {
-                console.error('Database update error: ' + err.message);
-                res.status(200).json({ error: 'Error updating data in the database' });
+                console.log("Error occurred while generating QR code:", err);
+                return res.status(500).json({ error: "Error generating QR code" });
             }
-            if (result.affectedRows == 1) {
-                res.status(200).json({ error: false, message: "Shipment successfully add", data: result });
-            } else {
-                res.status(200).json({ error: true, message: "Shipment not be add", data: null });
+            if (qrnum == 0) {
+                QRCode.toDataURL(redirectURL, function (err, code) {
+                    if (err) {
+                        console.log("Error occurred while generating QR code:", err);
+                        return res.status(500).json({ error: "Error generating QR code" });
+                    }
+
+                    connection.query('UPDATE my_tech.purchase_QR_tbl SET  QR_Code_Numbe= "' + QR_Code_Numbe + '", Courier_Detail= "' + Courier_Detail + '",delivered_status="1",Courier_ID="' + Courier_ID + '" ,QR_code="' + code + '" WHERE id  ="' + user_id + '"', (err, result) => {
+
+                        if (err) {
+                            console.error('Database update error: ' + err.message);
+                            return res.status(200).json({ error: 'Error updating data in the database' });
+                        }
+                        // if (result.affectedRows == 1) {
+                        return res.status(200).json({ error: false, message: "Shipment successfully add", data: result });
+                        // } else {
+                        //     console.log('erererere');
+                        //      return res.status(200).json({ error: true, err: "Shipment not be add", data: null });
+                        // }
+                    });
+
+                });
             }
-        });
+            else {
+                return res.send({ error: true, err: "this QR_number alreay added" })
+            }
+        })
+
+
+
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: error });

@@ -558,7 +558,8 @@
                       <thead>
                         <tr role="row">
                           <th>S.No</th>
-                          <th>Order ID</th>
+                          <!-- <th>Order ID</th> -->
+                          <th>QR code </th>
                           <th>Customer</th>
                           <th>Total</th>
                           <th>Shipment</th>
@@ -753,7 +754,7 @@
           if (response.error == true) {
             Swal.fire(
               'error!',
-              `${response.message}`,
+              `${response.err}`,
               'error'
             );
           } else {
@@ -796,7 +797,7 @@
           }
         })
         .then(data => {
-        
+
           data.data.forEach(property => {
             const newRow = createPropertyListing(property);
             propertyList.appendChild(newRow);
@@ -853,7 +854,7 @@
     function createPropertyListing(property) {
       let approveButtonHTML = '';
       let disapproveButtonHTML = '';
-  
+
       if (property.delivered_status == 2) {
         // Property is approved
         approveButtonHTML = '<button class="deleverdgreen" disabled>Delivered</button>';
@@ -862,7 +863,7 @@
         approveButtonHTML = '<button class="pending-btn" >Pending</button>';
 
       }
-      
+
 
       const originalDateTime = new Date(property.create_at);
       const day = originalDateTime.getUTCDate();
@@ -875,20 +876,21 @@
       const formattedDate = `${day}-${month}-${year}`;
       const formattedDate1 = `${day1}-${month1}-${year1}`;
       const tableRow = document.createElement('tr'); // Create a table row
-      console.log(property, '-------------');
+      console.log(property.QR_code == null, '-------------');
       tableRow.innerHTML = `
       <td>${count}</td>
-  <td>${property.QR_Code_Numbe}</td>
+   ${property.QR_code == null ? ' <td> <span> QR code  </span></td>' : ' <td><img src="' + property.QR_code + '" alt="" class="imgqr" /></td>'}
+ 
   <td>${property.name}</td>
   
   <td>₹ ${property.Selling_Price}</td>
   <td>
-${property.delivered_status == 0 ? 
-    '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.product_id + ',' + property.user_id + ')">Ready to Shipment</button>' 
-    : (property.delivered_status == 1 ? 
-        '<button class="delvr-button-mark" onclick="changestatus(' + property.product_id + ', ' + property.user_id + ')">Mark as delivered</button>' 
-        : '<button class="deleverdgreen" disabled>Delivered</button>')
-}
+${property.delivered_status == 0 ?
+          '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.product_id + ',' + property.id + ')">Ready to Shipment</button>'
+          : (property.delivered_status == 1 ?
+            '<button class="delvr-button-mark" onclick="changestatus(' + property.product_id + ', ' + property.user_id + ')">Mark as delivered</button>'
+            : '<button class="deleverdgreen" disabled>Delivered</button>')
+        }
 </td>
 
   <td>${approveButtonHTML}</td>

@@ -5,70 +5,48 @@ const { findStates } = require('../model/vehicle');
 function vehicleAdd(req, res) {
     try {
 
-        const { product_id, user_id, vehicle_type, brand_name, modal_name, reg_no, current_city, location } = req.body
+        const { product_id, user_id, QR_Code_Numbe, vehicle_type, brand_name, modal_name, reg_no, current_city, location, vehicle_number, vehicle_color } = req.body
         if (!req.body) {
             return res.status(500).json({ status: false, error: 'fill field ' });
 
         }
-        connection.query('SELECT * FROM my_tech.purchase_QR_tbl where user_id = "' + user_id + '" AND product_id="' + product_id + '" ',
+        connection.query('SELECT * FROM my_tech.purchase_QR_tbl where user_id = "' + user_id + '" AND 	QR_Code_Numbe="' + product_id + '" ',
             (err, result) => {
+
                 if (err) {
                     return res.status(500).json({ status: false, error: err });
                 }
                 if (result[0] == undefined) {
                     return res.status(200).json({ status: false, message: "The product not be purchase" });
                 } else {
-                    connection.query('SELECT * FROM my_tech.vehicle_info_tbl WHERE user_id = "' + user_id + '" AND product_id = "' + product_id + '"', (error, findVichelInfo) => {
+                    connection.query('SELECT * FROM my_tech.vehicle_info_tbl WHERE user_id = "' + user_id + '" AND QR_Code_Numbe  = "' + product_id + '"', (error, findVichelInfo) => {
                         if (error) {
                             return res.status(200).json({ status: false, error: err });
 
                         } if (findVichelInfo[0] == undefined) {
-                            const sql = 'INSERT INTO my_tech.vehicle_info_tbl (product_id,user_id, vehicle_type, brand_name, modal_name,reg_no,current_city,location) VALUES (?, ?, ?,?,?,?,?,?)';
+                            const sql = 'INSERT INTO my_tech.vehicle_info_tbl (user_id,QR_Code_Numbe , vehicle_type, brand_name, modal_name,vehicle_number,vehicle_color,reg_no,current_city,location) VALUES (?, ?, ?,?,?,?,?,?,?,?)';
                             const values = [
-                                product_id,
                                 user_id,
+                                product_id,
                                 vehicle_type,
                                 brand_name,
                                 modal_name,
+                                vehicle_number,
+                                vehicle_color,
                                 reg_no,
                                 current_city,
                                 location
                             ];
                             connection.query(sql, values, (err, result) => {
+                                console.log(err);
                                 if (err) {
                                     return res.status(500).json({ status: false, error: err });
                                 }
+                                else {
 
-                                if (result.affectedRows == 1) {
-                                    connection.query('UPDATE my_tech.purchase_QR_tbl SET status= "1" WHERE user_id = "' + user_id + '" AND product_id = "' + product_id + '"', (error, updateStatus) => {
-                                        console.log(updateStatus, 'updateStatusupdateStatusupdateStatus');
-                                        if (error) {
-                                            return res.status(200).json({ status: false, error: error });
-                                        }
-                                        if (updateStatus.affectedRows == 1) {
-
-                                            connection.query('UPDATE my_tech.product_tbl SET delivered_status_scan	= "1" WHERE id = "' + product_id + '"', (error, statusdata) => {
-                                                console.log(statusdata.affectedRows, 'statusdata');
-
-                                                if (error) {
-                                                    return res.status(200).json({ status: false, error: error });
-                                                }
-                                                if (statusdata.affectedRows == 1) {
-                                                    return res.status(200).json({ status: true, message: 'Successfully' });
-                                                } else {
-                                                    return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
-                                                }
-                                            })
-
-                                            // return res.status(200).json({ status: true, message: 'Successfully' });
-                                        } else {
-                                            return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
-                                        }
-                                    })
-                                } else {
-                                    const error = "QR code not scan";
-                                    return res.status(500).json({ status: false, error: `${error}` });
+                                    return res.status(200).json({ status: true, message: 'Successfully' });
                                 }
+
                             });
                         } else {
                             return res.status(500).json({ status: false, message: "Vichel Info Already Add" });
@@ -103,9 +81,9 @@ function getallvehicle(req, res) {
 
 function updateVehicle(req, res) {
     try {
-        const { id, user_id, vehicle_type, brand_name, modal_name, reg_no, current_city, location } = req.body;
-        const sql = 'UPDATE my_tech.vehicle_info_tbl SET  vehicle_type= ?, brand_name= ?,	modal_name=? , reg_no=? , current_city = ?, location=? WHERE id= ? AND user_id=? '
-        connection.query(sql, [vehicle_type, brand_name, modal_name, reg_no, current_city, location, id, user_id], (err, result) => {
+        const { id, user_id, vehicle_type, vehicle_number, brand_name, modal_name, vehicle_color, reg_no, current_city, location } = req.body;
+        const sql = 'UPDATE my_tech.vehicle_info_tbl SET  vehicle_type= ?, brand_name= ?,	modal_name=? , vehicle_number=?, vehicle_color = ? ,reg_no=? , current_city = ?, location=? WHERE id= ? AND user_id=? '
+        connection.query(sql, [vehicle_type, brand_name, modal_name, vehicle_number, vehicle_color, reg_no, current_city, location, id, user_id], (err, result) => {
             if (err) {
                 console.error('Database update error: ' + err.message);
                 return res.status(500).json({ error: 'Error updating data in the database' });
@@ -116,7 +94,6 @@ function updateVehicle(req, res) {
             }
 
             else {
-                console.log('Data updated in the database.');
                 return res.status(200).json({ message: 'vehicle info  Updated', status: true });
             }
             ;
@@ -155,10 +132,7 @@ function gteByid(req, res) {
     try {
         const { user_id } = req.body
         console.log(user_id);
-        connection.query(`SELECT my_tech.vehicle_info_tbl.*, my_tech.product_tbl.QR_code,my_tech.product_tbl.delivered_status_scan	
-        FROM my_tech.vehicle_info_tbl 
-        LEFT JOIN my_tech.product_tbl 
-        ON my_tech.vehicle_info_tbl.product_id = my_tech.product_tbl.id  where my_tech.vehicle_info_tbl.user_id = ${user_id}`, (err, result) => {
+        connection.query(`SELECT my_tech.vehicle_info_tbl.*, my_tech.purchase_QR_tbl.QR_code, my_tech.product_tbl.Image FROM my_tech.vehicle_info_tbl LEFT JOIN my_tech.purchase_QR_tbl ON my_tech.vehicle_info_tbl.QR_Code_Numbe = my_tech.purchase_QR_tbl.QR_Code_Numbe LEFT JOIN my_tech.product_tbl ON my_tech.purchase_QR_tbl.product_id = my_tech.product_tbl.id WHERE my_tech.vehicle_info_tbl.user_id =${user_id}`, (err, result) => {
             console.log();
             if (err) {
                 return res.status(500).json({ status: false, error: 'Error get  data  the database' });
@@ -168,7 +142,7 @@ function gteByid(req, res) {
 
             } else {
                 // result.forEach(element => {
-                //     element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+                result[0].Image = `http://192.168.29.179:5501/Backend/public/${result[0].Image}`;
                 // });
                 return res.status(200).json({ status: true, data: result, message: 'success' });
             }
@@ -246,7 +220,12 @@ function getCity(req, res) {
 function myorder(req, res) {
     const { user_id } = req.body
 
-    connection.query('SELECT * FROM my_tech.purchase_QR_tbl  WHERE user_id="' + user_id + '"', (err, result) => {
+    connection.query(` SELECT u.*, s.name AS state_name, c.name AS city_name
+    FROM my_tech.purchase_QR_tbl AS u
+    LEFT JOIN my_tech.tbl_states AS s ON u.state = s.id
+    LEFT JOIN my_tech.tbl_cities AS c ON u.city = c.id
+    
+    WHERE user_id=${user_id}`, (err, result) => {
         if (err) {
             return res.send({ status: false, message: err })
 
