@@ -220,16 +220,19 @@ function getCity(req, res) {
 function myorder(req, res) {
     const { user_id } = req.body
 
-    connection.query(` SELECT u.*, s.name AS state_name, c.name AS city_name
+    connection.query(` SELECT u.*, s.name AS state_name, c.name AS city_name , pro.Image ,pro.Product_Name,pro.Selling_Price,pro.MRP,pro.description
     FROM my_tech.purchase_QR_tbl AS u
     LEFT JOIN my_tech.tbl_states AS s ON u.state = s.id
     LEFT JOIN my_tech.tbl_cities AS c ON u.city = c.id
-    
+    LEFT JOIN my_tech.product_tbl  AS pro on  u.product_id  =pro.id
     WHERE user_id=${user_id}`, (err, result) => {
         if (err) {
             return res.send({ status: false, message: err })
 
         } else {
+            result.forEach(element => {
+                element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
+            });
             return res.send({ status: true, message: result })
         }
     })

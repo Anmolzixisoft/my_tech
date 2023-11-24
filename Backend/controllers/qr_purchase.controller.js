@@ -7,33 +7,34 @@ const axios = require('axios')
 function purchaseQr(req, res) {
     try {
         const { product_id, user_id, address, state, city, pincode } = req.body;
-        connection.query('SELECT * FROM my_tech.purchase_QR_tbl WHERE product_id = "' + product_id + '" AND user_id= "' + user_id + '"', (err, dupicate) => {
+        // connection.query('SELECT * FROM my_tech.purchase_QR_tbl WHERE product_id = "' + product_id + '" AND user_id= "' + user_id + '"', (err, dupicate) => {
+        //     if (err) {
+        //         console.error('Database  error: ' + err.message);
+        //         return res.status(500).json({ status: false, error: err.message });
+        //     }
+
+        //     if (dupicate == 0) {
+        const sql = 'INSERT INTO my_tech.purchase_QR_tbl (product_id, user_id,address, state, city, pincode) VALUES (?, ?,?,?,?,?)';
+        const values = [product_id, user_id, address, state, city, pincode];
+
+        connection.query(sql, values, (err, result) => {
             if (err) {
-                console.error('Database  error: ' + err.message);
-                return res.status(500).json({ status: false, error: err.message });
+                console.error('Database insertion error: ' + err.message);
+                return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
+            } else {
+                console.log('Data inserted into the database.');
+                return res.status(200).json({ status: true, message: 'Success' });
             }
+        });
+    }
+    //     else {
 
-            if (dupicate == 0) {
-                const sql = 'INSERT INTO my_tech.purchase_QR_tbl (product_id, user_id,address, state, city, pincode) VALUES (?, ?,?,?,?,?)';
-                const values = [product_id, user_id, address, state, city, pincode];
+    //         return res.status(200).json({ status: false, message: 'you are already purchased' });
+    //     }
+    // })
 
-                connection.query(sql, values, (err, result) => {
-                    if (err) {
-                        console.error('Database insertion error: ' + err.message);
-                        return res.status(500).json({ status: false, error: 'Error inserting data into the database' });
-                    } else {
-                        console.log('Data inserted into the database.');
-                        return res.status(200).json({ status: true, message: 'Success' });
-                    }
-                });
-            }
-            else {
-
-                return res.status(200).json({ status: false, message: 'you are already purchased' });
-            }
-        })
-
-    } catch (error) {
+    // }
+    catch (error) {
         console.error("An error occurred:", error);
         return res.status(500).json({ status: false, error: 'Server error' });
     }
