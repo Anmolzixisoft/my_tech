@@ -815,7 +815,7 @@
       let userid = id;
       let product_id_delivered = product_id;
       const userData = {
-        product_id: product_id_delivered,
+        id: product_id_delivered,
         user_id: userid
       };
 
@@ -888,7 +888,7 @@
 ${property.delivered_status == 0 ?
           '<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(' + property.product_id + ',' + property.id + ')">Ready to Shipment</button>'
           : (property.delivered_status == 1 ?
-            '<button class="delvr-button-mark" onclick="changestatus(' + property.product_id + ', ' + property.user_id + ')">Mark as delivered</button>'
+            '<button class="delvr-button-mark" onclick="changestatus(' + property.id + ', ' + property.user_id + ')">Mark as delivered</button>'
             : '<button class="deleverdgreen" disabled>Delivered</button>')
         }
 </td>

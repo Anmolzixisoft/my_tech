@@ -2,6 +2,12 @@
 <html lang="en">
 
 <head>
+
+  <style>
+    .error-message {
+      color: red;
+    }
+  </style>
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -540,7 +546,8 @@
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="productName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="productName" aria-describedby="" />
+                        <input type="text" class="form-control" id="productName" name="productName"
+                          aria-describedby="" />
                         <small id="productNameError" class="text-danger"></small>
 
                       </div>
@@ -548,8 +555,8 @@
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="mrp" class="form-label">MRP</label>
-                        <input type="text" class="form-control" id="mrp" onkeypress="return isNumberKey(event)" required
-                          aria-describedby="" />
+                        <input type="text" class="form-control" id="mrp" name="mrp"
+                          onkeypress="return isNumberKey(event)" required aria-describedby="" />
                         <small id="mrpError" class="text-danger"></small>
 
                       </div>
@@ -557,8 +564,8 @@
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="sellingPrice" class="form-label">Selling Price</label>
-                        <input type="text" class="form-control" id="sellingPrice" onkeypress="return isNumberKey(event)"
-                          required aria-describedby="" />
+                        <input type="text" class="form-control" id="sellingPrice" name="sellingPrice"
+                          onkeypress="return isNumberKey(event)" required aria-describedby="" />
                         <small id="sellingPriceError" class="text-danger"></small>
 
                       </div>
@@ -566,30 +573,32 @@
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="image" class="form-label">Upload QR Image</label>
-                        <input type="file" class="form-control" id="image" aria-describedby="" />
+                        <input type="file" class="form-control" id="image" name="image" aria-describedby="" />
                       </div>
                     </div>
                     <div class="col-md-6 col-sm-6">
                       <div class="label-font mb-3">
                         <label for="	description" class="form-label">Description.</label>
-                        <textarea class="form-control" placeholder="description here" id="description"></textarea>
-                   
+                        <textarea class="form-control" placeholder="description here" id="description"
+                          name="description"></textarea>
+
                         <small id="	descriptionError" class="text-danger"></small>
 
                       </div>
                     </div>
                   </div>
-                </form>
-                <div class="col-md-12 my-3">
-                  <div class="d-flex-bulkbtn">
-                    <div>
-                      <a id="submitButton" class="addpr-btn" href="#"><i></i>Submit</a>
-                    </div>
-                    <div>
-                      <a class="cancel-btn" href="#!"><i></i>Cancel </a>
+                  <div class="col-md-12 my-3">
+                    <div class="d-flex-bulkbtn">
+                      <div>
+                        <button type="submit" id="submitButton" class="addpr-btn" href="#"><i></i>Submit</button>
+                      </div>
+                      <div>
+                        <a class="cancel-btn" href="#!"><i></i>Cancel </a>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </form>
+
               </div>
             </div>
           </div>
@@ -617,6 +626,7 @@
   <script src="../assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
   <script src="../assets/plugins/chartjs/js/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
   <script src="../assets/js/index.js"></script>
   <script src="../utils.js"></script>
@@ -632,6 +642,51 @@
       }
       return true;
     }
+
+
+
+
+
+
+
+    jQuery(document).ready(function () {
+      jQuery("#submitButton").validate({
+        rules: {
+          productName: 'required',
+          mrp: 'required',
+          sellingPrice: 'required',
+          image: 'required',
+
+          description: 'required',
+        },
+        messages: {
+          productName: {
+            required: 'Please enter the productName',
+          },
+          mrp: {
+            required: 'Please enter the MRP',
+          },
+          sellingPrice: {
+            required: "Please enter the sellingPrice",
+          },
+          image: {
+            required: "Please Enter image",
+
+          },
+          description: {
+            required: "Please enter the description",
+          },
+
+        },
+        errorClass: 'error-message',
+      });
+    });
+
+
+
+
+
+
     document.addEventListener('DOMContentLoaded', function () {
       const submitButton = document.getElementById('submitButton');
       submitButton.addEventListener('click', function (event) {
@@ -641,51 +696,51 @@
         const sellingPrice = document.getElementById('sellingPrice').value;
         const description = document.getElementById('description').value
         const image = document.getElementById('image').files[0];
-        if (productName.trim() === '' || mrp.trim() === '' || sellingPrice.trim() === '') {
-          alert('Please fill in all the required fields!');
-        } else {
-          const form = document.getElementById('productForm');
+        // if (productName.trim() === '' || mrp.trim() === '' || sellingPrice.trim() === '') {
+        //   alert('Please fill in all the required fields!');
+        // } else {
+        const form = document.getElementById('productForm');
 
-          const formData = new FormData(form);
-          formData.append('Product_Name', productName);
-          formData.append('Selling_Price', sellingPrice);
-          formData.append('MRP', mrp);
-          formData.append('Image', image);
-          formData.append('description', description)
+        const formData = new FormData(form);
+        formData.append('Product_Name', productName);
+        formData.append('Selling_Price', sellingPrice);
+        formData.append('MRP', mrp);
+        formData.append('Image', image);
+        formData.append('description', description)
 
-          fetch(apiUrl + '/productAdd', {
-            method: 'POST',
-            body: formData,
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.message) {
-                Swal.fire({
-                  title: 'Success',
-                  text: data.message,
-                  icon: 'success',
-                })
-                setTimeout(() => {
-                  window.location.href = "manage-products.html"
-                }, 1000);
-              } else {
-                Swal.fire({
-                  title: 'Error',
-                  text: data.error,
-                  icon: 'error',
-                });
-
-              }
-            })
-            .catch(error => {
+        fetch(apiUrl + '/productAdd', {
+          method: 'POST',
+          body: formData,
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.message) {
+              Swal.fire({
+                title: 'Success',
+                text: data.message,
+                icon: 'success',
+              })
+              setTimeout(() => {
+                window.location.href = "manage-products.html"
+              }, 1000);
+            } else {
               Swal.fire({
                 title: 'Error',
-                text: error,
+                text: data.error,
                 icon: 'error',
               });
-            });
 
-        }
+            }
+          })
+          .catch(error => {
+            Swal.fire({
+              title: 'Error',
+              text: error,
+              icon: 'error',
+            });
+          });
+
+        // }
       });
     });
 

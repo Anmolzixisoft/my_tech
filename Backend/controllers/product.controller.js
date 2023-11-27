@@ -194,8 +194,8 @@ function addDetailslipment(req, res) {
 function delivered_status_change(req, res) {
     try {
 
-        const { product_id, user_id, delivered_status } = req.body;
-        const sql = 'UPDATE my_tech.purchase_QR_tbl SET  delivered_status="2" WHERE user_id= "' + user_id + '" AND 	product_id="' + product_id + '"'
+        const { id, user_id, delivered_status } = req.body;
+        const sql = 'UPDATE my_tech.purchase_QR_tbl SET  delivered_status="2" WHERE user_id= "' + user_id + '" AND 	id="' + id + '"'
 
         connection.query(sql, (err, result) => {
             if (err) {
