@@ -37,7 +37,7 @@
 <body class="login-bg">
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
-    if(checkAdmintoken != null){
+    if (checkAdmintoken != null) {
       location = "http://192.168.29.179:5501/Frontend/super_admin/dashboard.html"
     }
   </script>
@@ -94,7 +94,7 @@
   <script src="./assets/js/app.js"></script>
   <script>
     new PerfectScrollbar(".app-container");
-    </script>
+  </script>
 
 
   <script>
@@ -107,74 +107,77 @@
       }
     });
 
-    jQuery.validator.addMethod("passwordPattern", function(value, element) {
-        return this.optional(element) || /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])/.test(value);
+    jQuery.validator.addMethod("passwordPattern", function (value, element) {
+      return this.optional(element) || /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])/.test(value);
     }, "Password must contain at least one uppercase letter and one special character.");
 
-    jQuery(document).ready(function() {
-        jQuery("#admin_login").validate({
-            rules: {
-                email: {
-                    required: true,
-                    email: true, // This enforces email validation
-                },
-                password: {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 12,
-                    passwordPattern: true,
-                },
-            },
-            messages: {
-                email: {
-                    required: "Please Enter Email",
-                    email: "Please Enter a Valid Email Address",
-                },
-                password: {
-                    required: "Please Enter Password",
-                    minlength: "Password must be at least 6 characters long",
-                    maxlength: "Password cannot exceed 12 characters",
-                    passwordPattern: "Password must contain at least one uppercase letter and one special character.",
-                },
-            },
-        });
+    jQuery(document).ready(function () {
+      jQuery("#admin_login").validate({
+        rules: {
+          email: {
+            required: true,
+            email: true, // This enforces email validation
+          },
+          password: {
+            required: true,
+            minlength: 6,
+            maxlength: 12,
+            passwordPattern: true,
+          },
+        },
+        messages: {
+          email: {
+            required: "Please Enter Email",
+            email: "Please Enter a Valid Email Address",
+          },
+          password: {
+            required: "Please Enter Password",
+            minlength: "Password must be at least 6 characters long",
+            maxlength: "Password cannot exceed 12 characters",
+            passwordPattern: "Password must contain at least one uppercase letter and one special character.",
+          },
+        },
+      });
     });
 
-$(document).on('submit', '#admin_login', function(e) {
-        e.preventDefault();
-        const item = {
-            email: document.getElementById('email').value.trim(),
-            password: document.getElementById('password').value.trim(),
-        };
-        console.log(item);
-        $.ajax({
-            url: apiUrl +'/admin-login',
-            type: $(this).attr("method"),
-            dataType: "JSON",
-            data: JSON.stringify(item),
-            contentType: "application/json",
-            success: function(response, status) {
-              if (response.error == true) {
-                    Swal.fire(
-                        'error!',
-                        `${response.message}`,
-                        'error'
-                    );
-                } else {
-                    Swal.fire(
-                        'success!',
-                        `${response.message}`,
-                        'success',
-                    );
-                    setTimeout(() => {
-                        location = 'http://192.168.29.179:5501/Frontend/super_admin/dashboard.html';
-                    }, 1000);
-                    let admintoken = localStorage.setItem("admintoken", response.data[0]
-                        .token);
-                }
-            },
-            error: function(xhr, desc, err) {}
-        });
+    $(document).on('submit', '#admin_login', function (e) {
+      e.preventDefault();
+      const item = {
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value.trim(),
+      };
+      console.log(item);
+      $.ajax({
+        url: apiUrl + '/admin-login',
+        type: $(this).attr("method"),
+        dataType: "JSON",
+        data: JSON.stringify(item),
+        contentType: "application/json",
+        success: function (response, status) {
+          if (response.error == true) {
+            Swal.fire(
+              'error!',
+              `${response.message}`,
+              'error'
+            );
+          } else {
+            Swal.fire(
+              'success!',
+              `${response.message}`,
+              'success',
+            );
+            setTimeout(() => {
+              location = 'http://192.168.29.179:5501/Frontend/super_admin/dashboard.html';
+            }, 1000);
+            console.log(response.data[0], 'response.data[0]');
+            let Status = localStorage.setItem("Status", response.data[0]
+              .Status);
+            let admintoken = localStorage.setItem("admintoken", response.data[0]
+              .token);
+          }
+        },
+        error: function (xhr, desc, err) { }
+      });
     });
 
   </script>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        #propertyImage {
+            padding: 10px;
+            /* Adjust the value to set the desired padding */
+        }
+    </style>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--favicon-->
+    <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
+    <!--plugins-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+    <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <!-- loader-->
+    <link href="../assets/css/pace.min.css" rel="stylesheet" />
+    <script src="../assets/js/pace.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/bootstrap-extended.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="../assets/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="../assets/css/icons.css" rel="stylesheet" />
+    <!-- Theme Style CSS -->
+    <link rel="stylesheet" href="../assets/css/dark-theme.css" />
+    <link rel="stylesheet" href="../assets/css/semi-dark.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/header-colors.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <title>My-Tech -Admin Panel</title>
+</head>
+
+<body>
+    <script>
+        let checkAdmintoken = localStorage.getItem('admintoken')
+        if (checkAdmintoken == null) {
+            location = "http://192.168.29.179:5501/Frontend/"
+        }
+    </script>
+    <!--wrapper-->
+    <div class="wrapper">
+        <!--sidebar wrapper -->
+        <div class="sidebar-wrapper" data-simplebar="true">
+            <div class="sidebar-header">
+                <div>
+                    <h4 class="logo-text text-center">My-Tech</h4>
+                </div>
+                <div class="toggle-icon ms-auto">
+                    <i class="bx bx-arrow-back"></i>
+                </div>
+            </div>
+            <!--navigation-->
+            <ul class="metismenu" id="menu">
+                <li class="menu-label">Main</li>
+                <li>
+                    <a href="./dashboard.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/dashboardicon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Dashboard</div>
+                    </a>
+                </li>
+
+                <li class="menu-label" id="userhide">Users</li>
+                <li id="manageUserhide">
+                    <a href="manage-users.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/tssicon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Manage Users</div>
+                    </a>
+                </li>
+
+
+                <li id="hidemenu" class="menu-label">Products</li>
+                <li id="manageProductsListItem">
+                    <a href="manage-products.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/stocktrnsfericon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Manage Products</div>
+                    </a>
+                </li>
+
+                <li class="menu-label">Orders</li>
+                <li>
+                    <a href="purchase-product.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/stocktrnsfericon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Manage Orders</div>
+                    </a>
+                </li>
+                <li id="superadmin" class="menu-label"> Super Admin</li>
+                <li id="manageSuperAdmin">
+                    <a href="superAdmin.html">
+                        <div class="parent-icon">
+                            <img src="../assets/images/stocktrnsfericon.png" alt="" />
+                        </div>
+                        <div class="menu-title">Manage Super Admin</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <header>
+            <div class="topbar d-flex align-items-center">
+                <nav class="navbar navbar-expand gap-3">
+                    <div class="mobile-toggle-menu"><i class="bx bx-menu"></i></div>
+
+                    <div class="position-relative search-bar d-lg-block d-none">
+                        <input class="form-control px-5" type="search" placeholder="Search" />
+                        <span
+                            class="position-absolute top-50 search-show ms-3 translate-middle-y start-0 top-50 fs-5"><i
+                                class="bx bx-search"></i></span>
+                    </div>
+
+                    <div class="top-menu ms-auto">
+                        <ul class="navbar-nav align-items-center gap-1">
+                            <li class="nav-item mobile-search-icon d-flex d-lg-none" data-bs-toggle="modal"
+                                data-bs-target="#SearchModal">
+                                <a class="nav-link" href="avascript:;"><i class="bx bx-search"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="top-menu ms-auto">
+                        <ul class="navbar-nav align-items-center gap-1">
+                            <li class="nav-item mobile-search-icon d-flex d-lg-none" data-bs-toggle="modal"
+                                data-bs-target="#SearchModal">
+                                <a class="nav-link" href="avascript:;"><i class="bx bx-search"></i>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown dropdown-large">
+                                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                                    data-bs-toggle="dropdown"><span class="alert-count">7</span>
+                                    <i class="bx bx-bell"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:;">
+                                        <div class="msg-header">
+                                            <!-- <p class="msg-header-title">Notifications</p>
+                        <p class="msg-header-badge">8 New</p> -->
+                                        </div>
+                                    </a>
+                                    <div class="header-notifications-list">
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-1.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Daisy Anderson<span class="msg-time float-end">5 sec ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">The standard chunk of lorem</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-danger text-danger">
+                                                    dc
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        New Orders
+                                                        <span class="msg-time float-end">2 min ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">You have recived new orders</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-2.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Althea Cabardo
+                                                        <span class="msg-time float-end">14 sec ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Many desktop publishing packages
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-success text-success">
+                                                    <img src="../assets/images/app/outlook.png" width="25"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Account Created<span class="msg-time float-end">28 min
+                                                            ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Successfully created new email
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-info text-info">Ss</div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        New Product Approved
+                                                        <span class="msg-time float-end">2 hrs ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Your new product has approved
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-4.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Katherine Pechon
+                                                        <span class="msg-time float-end">15 min ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Making this the first true generator
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-success text-success">
+                                                    <i class="bx bx-check-square"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Your item is shipped
+                                                        <span class="msg-time float-end">5 hrs ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        Successfully shipped your item
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify bg-light-primary">
+                                                    <img src="../assets/images/app/github.png" width="25"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        New 24 authors<span class="msg-time float-end">1 day ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        24 new authors joined last week
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-online">
+                                                    <img src="../assets/images/avatars/avatar-8.png" class="msg-avatar"
+                                                        alt="user avatar" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        Peter Costanzo
+                                                        <span class="msg-time float-end">6 hrs ago</span>
+                                                    </h6>
+                                                    <p class="msg-info">
+                                                        It was popularised in the 1960s
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a href="javascript:;">
+                                        <div class="text-center msg-footer">
+                                            <button class="btn btn-primary w-100">
+                                                View All Notifications
+                                            </button>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown dropdown-large">
+                                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="alert-count">8</span>
+                                    <i class="bx bx-shopping-bag"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:;">
+                                        <div class="msg-header">
+                                            <p class="msg-header-title">My Cart</p>
+                                            <p class="msg-header-badge">10 Items</p>
+                                        </div>
+                                    </a>
+                                    <div class="header-message-list">
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/11.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/02.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/03.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/04.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/05.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/06.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/07.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/08.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="position-relative">
+                                                    <div class="cart-product rounded-circle bg-light">
+                                                        <img src="../assets/images/products/09.png" class=""
+                                                            alt="product image" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="cart-product-title mb-0">
+                                                        Men White T-Shirt
+                                                    </h6>
+                                                    <p class="cart-product-price mb-0">1 X $29.00</p>
+                                                </div>
+                                                <div class="">
+                                                    <p class="cart-price mb-0">$250</p>
+                                                </div>
+                                                <div class="cart-product-cancel">
+                                                    <i class="bx bx-x"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a href="javascript:;">
+                                        <div class="text-center msg-footer">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <h5 class="mb-0">Total</h5>
+                                                <h5 class="mb-0 ms-auto">$489.00</h5>
+                                            </div>
+                                            <button class="btn btn-primary w-100">Checkout</button>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="user-box dropdown px-3">
+                        <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../assets/images/avatars/avatar-4.png" class="user-img" alt="user avatar" />
+                            <div class="user-info">
+                                <p class="user-name mb-0">Admin</p>
+                                <!-- <p class="designattion mb-0">Web Designer</p> -->
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                        class="bx bx-log-out-circle"></i><span>Logout</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <!--end header -->
+        <!--start page wrapper -->
+        <div class="page-wrapper">
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="inv-box">
+                            <h4>Super Admin</h4>
+                            <div class="manage-flex">
+                                <h5>Update SuperAdmin</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <form id="productForm">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="label-font mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                    aria-describedby="" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="label-font mb-3">
+                                                <label for="password" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="password"
+                                                    name="password" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 mt-md-4 pt-md-3">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="inlineRadio1" value="1">
+                                                <label class="form-check-label labelradio"
+                                                    for="inlineRadio1">Active</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    id="inlineRadio2" value="0">
+                                                <label class="form-check-label labelradio"
+                                                    for="inlineRadio2">Deactive</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 my-3">
+                                        <div class="d-flex-bulkbtn">
+                                            <div>
+                                                <button class="addpr-btn" type="submit" id="submit">Submit</button>
+                                            </div>
+                                            <div>
+                                                <a class="cancel-btn" href="#!"><i></i>Cancel </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay toggle-icon"></div>
+
+    <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+    <footer class="page-footer">
+        <p class="mb-0">Copyright © 2023. All right reserved.</p>
+    </footer>
+    </div>
+
+
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="../assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="../assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="../assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="../assets/plugins/chartjs/js/chart.js"></script>
+    <script src="../assets/js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="../utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+        new PerfectScrollbar(".app-container");
+    </script>
+    <script>
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        var productID = urlParams.get('id');
+
+
+
+        async function getProductData() {
+            const userData = {
+                productid: productID
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: apiUrl + '/getproductbyid',
+                contentType: 'application/json',
+                data: JSON.stringify(userData)
+            }).done(function (data) {
+                $('#productName').val(data.message.Product_Name);
+                $('#mrp').val(data.message.MRP);
+                $('#sellingPrice').val(data.message.Selling_Price);
+                $('#description').val(data.message.description);
+                $('#status').val(data.message.Status);
+                $('#propertyImage').attr('src', data.message.Image);
+                $('#idproduct').val(data.message.id);
+                if (data.message.Status == 1) {
+                    $('#inlineRadio1').prop('checked', true); // Set 'Active' radio button
+                } else if (data.message.Status == 0) {
+                    $('#inlineRadio2').prop('checked', true); // Set 'Deactive' radio button
+                }
+            }).fail(function (error) {
+            });
+        }
+
+        getProductData();
+        // Your existing code...
+
+        $(document).ready(function () {
+            $('.form-check-input').on('change', function () {
+                const isChecked = $(this).is(':checked');
+                const radioId = $(this).attr('id');
+
+                if (isChecked) {
+
+                    if (radioId === 'inlineRadio1') {
+                        $('#inlineRadio2').prop('checked', false);
+                    }
+                    else if (radioId === 'inlineRadio2') {
+                        $('#inlineRadio1').prop('checked', false);
+                    }
+                }
+            });
+
+        });
+
+        $('#idproduct').hide();
+        $(document).on('submit', '#productForm', function (e) {
+
+            const fromdata = new FormData(this)
+
+
+            e.preventDefault();
+            $.ajax({
+                url: apiUrl + '/editproduct',
+                type: "POST",
+                dataType: "JSON",
+                data: fromdata,
+                processData: false,
+                contentType: false,
+                success: function (response, status) {
+                    if (response.status != true) {
+                        Swal.fire(
+                            'error!',
+                            `${response.error}`,
+                            'error'
+                        );
+                    } else {
+                        Swal.fire(
+                            'success!',
+                            `${response.message}`,
+                            'success',
+                        );
+                        setTimeout(() => {
+                            window.location.href = "manage-products.html"
+                        }, 1000);
+                    }
+                },
+                error: function (xhr, desc, err) { }
+            });
+        })
+
+    </script>
+</body>
+
+</html>

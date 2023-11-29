@@ -15,9 +15,6 @@
 
   <!-- DataTables Buttons CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
-
-  <!-- DataTables JS -->
-  <script type="text/javascript" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
   <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
   <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
   <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
@@ -49,8 +46,9 @@
     if (checkAdmintoken == null) {
       location = "http://192.168.29.179:5501/Frontend/"
     }
-    var checkRole = localStorage.getItem('Status')
 
+    var checkRole = localStorage.getItem('Status')
+    console.log('---------------', checkRole == 1);
   </script>
   <!--wrapper-->
   <div class="wrapper">
@@ -96,6 +94,7 @@
             <div class="menu-title">Manage Products</div>
           </a>
         </li>
+
         <li class="menu-label">Orders</li>
         <li>
           <a href="purchase-product.html">
@@ -103,6 +102,15 @@
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
             <div class="menu-title">Manage Orders</div>
+          </a>
+        </li>
+        <li id="superadmin" class="menu-label"> Super Admin</li>
+        <li id="manageSuperAdmin">
+          <a href="superAdmin.html">
+            <div class="parent-icon">
+              <img src="../assets/images/stocktrnsfericon.png" alt="" />
+            </div>
+            <div class="menu-title">Manage Super Admin</div>
           </a>
         </li>
       </ul>
@@ -539,10 +547,14 @@
         <div class="row">
           <div class="col-md-12">
             <div class="inv-box">
-              <h4>Manage Orders</h4>
+              <h4>Products</h4>
               <div class="manage-flex">
-                <h5> Manage Your Orders</h5>
-
+                <h5>Manage your Products</h5>
+                <div class="d-flex-bulkbtn">
+                  <div>
+                    <a class="addpr-btn me-2" href="user-add.html">+Add New</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -568,15 +580,13 @@
                       <thead>
                         <tr role="row">
                           <th>S.No</th>
-                          <!-- <th>Order ID</th> -->
-                          <th>QR code </th>
-                          <th>Customer</th>
-                          <th>Total</th>
-                          <th>Shipment</th>
+                          <th>Email</th>
+                          <th>Password</th>
+
+                          <th>Created Date</th>
+                          <th>Last Update</th>
                           <th>Status</th>
-                          <th>Date</th>
                           <th>Action</th>
-                          <!-- <th>Status</th> -->
                         </tr>
                       </thead>
                       <tbody id="property-list">
@@ -588,49 +598,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="l3_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="shipment_form">
-              <div class="row">
-                <div class="col-md-4 col-sm-6">
-                  <div class="label-font mb-3">
-                    <label for="" class="form-label">QR Code Number </label>
-                    <input type="text" class="form-control" name="QR_Code_Numbe" id="QR_Code_Numbe"
-                      aria-describedby="" />
-                  </div>
-                </div>
-
-                <div class="col-md-4 col-sm-6">
-                  <div class="label-font mb-3">
-                    <label for="" class="form-label"> Courier Detail </label>
-                    <input type="text" class="form-control" name="Courier_Detail" id="Courier_Detail"
-                      aria-describedby="" />
-                  </div>
-                </div>
-
-                <div class="col-md-4 col-sm-6">
-                  <div class="label-font mb-3">
-                    <label for="" class="form-label"> Courier ID</label>
-                    <input type="text" class="form-control " name="Courier_ID" id="Courier_ID" aria-describedby="" />
-                  </div>
-                </div>
-                <div class="text-center mb-4">
-                  <button type="submit" class="addpr-btn">Submit</button>
-                </div>
-              </div>
-            </form>
-
-          </div>
-
         </div>
       </div>
     </div>
@@ -647,9 +614,18 @@
   </div>
   <!--end wrapper-->
 
+  <!--  shipment modal -->
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
   <!-- Bootstrap JS -->
   <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
   <!--plugins-->
   <script src="../assets/js/jquery.min.js"></script>
   <script src="../assets/plugins/simplebar/js/simplebar.min.js"></script>
@@ -663,13 +639,15 @@
   <script type="text/javascript" charset="utf8"
     src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
   <!--app JS-->
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+
+  <!-- DataTables Buttons JS -->
   <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   <script src="../assets/js/app.js"></script>
   <script src="../utils.js"></script>
@@ -701,104 +679,61 @@
   </script>
   <script>
 
-    function viewdetails(id) {
-      location.href = `order-details.html?id=${id}`;
-    }
 
-    jQuery(document).ready(function () {
-      jQuery("#shipment_form").validate({
-        rules: {
-          QR_Code_Numbe: {
-            required: true
-          },
-          Courier_Detail: {
-            required: true
-          },
-          Courier_ID: {
-            required: true
-          }
-        },
-        messages: {
-          QR_Code_Numbe: {
-            required: "Please enter QR Code Number"
-          },
-          Courier_Detail: {
-            required: "Please enter Courier Detail"
-          },
-          Courier_ID: {
-            required: "Please enter Courier ID"
-          }
-        },
 
-        errorClass: "error",
-        errorElement: "div",
-      });
 
-    });
-    function openShipmentModal(product_id, user_id) {
-      $('#l3_modal').attr('data-id', product_id);
-      $('#l3_modal').attr('data-id_user', user_id);
-
-      $('#l3_modal').modal('show');
-    }
-
-    $(document).on('submit', '#shipment_form', function (e) {
-      e.preventDefault();
-
-      // Proceed with your action (e.g., AJAX submission) when the form is valid
-      var QRCodeNumber = $("#QR_Code_Numbe").val();
-      var courierDetail = $("#Courier_Detail").val();
-      var courierID = $("#Courier_ID").val();
-      var productId = $('#l3_modal').attr('data-id');
-      var userid = $('#l3_modal').attr('data-id_user');
-      var requestData = {
-        QR_Code_Numbe: QRCodeNumber,
-        Courier_Detail: courierDetail,
-        Courier_ID: courierID,
-
-        product_id: productId,
-        user_id: userid
+    function deleteproduct(id) {
+      let productid = id
+      const userData = {
+        productid: productid
       };
-      // AJAX POST request
-      $.ajax({
-        url: apiUrl + '/addDetailsproduct',
-        type: "POST",
-        dataType: "JSON",
-        data: JSON.stringify(requestData),
-        contentType: "application/json",
-        success: function (response) {
-          if (response.error == true) {
-            Swal.fire(
-              'error!',
-              `${response.err}`,
-              'error'
-            );
-          } else {
-            Swal.fire(
-              'success!',
-              `${response.message}`,
-              'success',
-            );
-            setTimeout(() => {
-              location.reload();
-            }, 1000);
-          }
+
+      fetch(apiUrl + '/deleteProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-        error: function (xhr, status, error) {
-          // Handle errors from the server
-          console.error("Request failed", error);
-          // You can add code here to handle errors, show messages, etc.
-        }
-      });
+        body: JSON.stringify(userData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status == true) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+            }).then(() => {
+              window.location.href = "manage-products.html"
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.error,
+            });
+          }
+        })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+          });
+        });
+    }
+
+    function editproduct(id) {
+      location.href = `update-super-admin.html?id=${id}`;
+    }
 
 
-    });
 
     const propertyList = document.getElementById('property-list');
     let count = 1;
+
     function fetchData() {
 
-      const api = apiUrl + '/getpurchaseinfo';
+      const api = apiUrl + '/get-super-admin';
       fetch(api, {
         method: 'get',
         headers: {
@@ -813,9 +748,13 @@
           }
         })
         .then(data => {
-          data.data.forEach(property => {
-            const newRowData = createPropertyListing(property);
+          data.message.forEach(property => {
+            console.log(property);
+            if (property.Status==2) {
+              const newRowData = createPropertyListing(property);
             $('#property-table').DataTable().row.add(newRowData).draw();
+            }
+ 
           });
         })
         .catch(error => {
@@ -823,61 +762,8 @@
         });
     }
 
-    function changestatus(product_id, id) {
-
-      let userid = id;
-      let product_id_delivered = product_id;
-      const userData = {
-        id: product_id_delivered,
-        user_id: userid
-      };
-
-      $.ajax({
-        url: apiUrl + '/status_change',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(userData),
-        success: function (data) {
-          if (data.message) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: data.message,
-            }).then(() => {
-              location.reload();
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: data.error,
-            });
-          }
-        },
-        error: function (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error,
-          });
-        }
-      });
-    }
-
     function createPropertyListing(property) {
-      let approveButtonHTML = '';
-      let disapproveButtonHTML = '';
-
-      if (property.delivered_status == 2) {
-        // Property is approved
-        approveButtonHTML = '<button class="deleverdgreen" disabled>Delivered</button>';
-      } else {
-        // Neither approved nor disapproved
-        approveButtonHTML = '<button class="pending-btn" >Pending</button>';
-
-      }
-
-
+      console.log(property);
       const originalDateTime = new Date(property.create_at);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
@@ -888,36 +774,51 @@
       const year1 = originalDateTime1.getUTCFullYear();
       const formattedDate = `${day}-${month}-${year}`;
       const formattedDate1 = `${day1}-${month1}-${year1}`;
-      const rowData = [
+
+      let actionButtons = ''; // Initialize an empty string for action buttons
+
+      // Check if checkRole is equal to 1
+  
+        // If true, include action buttons in the string
+        actionButtons = `
+      <div class="statusAction">
+        <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>
+        <i class="fa-solid fa-trash"  onclick="deleteproduct(${property.id})"></i>
+      </div>`;
+    
+
+      const tableRow = [
         count,
-        property.QR_code == null ? '<span> QR code  </span>' : `<img src="${property.QR_code}" alt="" class="imgqr" />`,
-        property.name,
-        `₹ ${property.Selling_Price}`,
-        property.delivered_status == 0 ? `<button class="delvr-button" data-bs-toggle="modal" data-bs-target="#l3_modal" onclick="openShipmentModal(${property.product_id}, ${property.id})">Ready to Shipment</button>` :
-          (property.delivered_status == 1 ? `<button class="delvr-button-mark" onclick="changestatus(${property.id}, ${property.user_id})">Mark as delivered</button>` : '<button class="deleverdgreen" disabled>Delivered</button>'),
-        approveButtonHTML,
+        property.email,
+
+        property.password,
         formattedDate,
-        `<span class="eye-btn"><i class="fa-solid fa-eye" onclick="viewdetails(${property.user_id})"></i></span>`
+        formattedDate1,
+        property.active == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '<button class="nondelvr-button" style="cursor:auto">Deactive</button>',
+        actionButtons // Include the action buttons in the tableRow
       ];
 
       count++;
-      return rowData;
+      return tableRow;
+    }
+
+    function openShipmentModal(id) {
+      $('#l3_modal').attr('data-id', id);
+      $('#l3_modal').modal('show');
     }
 
     // window.onload = fetchData;
     $(document).ready(function () {
-      // Initialize DataTable with options
       $('#property-table').DataTable({
-        dom: 'lBfrtip', // 'l' adds the "Show 50 entries" dropdown
-        lengthMenu: [5, 10, 25, 50, 100], // Customize the entries dropdown options
+        dom: 'Bfrtip',
         buttons: [
           'copy', 'csv', 'excel', 'pdf'
-        ],
+        ]
       });
-
 
       fetchData(); // Call your existing fetchData function
     });
+
 
     // $(document).ready(function () {
     //   $('.search-input-box input[type="search"]').keyup(function () {
@@ -929,23 +830,6 @@
     //     });
     //   });
     // });
-
-    if (checkRole == 1) {
-      // If true, show the li element
-      document.getElementById('manageProductsListItem').style.display = 'block';
-      document.getElementById('hidemenu').style.display = 'block';
-      document.getElementById('userhide').style.display = 'block';
-
-      document.getElementById('manageUserhide').style.display = 'block';
-
-    } else {
-      // If false, hide the li element
-      document.getElementById('manageProductsListItem').style.display = 'none';
-      document.getElementById('hidemenu').style.display = 'none';
-      document.getElementById('userhide').style.display = 'none';
-      document.getElementById('manageUserhide').style.display = 'none';
-
-    }
   </script>
 </body>
 

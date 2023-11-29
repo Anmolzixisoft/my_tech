@@ -217,4 +217,23 @@ function getpurchaseinfoPatycular(req, res) {
         return res.status(500).json({ error: 'Server error' });
     }
 }
-module.exports = { purchaseQr, getMobileNo, getpurchaseinfo, getpurchaseinfoPatycular }
+
+const getOrder = (req, res) => {
+    try {
+        connection.query('SELECT * FROM my_tech.purchase_QR_tbl', (err, result) => {
+            if (err) {
+                console.error('Database insertion error: ' + err.message);
+                return res.status(500).json({ error: 'Error inserting data into the database' });
+            } else {
+
+                return res.status(200).json({ data: result, message: 'success' });
+
+            }
+        })
+    } catch (error) {
+
+    }
+}
+
+
+module.exports = { purchaseQr, getMobileNo, getpurchaseinfo, getpurchaseinfoPatycular, getOrder }

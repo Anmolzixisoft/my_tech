@@ -317,6 +317,7 @@ const adminLogin = (req, res) => {
                 if (findEmail[0].password === user.password) {
                     const token = jwt.sign({ userId: findEmail[0].id }, 'thisismyadminsceretkey');
                     findEmail[0].token = token;
+                    console.log(findEmail[0].Status);
                     return res.status(200).json({ status: true, error: false, message: "Successfully Login", data: findEmail })
                 } else {
                     const error = "Incorrect password";
@@ -353,5 +354,61 @@ function activeDiactiveUser(req, res) {
     })
 }
 
+const addsuperadmin = (req, res) => {
+    try {
+        const { email, password } = req.body
+        connection.query(
+            'SELECT * FROM my_tech.admin_tbl WHERE email = ? ',
+            [email],
+            (err, results) => {
+                if (err) {
+                    console.error('Error checking email existence: ' + err);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
 
-module.exports = { login, verifyByOtp, sentOtp, setPass, adminLogin, activeDiactiveUser }
+                if (results.length > 0) {
+                    return res.status(409).json({ status: false, message: `User already registered with this email` });
+                }
+
+                else {
+                    const sql = 'INSERT INTO my_tech.admin_tbl (email, password, Status) VALUES (?,?,"2")';
+                    const values = [email, password];
+
+                    connection.query(sql, values, (err, result) => {
+                        if (err) {
+                            return res.send({ error: err, status: false })
+                        } else {
+                            return res.send({ message: "success", Status: true })
+                        }
+                    })
+                }
+
+
+            })
+    }
+
+    catch (error) {
+        return res.send({ error: error, status: false })
+    }
+}
+
+
+
+
+
+const getsuperadmin = (req, res) => {
+    try {
+        connection.query('SELECT * FROM my_tech.admin_tbl', (error, result) => {
+            if (error) {
+                console.error('Error checking email existence: ' + err);
+                return res.status(500).json({ error: 'Internal server error' });
+            } else {
+                return res.send({ message: result, status: true })
+            }
+        })
+    } catch (error) {
+
+    }
+}
+
+module.exports = { login, verifyByOtp, sentOtp, setPass, adminLogin, activeDiactiveUser, addsuperadmin ,getsuperadmin}

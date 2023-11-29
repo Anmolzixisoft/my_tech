@@ -3,8 +3,13 @@ const QRCode = require('qrcode')
 
 function productAdd(req, res) {
     try {
+
         const { Product_Name, MRP, Selling_Price, description } = req.body;
+
+
         const { Image } = req.files
+        console.log("body => ", req.body);
+        console.log("image", req.files);
         if (!Image) {
             return res.send({ error: "insert image" })
         }
@@ -14,7 +19,7 @@ function productAdd(req, res) {
 
         connection.query(sql, values, (err, result) => {
             if (err) {
-                console.error('Database insertion error: ' + err.message);
+                console.error('Database insertion error: ' + err, sql,);
                 res.status(500).json({ error: 'Error inserting data into the database' });
             } else {
                 var id = result.insertId
@@ -28,7 +33,7 @@ function productAdd(req, res) {
 
                     connection.query(`UPDATE my_tech.product_tbl SET QR_code= '${code}'  WHERE product_tbl.id =${result.insertId}`, values, (err, result) => {
                         if (err) {
-                            console.error('Database insertion error: ' + err.message);
+                            console.error('Database insertion error: ' + err);
                             res.status(500).json({ error: 'Error inserting data into the database' });
                         } else {
 
