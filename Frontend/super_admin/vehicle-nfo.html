@@ -564,14 +564,15 @@
                       <thead>
                         <tr role="row">
                           <th>S.No</th>
+                          <th>User Name</th>
+
                           <th>vehicle_type</th>
                           <th>brand_name</th>
                           <th>modal_name</th>
                           <th>vehicle_number</th>
                           <th>Created Date</th>
                           <th>Last update</th>
-                          <th>User Details</th>
-                          
+
                           <th>Approval</th>
 
                           <!-- Uncomment the status column if needed -->
@@ -663,7 +664,7 @@
       location.href = `order-details.html?id=${id}`;
     }
     function createPropertyListing(property) {
-        console.log(property,'property');
+      console.log(property, 'property');
       let approveButtonHTML = '';
       let disapproveButtonHTML = '';
 
@@ -690,15 +691,17 @@
       const formattedDate1 = `${day1}-${month1}-${year1}`;
       const tableRow = [
         count,
-       property.vehicle_type,
+
+        `<a href="user-details.html?id=${property.user_id}">${property.user_data.name}</a>`,
+        property.vehicle_type,
         property.brand_name,
         property.modal_name,
         property.vehicle_number,
         formattedDate,
         formattedDate1,
-        
-        `<span class="eye-btn"><i class="fa-solid fa-eye" onclick="viewdetails(${property.user_id})"></i></span>`,
-       
+
+
+
         // Uncomment the status column if needed
         `${approveButtonHTML} ${disapproveButtonHTML}`
       ];

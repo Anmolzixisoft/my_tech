@@ -65,10 +65,20 @@ function getMobileNo(req, res) {
         const entityID = "1701157319958638363"
         const msg = `INVEST AND EARN FOR LIFE Lease guaranteed Shops Assured Returns@12% Sec 133 noida Pay 48 Lac Get 48k per month till possession Limited Units ${otp} SKYLED`
 
-        console.log(product_id, vehicle_number);
         if (!vehicle_number) {
             return res.send({ status: false, error: ' please add vehicle number', data: null })
         }
+
+        console.log(req.body);
+
+        // connection.query('SELECT * FROM my_tech.vehicle_info_tbl  WHERE QR_Code_Numbe="' + product_id + '"', (error, result) => {
+        //     if (error) {
+        //         console.log(err);
+        //         return res.status(500).json({ status: false, error: err });
+        //     }
+        //     else { }
+        // })
+
         connection.query('SELECT * FROM my_tech.vehicle_info_tbl  WHERE QR_Code_Numbe="' + product_id + '" AND vehicle_number="' + vehicle_number + '" ', (err, result) => {
 
             if (err) {
@@ -79,6 +89,10 @@ function getMobileNo(req, res) {
 
                 if (result.length == 0) {
                     return res.status(200).json({ status: false, error: 'please add  right vehicle number', data: null });
+                }
+                if (result[0].approval_status != 1) {
+                    return res.status(200).json({ status: false, error: 'please Connect Admin', data: null });
+
                 }
                 else {
 
@@ -130,8 +144,6 @@ function getMobileNo(req, res) {
                         }
                     }
                     );
-
-
                 }
 
             }

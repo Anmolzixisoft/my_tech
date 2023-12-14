@@ -62,24 +62,24 @@ function vehicleAdd(req, res) {
 
     }
 }
-
 function getallvehicle(req, res) {
     try {
-        connection.query('select * from my_tech.vehicle_info_tbl ', (err, result) => {
+        connection.query('SELECT v.*, u.* FROM my_tech.vehicle_info_tbl v LEFT JOIN my_tech.users_tbl u ON v.user_id = u.id', (err, result) => {
             if (err) {
-                return res.status(500).json({ status: false, error: 'Error get  data  the database' });
+                return res.status(500).json({ status: false, error: 'Error getting data from the database' });
             } else {
                 result.forEach(element => {
                     element.Image = `http://192.168.29.179:5501/Backend/public/${element.Image}`;
                 });
                 return res.status(200).json({ status: true, data: result, message: 'success' });
             }
-        })
+        });
     } catch (error) {
-        return res.send({ data: error, status: false })
-
+        return res.status(500).json({ status: false, error: 'Internal server error' });
     }
 }
+
+
 
 function updateVehicle(req, res) {
     try {
