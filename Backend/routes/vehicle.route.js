@@ -1,10 +1,11 @@
 var express = require('express')
 const vehicleRouter = express.Router();
-const { vehicleAdd, getallvehicle, myorder, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity } = require('../controllers/vehicle.controller')
+const { vehicleAdd, activeDiactiveVAhicle,getallvehicle, myorder, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity } = require('../controllers/vehicle.controller')
 const { singleUpload } = require('../middleware/multer')
 
 vehicleRouter.post('/vehicleAdd', singleUpload, vehicleAdd);
 vehicleRouter.get('/getAllVehicle', getallvehicle)
+vehicleRouter.post('/activeDiactiveVAhicle',activeDiactiveVAhicle)
 vehicleRouter.post('/updateVehicle', singleUpload, updateVehicle);
 vehicleRouter.post('/deleteVehicle', singleUpload, deleteVehicle);
 vehicleRouter.post('/getVehicleById', singleUpload, gteByid);

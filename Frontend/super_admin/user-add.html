@@ -3,7 +3,18 @@
 
 <head>
 
+
     <style>
+        .required {
+            color: red;
+            margin-left: 5px;
+            /* Add space between label text and asterisk */
+        }
+
+        .error-text {
+            color: red;
+        }
+
         .error-message {
             color: red;
         }
@@ -653,32 +664,20 @@
 
 
         jQuery(document).ready(function () {
-            jQuery("#submitButton").validate({
+            jQuery("#productForm").validate({
                 rules: {
-                    productName: 'required',
-                    mrp: 'required',
-                    sellingPrice: 'required',
-                    Image: 'required',
+                    email: 'required',
+                    password: 'required',
 
-                    description: 'required',
                 },
                 messages: {
-                    productName: {
-                        required: 'Please enter the productName',
+                    email: {
+                        required: 'Please enter the email',
                     },
-                    mrp: {
-                        required: 'Please enter the MRP',
+                    password: {
+                        required: 'Please enter the password',
                     },
-                    sellingPrice: {
-                        required: "Please enter the sellingPrice",
-                    },
-                    Image: {
-                        required: "Please Enter image",
 
-                    },
-                    description: {
-                        required: "Please enter the description",
-                    },
 
                 },
                 errorClass: 'error-message',
@@ -689,65 +688,53 @@
 
 
 
+        $(document).on('submit', '#productForm', function (e) {
+            e.preventDefault();  // Use e.preventDefault() instead of event.preventDefault()
+            const emaildata = document.getElementById('email').value;
+            const passworddata = document.getElementById('password').value;
+            console.log(emaildata);
+            const datauser = {
+                email: emaildata,
+                password: passworddata
+            };
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const submitButton = document.getElementById('submitButton');
-            submitButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                const productName = document.getElementById('productName').value;
-                const mrp = document.getElementById('mrp').value;
-                const sellingPrice = document.getElementById('sellingPrice').value;
-                const Description = document.getElementById('description').value.split('\n')[0].trim();
-                console.log(Description, 'description');
-
-
-                const Image = document.getElementById('Image').files[0];
-                // if (productName.trim() === '' || mrp.trim() === '' || sellingPrice.trim() === '') {
-                //   alert('Please fill in all the required fields!');
-                // } else {
-                const form = document.getElementById('productForm');
-
-                const formData = new FormData(form);
-                formData.append('Product_Name', productName);
-                formData.append('Selling_Price', sellingPrice);
-                formData.append('MRP', mrp);
-                formData.append('Image', Image);
-                formData.append('description', Description)
-                fetch(apiUrl + '/productAdd', {
-                    method: 'POST',
-                    body: formData,
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            Swal.fire({
-                                title: 'Success',
-                                text: data.message,
-                                icon: 'success',
-                            })
-                            setTimeout(() => {
-                                window.location.href = "manage-products.html"
-                            }, 1000);
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                text: data.error,
-                                icon: 'error',
-                            });
-
-                        }
-                    })
-                    .catch(error => {
+            fetch(apiUrl + '/add-super-admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Set the content type to JSON
+                },
+                body: JSON.stringify(datauser),  // Convert the object to a JSON string
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: data.message,
+                            icon: 'success',
+                        });
+                        setTimeout(() => {
+                            window.location.href = "superAdmin.html";
+                        }, 1000);
+                    } else {
                         Swal.fire({
                             title: 'Error',
-                            text: error,
+                            text: data.error,
                             icon: 'error',
                         });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: error,
+                        icon: 'error',
                     });
+                });
 
-                // }
-            });
+            // }
         });
+
 
 
     </script>

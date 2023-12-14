@@ -6,6 +6,8 @@ function vehicleAdd(req, res) {
     try {
 
         const { product_id, user_id, QR_Code_Numbe, vehicle_type, brand_name, modal_name, reg_no, current_city, location, vehicle_number, vehicle_color } = req.body
+
+
         if (!req.body) {
             return res.status(500).json({ status: false, error: 'fill field ' });
 
@@ -237,4 +239,31 @@ function myorder(req, res) {
         }
     })
 }
-module.exports = { vehicleAdd, getallvehicle, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity, myorder }
+
+function activeDiactiveVAhicle(req, res) {
+    const { userId, status } = req.body
+    console.log(req.body, '----');
+    connection.query('select * from my_tech.vehicle_info_tbl where id="' + userId + '" ', (err, result) => {
+        if (err) {
+            return res.send({ error: err, status: false }
+            )
+        }
+        if (result.length == 0) {
+            return res.send({ error: " user not found ", status: false })
+        }
+        else {
+            connection.query('UPDATE my_tech.vehicle_info_tbl SET approval_status="' + status + '"  where id="' + userId + '"', (err, result) => {
+                if (err) {
+                    return res.send({ error: err, status: false })
+                }
+                else {
+                    return res.send({ message: "succesfully", status: true })
+                }
+            })
+
+        }
+    })
+}
+
+
+module.exports = { activeDiactiveVAhicle, vehicleAdd, getallvehicle, updateVehicle, deleteVehicle, gteByid, ProjuctgteByid, getStates, getCity, myorder }

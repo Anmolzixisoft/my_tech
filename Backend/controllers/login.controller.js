@@ -357,6 +357,7 @@ function activeDiactiveUser(req, res) {
 const addsuperadmin = (req, res) => {
     try {
         const { email, password } = req.body
+        console.log(email, password);
         connection.query(
             'SELECT * FROM my_tech.admin_tbl WHERE email = ? ',
             [email],
@@ -411,4 +412,59 @@ const getsuperadmin = (req, res) => {
     }
 }
 
-module.exports = { login, verifyByOtp, sentOtp, setPass, adminLogin, activeDiactiveUser, addsuperadmin ,getsuperadmin}
+
+
+
+const updatesuperadmin = (req, res) => {
+    try {
+        const { id, email, newPassword } = req.body;
+        const sql = 'UPDATE my_tech.admin_tbl SET password = ? , email=?  WHERE id = ?';;
+
+        connection.query(sql, [newPassword, email, id], (err, result) => {
+            if (err) {
+                console.error('Error updating super admin: ' + err);
+                return res.status(500).json({ error: 'Internal server error' });
+            } else {
+                if (result.affectedRows === 0) {
+                    return res.status(404).json({ status: false, message: 'Super admin not found' });
+                } else {
+                    return res.send({ message: 'Super admin updated successfully', status: true });
+                }
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+const deletesuperadmin = (req, res) => {
+     try {
+        const { id } = req.body;
+        const sql = 'DELETE FROM my_tech.admin_tbl WHERE id = ?';
+
+        connection.query(sql, [id], (err, result) => {
+            if (err) {
+                console.error('Error deleting super admin: ' + err);
+                return res.status(500).json({ error: 'Internal server error' });
+            } else {
+                if (result.affectedRows === 0) {
+                    return res.status(404).json({ status: false, message: 'Super admin not found' });
+                } else {
+                    return res.send({ message: 'Super admin deleted successfully', status: true });
+                }
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+
+
+
+
+
+
+module.exports = { login, verifyByOtp, sentOtp, setPass, adminLogin, activeDiactiveUser, addsuperadmin, getsuperadmin, updatesuperadmin, deletesuperadmin }

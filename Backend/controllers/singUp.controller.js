@@ -228,9 +228,8 @@ function sendVerificationMail(req, res) {
 
 function AdduserDetails(req, res) {
     try {
+        console.log(req.body);
         const { id, name, email, mobile_number, emergency_mobile_number, aadhar_no, license_no, address, state, city, pincode } = req.body;
-
-
 
         const { aadhar_image, license_image, profile_image, aadhar_image_back } = req.files
         // if (!aadhar_image || !license_image || !profile_image) {

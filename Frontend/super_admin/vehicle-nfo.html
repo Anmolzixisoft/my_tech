@@ -3,23 +3,26 @@
 
 <head>
   <!-- Required meta tags -->
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!--favicon-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
-
+  <!--favicon-->
   <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
   <!--plugins-->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
-
-  <!-- DataTables Buttons CSS -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
   <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
   <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
   <link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
   <!-- loader-->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+
+  <!-- DataTables Buttons CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
   <link href="../assets/css/pace.min.css" rel="stylesheet" />
   <script src="../assets/js/pace.min.js"></script>
   <!-- Bootstrap CSS -->
@@ -41,16 +44,13 @@
 </head>
 
 <body>
+  <!--wrapper-->
   <script>
     let checkAdmintoken = localStorage.getItem('admintoken')
     if (checkAdmintoken == null) {
       location = "http://192.168.29.179:5501/Frontend/"
     }
-
-    var checkRole = localStorage.getItem('Status')
-    console.log('---------------', checkRole == 1);
   </script>
-  <!--wrapper-->
   <div class="wrapper">
     <!--sidebar wrapper -->
     <div class="sidebar-wrapper" data-simplebar="true">
@@ -74,19 +74,18 @@
           </a>
         </li>
 
-        <li class="menu-label" id="userhide">Users</li>
-        <li id="manageUserhide">
+        <li class="menu-label">Vehicle</li>
+        <li>
           <a href="manage-users.html">
             <div class="parent-icon">
               <img src="../assets/images/tssicon.png" alt="" />
             </div>
-            <div class="menu-title">Manage Users</div>
+            <div class="menu-title">Manage Vehicle</div>
           </a>
         </li>
 
-
-        <li id="hidemenu" class="menu-label">Products</li>
-        <li id="manageProductsListItem">
+        <li class="menu-label">Products</li>
+        <li>
           <a href="manage-products.html">
             <div class="parent-icon">
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
@@ -94,7 +93,6 @@
             <div class="menu-title">Manage Products</div>
           </a>
         </li>
-
         <li class="menu-label">Orders</li>
         <li>
           <a href="purchase-product.html">
@@ -102,15 +100,6 @@
               <img src="../assets/images/stocktrnsfericon.png" alt="" />
             </div>
             <div class="menu-title">Manage Orders</div>
-          </a>
-        </li>
-        <li id="superadmin" class="menu-label"> Super Admin</li>
-        <li id="manageSuperAdmin">
-          <a href="superAdmin.html">
-            <div class="parent-icon">
-              <img src="../assets/images/stocktrnsfericon.png" alt="" />
-            </div>
-            <div class="menu-title">Manage Super Admin</div>
           </a>
         </li>
       </ul>
@@ -154,8 +143,7 @@
                 <div class="dropdown-menu dropdown-menu-end">
                   <a href="javascript:;">
                     <div class="msg-header">
-                      <!-- <p class="msg-header-title">Notifications</p>
-                        <p class="msg-header-badge">8 New</p> -->
+
                     </div>
                   </a>
                   <div class="header-notifications-list">
@@ -547,21 +535,16 @@
         <div class="row">
           <div class="col-md-12">
             <div class="inv-box">
-              <h4>Products</h4>
+              <h4>Vehicle</h4>
               <div class="manage-flex">
-                <h5>Manage your Products</h5>
-                <div class="d-flex-bulkbtn">
-                  <div>
-                    <a class="addpr-btn me-2" href="user-add.html">+Add New</a>
-                  </div>
-                </div>
+                <h5>Manage your Vehicle</h5>
               </div>
             </div>
           </div>
           <div class="col-md-12">
             <div class="card mt-3">
               <div class="card-body">
-                <!-- <div class="table-top">
+                <div class="table-top">
                   <div class="search-set">
                     <div class="search-input-box">
                       <a class="btn-searchset"><i class="fa-solid fa-filter"></i>
@@ -573,20 +556,26 @@
                       </div>
                     </div>
                   </div>
-                </div> -->
-                <div class="delverystatustable">
-                  <div class="table-responsive">
+                </div>
+
+                <div class="table-responsive">
+                  <div class="delverystatustable">
                     <table id="property-table" class="table">
                       <thead>
                         <tr role="row">
                           <th>S.No</th>
-                          <th>Email</th>
-                          <th>Password</th>
-
+                          <th>vehicle_type</th>
+                          <th>brand_name</th>
+                          <th>modal_name</th>
+                          <th>vehicle_number</th>
                           <th>Created Date</th>
-                          <th>Last Update</th>
-                          <th>Status</th>
-                          <th>Action</th>
+                          <th>Last update</th>
+                          <th>User Details</th>
+                          
+                          <th>Approval</th>
+
+                          <!-- Uncomment the status column if needed -->
+                          <!-- <th>Status</th> -->
                         </tr>
                       </thead>
                       <tbody id="property-list">
@@ -596,37 +585,29 @@
                 </div>
 
               </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!--end page wrapper -->
-    <!--start overlay-->
-    <div class="overlay toggle-icon"></div>
-    <!--end overlay-->
-    <!--Start Back To Top Button-->
-    <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
-    <!--End Back To Top Button-->
-    <footer class="page-footer">
-      <p class="mb-0">Copyright © 2023. All right reserved.</p>
-    </footer>
   </div>
-  <!--end wrapper-->
 
-  <!--  shipment modal -->
+  <div class="overlay toggle-icon"></div>
 
+  <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
 
+  <footer class="page-footer">
+    <p class="mb-0">Copyright © 2023. All right reserved.</p>
+  </footer>
+  </div>
+  <script src="../utils.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
 
+  <!-- DataTables Buttons JS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-
-  <!-- Bootstrap JS -->
   <script src="../assets/js/bootstrap.bundle.min.js"></script>
-
-  <!--plugins-->
   <script src="../assets/js/jquery.min.js"></script>
   <script src="../assets/plugins/simplebar/js/simplebar.min.js"></script>
   <script src="../assets/plugins/metismenu/js/metisMenu.min.js"></script>
@@ -635,106 +616,25 @@
   <script src="../assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
   <script src="../assets/plugins/chartjs/js/chart.js"></script>
   <script src="../assets/js/index.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.2.min.js"></script>
   <script type="text/javascript" charset="utf8"
     src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-  <!--app JS-->
-  <script type="text/javascript" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
-
-  <!-- DataTables Buttons JS -->
   <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
-  <script src="../assets/js/app.js"></script>
-  <script src="../utils.js"></script>
   <script>
     new PerfectScrollbar(".app-container");
   </script>
   <script>
-    $(".fingsize")
-      .addClass("img-enlargable")
-      .click(function () {
-        var src = $(this).attr("src");
-        $("<div>")
-          .css({
-            background: "RGBA(0,0,0,.5) url(" + src + ") no-repeat center",
-            backgroundSize: "contain",
-            width: "100%",
-            height: "100%",
-            position: "fixed",
-            zIndex: "10000",
-            top: "0",
-            left: "0",
-            cursor: "zoom-out",
-          })
-          .click(function () {
-            $(this).remove();
-          })
-          .appendTo("body");
-      });
-  </script>
-  <script>
-
-
-
-
-    function deleteproduct(id) {
-      let productid = id
-      console.log(productid);
-      const userData = {
-        id: productid
-      };
-
-      fetch(apiUrl + '/deletesuperadmin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status == true) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: data.message,
-            }).then(() => {
-              window.location.href = "superAdmin.html"
-            })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: data.error,
-            });
-          }
-        })
-        .catch(error => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error,
-          });
-        });
-    }
-
-    function editproduct(id) {
-      location.href = `update-super-admin.html?id=${id}`;
-    }
-
-
 
     const propertyList = document.getElementById('property-list');
     let count = 1;
 
     function fetchData() {
 
-      const api = apiUrl + '/get-super-admin';
+      const api = apiUrl + '/getAllVehicle';
       fetch(api, {
         method: 'get',
         headers: {
@@ -749,89 +649,127 @@
           }
         })
         .then(data => {
-          data.message.forEach(property => {
-            console.log(property);
-            if (property.Status == 2) {
-              const newRowData = createPropertyListing(property);
-              $('#property-table').DataTable().row.add(newRowData).draw();
-            }
-
+          data.data.forEach(property => {
+            const newRowData = createPropertyListing(property);
+            $('#property-table').DataTable().row.add(newRowData).draw();
           });
+
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error);
         });
     }
-
+    function viewdetails(id) {
+      location.href = `order-details.html?id=${id}`;
+    }
     function createPropertyListing(property) {
-      console.log(property);
-      const originalDateTime = new Date(property.create_at);
+        console.log(property,'property');
+      let approveButtonHTML = '';
+      let disapproveButtonHTML = '';
+
+      if (property.approval_status == 1) {
+        // Property is approved
+        approveButtonHTML = '<button class="delvr-button1" disabled>Approved</button>';
+      } else if (property.approval_status == 0) {
+        // Property is disapproved
+        disapproveButtonHTML = '<button class="nondelvr-button1" disabled>Disapproved</button>';
+      } else {
+        // Neither approved nor disapproved
+        approveButtonHTML = '<button class="delvr-button" onclick="changestatus(' + property.id + ', 1)">Approve</button>';
+        disapproveButtonHTML = '<button class="nondelvr-button" onclick="changestatus(' + property.id + ', 0)">Disapprove</button>';
+      }
+      const originalDateTime = new Date(property.created_at);
       const day = originalDateTime.getUTCDate();
       const month = originalDateTime.getUTCMonth() + 1;
       const year = originalDateTime.getUTCFullYear();
-      const originalDateTime1 = new Date(property.update_at);
+      const originalDateTime1 = new Date(property.updated_at);
       const day1 = originalDateTime1.getUTCDate();
       const month1 = originalDateTime1.getUTCMonth() + 1;
       const year1 = originalDateTime1.getUTCFullYear();
       const formattedDate = `${day}-${month}-${year}`;
       const formattedDate1 = `${day1}-${month1}-${year1}`;
-
-      let actionButtons = ''; // Initialize an empty string for action buttons
-
-      // Check if checkRole is equal to 1
-
-      // If true, include action buttons in the string
-      actionButtons = `
-      <div class="statusAction">
-        <i class="fa-regular fa-pen-to-square" onclick="editproduct(${property.id})"></i>
-        <i class="fa-solid fa-trash"  onclick="deleteproduct(${property.id})"></i>
-      </div>`;
-
-
       const tableRow = [
         count,
-        property.email,
-
-        property.password,
+       property.vehicle_type,
+        property.brand_name,
+        property.modal_name,
+        property.vehicle_number,
         formattedDate,
         formattedDate1,
-        property.active == 1 ? '<button class="delvr-button" style="cursor:auto">Active</button>' : '<button class="nondelvr-button" style="cursor:auto">Deactive</button>',
-        actionButtons // Include the action buttons in the tableRow
+        
+        `<span class="eye-btn"><i class="fa-solid fa-eye" onclick="viewdetails(${property.user_id})"></i></span>`,
+       
+        // Uncomment the status column if needed
+        `${approveButtonHTML} ${disapproveButtonHTML}`
       ];
-
       count++;
-      return tableRow;
+      return tableRow; // Return the table row element as an array
     }
+    // window.onload = fetchData;
+    $(document).ready(function () {
+      // Initialize DataTable with options
+      $('#property-table').DataTable({
+        dom: 'lBfrtip', // 'l' adds the "Show 50 entries" dropdown
+        lengthMenu: [5, 10, 25, 50, 100], // Customize the entries dropdown options
+        buttons: [
+          'copy', 'csv', 'excel', 'pdf'
+        ],
+      });
 
-    function openShipmentModal(id) {
-      $('#l3_modal').attr('data-id', id);
-      $('#l3_modal').modal('show');
+
+      fetchData(); // Call your existing fetchData function
+    });
+    function changestatus(id, status) {
+      let userid = id;
+      let statusdata = status;
+      const userData = {
+        userId: userid,
+        status: statusdata
+      };
+
+      $.ajax({
+        url: apiUrl + '/activeDiactiveVAhicle',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(userData),
+        success: function (data) {
+          if (data.message) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+            }).then(() => {
+              window.location.href = "vehicle_info.html";
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.error,
+            });
+          }
+        },
+        error: function (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+          });
+        }
+      });
     }
 
     $(document).ready(function () {
-      $('#property-table').DataTable({
-        dom: 'lBfrtip',
-        lengthMenu: [5, 10, 25, 50, 100],  // Add lengthMenu here
-        buttons: [
-          'copy', 'csv', 'excel', 'pdf'
-        ]
-      });
+      $('.search-input-box input[type="search"]').keyup(function () {
+        var searchText = $(this).val().toLowerCase();
 
-      fetchData(); // Call your existing fetchData dele
+        $('#property-list tr').each(function () {
+          var cellText = $(this).text().toLowerCase();
+          $(this).toggle(cellText.indexOf(searchText) > -1);
+        });
+      });
     });
 
-
-
-    // $(document).ready(function () {
-    //   $('.search-input-box input[type="search"]').keyup(function () {
-    //     var searchText = $(this).val().toLowerCase();
-
-    //     $('#property-list tr').each(function () {
-    //       var cellText = $(this).text().toLowerCase();
-    //       $(this).toggle(cellText.indexOf(searchText) > -1);
-    //     });
-    //   });
-    // });
   </script>
 </body>
 
